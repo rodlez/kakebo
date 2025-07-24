@@ -1,0 +1,2 @@
+# kakebo
+Personal Accounting Tool
