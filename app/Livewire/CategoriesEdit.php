@@ -7,7 +7,7 @@ use Livewire\Component;
 
 class CategoriesEdit extends Component
 {
-     public Category $category;
+    public Category $category;
 
     public function mount(Category $category)
     {

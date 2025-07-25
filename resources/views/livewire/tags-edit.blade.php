@@ -1,21 +1,21 @@
 <div class="max-w-7xl mx-auto sm:pb-8 sm:px-6 lg:px-8">
     <!-- Sitemap -->
     <div class="flex flex-row justify-start items-start gap-1 text-sm py-3 px-4 text-slate-500">
-        <a href="/categories" class="hover:text-blue-600">Categories</a> /
-        <a href="/categories/show/{{$category->id}}" class="hover:text-blue-600">Info</a> /
-        <a href="/categories/edit/{{ $category->id }}" class="font-bold text-black border-b-2 border-b-blue-600">Edit</a>
+        <a href="/tags" class="hover:text-orange-600">Tags</a> /
+        <a href="/tags/show/{{$tag->id}}" class="hover:text-orange-600">Info</a> /
+        <a href="/tags/edit/{{ $tag->id }}" class="font-bold text-black border-b-2 border-b-orange-600">Edit</a>
     </div>
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <!-- Header -->
-        <div class="flex flex-row justify-between items-center py-4 bg-blue-400">
+        <div class="flex flex-row justify-between items-center py-4 bg-orange-400">
             <div>
-                <span class="text-lg text-white px-4">Category Edit</span>
+                <span class="text-lg text-white px-4">Tag Edit</span>
             </div>
         </div>
-        <!--Category -->
+        <!--Tags -->
         <div class="mx-auto w-11/12 py-4 px-2">
-            <form action="{{ route('categories.update', $category) }}" method="POST">
+            <form action="{{ route('tags.update', $tag) }}" method="POST">
                 <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
                 @csrf
                 <!-- Dirtective to Override the http method -->
@@ -23,7 +23,7 @@
 
                 <div class="flex flex-col justify-start items-start w-full sm:w-2/3 gap-4 py-2">
                     <span class="text-md font-semibold px-2">Name</span>
-                    <input name="name" id="name" type="text" value="{{ $category->name }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg w-full sm:w-2/3 p-2 focus:ring-blue-500 focus:border-blue-500">
+                    <input name="name" id="name" type="text" value="{{ $tag->name }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg w-full sm:w-2/3 p-2 focus:ring-orange-500 focus:border-orange-500">
                 </div>
                 <!-- Errors -->
                 @error('name')
@@ -42,8 +42,8 @@
         </div>
     </div>
     <!-- Footer -->
-    <div class="flex flex-row justify-end items-center py-4 px-4 bg-blue-400 sm:rounded-b-lg">
-        <a href="{{ route('categories.show', $category) }}">
+    <div class="flex flex-row justify-end items-center py-4 px-4 bg-orange-400 sm:rounded-b-lg">
+        <a href="{{ route('tags.show', $tag) }}">
             <i class="fa-lg fa-solid fa-backward-step text-white hover:text-black transition duration-1000 ease-in-out" title="Go Back"></i>
         </a>
     </div>
