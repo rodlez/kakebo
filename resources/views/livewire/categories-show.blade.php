@@ -19,8 +19,7 @@
                 <!-- Name -->
                 <input type="text" id="name" class="bg-zinc-200 border border-zinc-300 text-gray-900 text-md rounded-lg w-full sm:w-1/2 pl-2 p-2  dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ $category->name }}" disabled>
                 <!-- Edit -->
-                <a href="{{ route('categories.edit', $category) }}">
-                    edit
+                <a href="{{ route('categories.edit', $category) }}">                    
                     <i class="fa-solid fa-pen-to-square text-green-600 hover:text-black transition duration-1000 ease-in-out" title="Edit"></i>
                 </a>
                 <!-- Delete -->
@@ -31,8 +30,7 @@
                     @method('DELETE')
                     <button
                         onclick="return confirm('Are you sure you want to delete the category: {{ $category->name }}?')"
-                        title="Delete">
-                        delete
+                        title="Delete">                        
                         <i
                             class="fa-solid fa-trash text-red-600 hover:text-black transition duration-1000 ease-in-out"></i>
                     </button>

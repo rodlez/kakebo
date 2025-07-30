@@ -25,7 +25,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-start px-2 sm:px-4 py-4 gap-4">
                 <!-- Search -->
                 <div class="relative w-full">
-                    <div class="absolute top-2.5 bottom-0 left-4 text-slate-700">
+                    <div class="absolute top-0.5 bottom-0 left-4 text-slate-700">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
                     <input wire:model.live="search" type="search"
@@ -34,7 +34,7 @@
                 </div>
                 <!-- Pagination -->
                 <div class="relative w-32">
-                    <div class="absolute top-2.5 bottom-0 left-4 text-slate-700">
+                    <div class="absolute top-0 bottom-0 left-4 text-slate-700">
                         <i class="fa-solid fa-book-open"></i>
                     </div>
                     <select wire:model.live="perPage"
@@ -52,11 +52,11 @@
                     <div class="flex flex-row justify-start items-center gap-4 py-2 px-4 mb-2 rounded-lg bg-zinc-200">
                         <span class="text-sm font-semibold">Bulk Actions</span>
                         <a wire:click.prevent="bulkClear" class="cursor-pointer" title="Unselect All">
-                            <span>X<i class="fa-solid fa-rotate-right text-green-600 hover:text-green-500"></i></span>
+                            <span><i class="fa-solid fa-rotate-right text-green-600 hover:text-green-500"></i></span>
                         </a>
                         <a wire:click.prevent="bulkDelete" wire:confirm="Are you sure you want to delete this items?"
                             class="cursor-pointer text-red-600 hover:text-red-500" title="Delete">
-                            <span>D<i class="fa-sm fa-solid fa-trash"></i></span>
+                            <span><i class="fa-sm fa-solid fa-trash"></i></span>
                             <span>({{ count($selections) }})</span>
                         </a>
                     </div>
@@ -105,12 +105,12 @@
                                             <div class="flex justify-center items-center gap-2">
                                                 <!-- Show -->
                                                 <a href="{{ route('categories.show', $category) }}" title="Show">
-                                                    ver<i
+                                                    <i
                                                         class="fa-solid fa-circle-info text-blue-600 hover:text-black transition duration-1000 ease-in-out"></i>
                                                 </a>
                                                 <!-- Edit -->
                                                 <a href="{{ route('categories.edit', $category) }}" title="Edit">
-                                                    edit
+                                                    
                                                     <i
                                                         class="fa-solid fa-pen-to-square text-green-600 hover:text-black transition duration-1000 ease-in-out"></i>
                                                 </a>
@@ -122,8 +122,7 @@
                                                     @method('DELETE')
                                                     <button
                                                         onclick="return confirm('Are you sure you want to delete the category: {{ $category->name }}?')"
-                                                        title="Delete">
-                                                        delete
+                                                        title="Delete">                                                        
                                                         <i
                                                             class="fa-solid fa-trash text-red-600 hover:text-black transition duration-1000 ease-in-out"></i>
                                                     </button>

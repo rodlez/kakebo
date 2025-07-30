@@ -27,7 +27,7 @@
                 <div class="flex flex-row justify-start w-fit pt-4 px-4 sm:px-12">
                     <div class="bg-black text-sm text-white p-2 mx-2 rounded-lg relative">
                         <span class="text-orange-400 font-bold">HELP - </span> Add multiple tags using the Add button.
-                        <button wire:click.prevent="help">H<i class="fa-lg fa-solid fa-circle-xmark text-red-600 hover:text-red-400 transition duration-1000 ease-in-out absolute top-0 -right-2" title="Close"></i></button>
+                        <button wire:click.prevent="help"><i class="fa-lg fa-solid fa-circle-xmark text-red-600 hover:text-red-400 transition duration-1000 ease-in-out absolute top-0 -right-2" title="Close"></i></button>
                     </div>
                 </div>
             @endif
@@ -38,7 +38,7 @@
                     <span class="font-semibold pl-2">Add</span>
                     @if ($inputs->count() < 5)
                         <button wire:click.prevent="add">
-                            +<i class="fa-solid fa-circle-plus text-green-600 hover:text-green-400"></i>
+                            <i class="fa-solid fa-circle-plus text-green-600 hover:text-green-400"></i>
                         </button>
                     @else
                         <span class="text-red-600 text-sm px-2">You have reached the limit (5)</span>
@@ -51,7 +51,7 @@
                         <input wire:model="inputs.{{ $key }}.name" type="text" id="inputs.{{ $key }}.name" class="w-full sm:w-1/2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 placeholder:text-zinc-400 px-2" placeholder="Enter a name">
                         @if ($count > 0)
                             <button wire:click="remove({{ $key }})">
-                                -<i class="fa-solid fa-trash text-red-600 hover:text-black transition duration-1000 ease-in-out" title="Delete"></i>
+                                <i class="fa-solid fa-trash text-red-600 hover:text-black transition duration-1000 ease-in-out" title="Delete"></i>
                             </button>
                         @else
                             <span class="px-4"></span>

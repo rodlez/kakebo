@@ -23,4 +23,50 @@ class Entry extends Model
         'date',        
         'info'
     ];
+
+     /**
+     * Get the user associated with the Entry.
+     */
+    public function user()
+    {
+        return $this->belongsTo(
+            User::class,
+            foreignKey: 'user_id'
+        );
+    }
+
+    /**
+     * Get the category associated with the Entry.
+     */
+    public function category()
+    {
+        return $this->belongsTo(
+            Category::class,
+            foreignKey: 'category_id'
+        );
+    }
+
+    /**
+     * Get the tags associated with the Sport.
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(
+            Tag::class,
+            table: 'entry_tag',
+            foreignPivotKey: 'entry_id'
+        )->withTimestamps();
+    }
+
+    /**
+     * Get the Files associated.
+     */
+    public function files()
+    {
+        return $this->hasMany(
+            File::class,
+            foreignKey: 'entry_id'
+        );
+    }
+
 }
