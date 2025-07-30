@@ -67,15 +67,15 @@ class Archive extends Component
     }
 
     public function mount() {       
-        $this->dateFrom = date('Y-m-d', strtotime(Entry::onlyTrashed()->min('date')));
-        $this->initialDateFrom = date('Y-m-d', strtotime(Entry::onlyTrashed()->min('date')));
-        $this->dateTo = date('Y-m-d', strtotime(Entry::onlyTrashed()->max('date')));
-        $this->initialDateTo = date('Y-m-d', strtotime(Entry::onlyTrashed()->max('date')));
+        $this->dateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->min('date')));
+        $this->initialDateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->min('date')));
+        $this->dateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->max('date')));
+        $this->initialDateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->max('date')));
 
-        $this->valueFrom = Entry::onlyTrashed()->min('value');
-        $this->initialValueFrom = Entry::onlyTrashed()->min('value');
-        $this->valueTo = Entry::onlyTrashed()->max('value');
-        $this->initialValueTo = Entry::onlyTrashed()->max('value');
+        $this->valueFrom = Entry::onlyTrashed()->where('user_id', Auth::id())->min('value');
+        $this->initialValueFrom = Entry::onlyTrashed()->where('user_id', Auth::id())->min('value');
+        $this->valueTo = Entry::onlyTrashed()->where('user_id', Auth::id())->max('value');
+        $this->initialValueTo = Entry::onlyTrashed()->where('user_id', Auth::id())->max('value');
 
         $this->admin = Auth::user()->is_admin;
     }
@@ -90,10 +90,10 @@ class Archive extends Component
     public function clearFilters()
     {
         $this->types = 2;
-        $this->dateFrom = date('Y-m-d', strtotime(Entry::onlyTrashed()->min('date')));
-        $this->dateTo = date('Y-m-d', strtotime(Entry::onlyTrashed()->max('date')));        
-        $this->valueFrom = Entry::onlyTrashed()->min('value');
-        $this->valueTo = Entry::onlyTrashed()->max('value');
+        $this->dateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->min('date')));
+        $this->dateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->max('date')));        
+        $this->valueFrom = Entry::onlyTrashed()->where('user_id', Auth::id())->min('value');
+        $this->valueTo = Entry::onlyTrashed()->where('user_id', Auth::id())->max('value');
         $this->compa = '';
         $this->cat = 0;
         $this->tag = 0;
@@ -111,14 +111,14 @@ class Archive extends Component
 
      public function clearFilterDate()
     {
-        $this->dateFrom = date('Y-m-d', strtotime(Entry::onlyTrashed()->min('date')));
-        $this->dateTo = date('Y-m-d', strtotime(Entry::onlyTrashed()->max('date')));
+        $this->dateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->min('date')));
+        $this->dateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->max('date')));
     }    
 
     public function clearFilterValue()
     {
-        $this->valueFrom = Entry::onlyTrashed()->min('value');
-        $this->valueTo = Entry::onlyTrashed()->max('value');
+        $this->valueFrom = Entry::onlyTrashed()->where('user_id', Auth::id())->min('value');
+        $this->valueTo = Entry::onlyTrashed()->where('user_id', Auth::id())->max('value');
     }
 
     public function clearFilterCompany()

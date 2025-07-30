@@ -47,11 +47,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/entries/{entry}', [EntryController::class, 'destroy'])->name('entries.destroy');
     Route::get('/entries/edit/{entry}', EntriesEdit::class)->name('entries.edit');
 
-     /* ARCHIVE */
-    Route::get('/archive', Archive::class)->name('archive.index');
-    Route::get('/archive/show/{archive}', ArchiveShow::class)->name('archive.show');
-    Route::put('/archive/{archive}', [ArchiveController::class, 'restore'])->name('archive.restore');
-    Route::delete('/archive/{archive}', [ArchiveController::class, 'destroy'])->name('archive.destroy');
+    
 
     /* FILES */
     Route::get('/entries/{entry}/file', FileUpload::class)->name('files.upload');
@@ -76,5 +72,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tags/edit/{tag}', TagsEdit::class)->name('tags.edit');
 
 });
+
+
+// ADMIN TEST
+
+Route::group(['middleware' => ['auth', 'admin']], function () {
+    //Route::get('admin-home', [App\Http\Controllers\AdminController::class, 'adminHome'])->name('admin.home');
+    /* ARCHIVE */
+    Route::get('/archive', Archive::class)->name('archive.index');
+    Route::get('/archive/show/{archive}', ArchiveShow::class)->name('archive.show');
+    Route::put('/archive/{archive}', [ArchiveController::class, 'restore'])->name('archive.restore');
+    Route::delete('/archive/{archive}', [ArchiveController::class, 'destroy'])->name('archive.destroy');
+});
+
+
 
 require __DIR__.'/auth.php';

@@ -24,12 +24,10 @@
                     @if ($showFilters % 2 != 0)
                         <a wire:click="activateFilter" class="cursor-pointer tooltip">
                             <i class="fa-solid fa-minus"></i>
-                            <span class="tooltiptext">Close</span>
                         </a>
                     @else
                         <a wire:click="activateFilter" class="cursor-pointer tooltip">
                             <i class="fa-solid fa-plus"></i>
-                            <span class="tooltiptext">Open</span>
                         </a>
                     @endif
                 </div> 
@@ -302,6 +300,7 @@
                                     <th wire:click="sorting('entries.id')" scope="col"
                                         class="p-2 hover:cursor-pointer hover:text-red-600 {{ $column == 'id' ? 'text-red-600' : '' }}">
                                         id {!! $sortLink !!}</th>
+                                    <th scope="col" class="p-2 text-center capitalize">user</th>
                                     <th wire:click="sorting('entries.date')" scope="col"
                                         class="p-2 hover:cursor-pointer hover:text-red-600 {{ $column == 'date' ? 'text-red-600' : '' }}">
                                         date {!! $sortLink !!}</th>
@@ -332,6 +331,7 @@
                                                 class="text-green-600 outline-none focus:ring-0 checked:bg-green-500"
                                                 value={{ $archive->id }}></td>
                                         <td class="p-2">{{ $archive->id }}</td>
+                                        <td class="p-2">{{ $archive->user->name }}</td>
                                         <td class="p-2">{{ date('d-m-Y', strtotime($archive->date)) }}</td>
                                         <td class="p-2"> <a
                                                 href="#">{{ $archive->title }}</a>
@@ -379,6 +379,7 @@
                                                     </button>
                                                 </form>                                           
                                                 <!-- Delete -->
+                                                 @if($admin == 1)
                                                 <form action="{{ route('archive.destroy', $archive->id) }}" method="POST">
                                                 <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
                                                 @csrf
@@ -392,7 +393,8 @@
                                                             <i
                                                                 class="fa-solid fa-trash"></i></span>
                                                     </button>
-                                            </form>                                               
+                                                </form>                                               
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

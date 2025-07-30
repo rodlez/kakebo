@@ -17,7 +17,9 @@
                     <flux:navlist.item icon="home" :href="route('entries.index')" :current="request()->routeIs('entries')" wire:navigate>{{ __('Entries') }}</flux:navlist.item>
                     <flux:navlist.item icon="home" :href="route('categories.index')" :current="request()->routeIs('categories')" wire:navigate>{{ __('Categories') }}</flux:navlist.item>
                     <flux:navlist.item icon="home" :href="route('tags.index')" :current="request()->routeIs('tags')" wire:navigate>{{ __('Tags') }}</flux:navlist.item>
+                    @if(auth()->user()->is_admin == 1 )
                     <flux:navlist.item icon="home" :href="route('archive.index')" :current="request()->routeIs('archive')" wire:navigate>{{ __('Archive') }}</flux:navlist.item>
+                    @endif
                 </flux:navlist.group>
             </flux:navlist>
 
