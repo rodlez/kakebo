@@ -21,10 +21,10 @@
             </div>
             <!-- FILTERS-->
             <div
-                class="flex flex-row justify-between items-center py-2 px-4 mt-2">
-                <div class="border-green-600 border-b-2 w-full sm:w-full">
+                class="flex flex-row justify-between items-center py-2 mx-4 mt-2 border-green-600 border-b-2 w-100 sm:w-100">
+                <div>
                     <span class="px-2 text-lg text-zinc-800">Filters</span>
-                </div>                
+                </div>
                 <!-- Open/Close Buttons -->
                  <div>
                     @if ($showFilters % 2 != 0)
@@ -38,11 +38,17 @@
                             <!-- <span class="tooltiptext">Open</span> -->
                         </a>
                     @endif
-                </div>                 
+                </div> 
+
+                {{-- 
+                // TODO: SHOW HIDE
+                <div>
+                    <button onclick="showHide()" id="botonini">Show</button>
+                </div> --}}
             </div>
 
             @if ($showFilters % 2 != 0) 
-            <div id="filtrini" class="text-black bg-gray-200 rounded-lg mx-4 my-2 py-2 w-full">
+            <div id="filtrini" class="text-black bg-gray-200 rounded-lg mx-4 my-2 py-2 w-100">
                 
                 <!-- Users -->
                 @if ($isAdmin)
@@ -79,8 +85,8 @@
                     <div class="flex flex-row items-center w-full md:w-1/2 md:text-start">
                         <select wire:model.live="types" class="rounded-lg w-full md:w-80">
                             <option value="2">All</option>
-                            <option value="0">Expense</option>
-                            <option value="1">Income</option>
+                            <option value="0">Gasto</option>
+                            <option value="1">Ingreso</option>
                         </select>
                         @if ($types != 2)
                             <a wire:click.prevent="clearFilterTypes" title="Reset Filter" class="cursor-pointer">
@@ -211,30 +217,6 @@
                     </div>
                 </div>
 
-                <!-- Source -->
-                <div
-                    class="flex flex-col justify-start items-start sm:flex-row sm:justify-between sm:items-center gap-1 px-4 py-2">
-                    <div class="w-full px-2 md:w-60 md:mx-auto md:text-start">
-                        <span><i class="text-yellow-600 fa-lg fa-solid fa-sitemap"></i></span>
-                        <span class="px-2">Source (<span
-                                class="font-semibold text-sm">{{ $sources->count() }}</span>)</span>
-                    </div>
-                    <div class="flex flex-row items-center w-full md:w-1/2 md:text-start">
-                        <select wire:model.live="sour" class="rounded-lg w-full md:w-80">
-                            <option value="0">All</option>
-                            @foreach ($sources as $source)
-                                <option value="{{ $source->source }}">{{ $source->source }}</option>
-                            @endforeach
-                        </select>
-                        @if ($sour != '')
-                            <a wire:click.prevent="clearFilterSource" title="Reset Filter" class="cursor-pointer">
-                                <span class="text-red-600 hover:text-red-400 px-2"><i
-                                        class="fa-solid fa-circle-xmark"></i></span>
-                            </a>
-                        @endif
-                    </div>
-                </div>
-
                 <!-- Company -->
                 <div
                     class="flex flex-col justify-start items-start sm:flex-row sm:justify-between sm:items-center gap-1 px-4 py-2">
@@ -259,19 +241,19 @@
                     </div>
                 </div>
 
-                <!-- Category -->  
+                <!-- Category -->
                 <div
                     class="flex flex-col justify-start items-start sm:flex-row sm:justify-between sm:items-center gap-1 px-4 py-2">
                     <div class="w-full px-2 md:w-60 md:mx-auto md:text-start">
                         <span><i class="text-yellow-600 fa-lg fa-solid fa-sitemap"></i></span>
                         <span class="px-2">Category (<span
-                                class="font-semibold text-sm">{{ count($categories) }}</span>)</span>
+                                class="font-semibold text-sm">{{ $categories->count() }}</span>)</span>
                     </div>
                     <div class="flex flex-row items-center w-full md:w-1/2 md:text-start">
                         <select wire:model.live="cat" class="rounded-lg w-full md:w-80">
                             <option value="0">All</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->name }}">{{ $category->name }}</option>
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
                         @if ($cat > 0)
@@ -295,7 +277,7 @@
                         <select wire:model.live="bal" class="rounded-lg w-full md:w-80">
                             <option value="0">All</option>
                             @foreach ($balances as $balance)
-                                <option value="{{ $balance->name }}">{{ $balance->name }}</option>
+                                <option value="{{ $balance->id }}">{{ $balance->name }}</option>
                             @endforeach
                         </select>
                         @if ($bal > 0)
@@ -307,25 +289,23 @@
                     </div>
                 </div>
 
-                <!-- Tags -->
+                <!-- Tag -->
                 <div
-                    class="flex flex-col justify-start items-start sm:flex-row sm:justify-between sm:items-start gap-1 px-4 py-2">
-                    <div class="w-full px-2 md:w-60 md:mx-auto md:text-start ">
-                        <span><i class="text-orange-600 fa-lg fa-solid fa-tags"></i></span>
-                        <span class="px-2">Tags (<span
-                                class="font-semibold text-sm">{{ count($tags) }}</span>)</span>
+                    class="flex flex-col justify-start items-start sm:flex-row sm:justify-between sm:items-center gap-1 px-4 py-2">
+                    <div class="w-full px-2 md:w-60 md:mx-auto md:text-start">
+                        <span><i class="text-yellow-600 fa-lg fa-solid fa-sitemap"></i></span>
+                        <span class="px-2">Tag (<span
+                                class="font-semibold text-sm">{{ $tags->count() }}</span>)</span>
                     </div>
-                    <div class="flex flex-row items-start w-full md:w-1/2 md:text-start">
-                        <div wire:ignore class="rounded-lg w-full md:w-80">
-                            <select wire:model.live="selectedTags" name="selectedTags" id="selectedTags" multiple>
-                                <option value="0">All</option>
-                                @foreach ($tags as $tag)
-                                    <option value="{{ $tag['id'] }}">{{ $tag['name'] }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        @if ($selectedTags != [])
-                            <a wire:click="clearFilterTag" title="Reset Filter" class="cursor-pointer">
+                    <div class="flex flex-row items-center w-full md:w-1/2 md:text-start">
+                        <select wire:model.live="tag" class="rounded-lg w-full md:w-80">
+                            <option value="0">All</option>
+                            @foreach ($tags as $taged)
+                                <option value="{{ $taged->id }}">{{ $taged->name }}</option>
+                            @endforeach
+                        </select>
+                        @if ($tag > 0)
+                            <a wire:click.prevent="clearFilterTag" title="Reset Filter" class="cursor-pointer">
                                 <span class="text-red-600 hover:text-red-400 px-2"><i
                                         class="fa-solid fa-circle-xmark"></i></span>
                             </a>
@@ -336,40 +316,18 @@
             <!-- End Filters -->
             </div>
             @endif        
-            
-            <!-- Search -->
 
-            <!-- Search Type-->
-            <div class="flex flex-row sm:flex-col justify-start items-start px-2 sm:px-4 py-2 gap-2">
-                <div class="border-blue-600 border-b-2 w-full sm:w-full">
-                    <span class="px-2 text-lg text-zinc-800">Search</span>
-                </div>
-                <div>
-                    <label class="px-2"><input type="radio" wire:model.live="searchType" value="title"><span class="pl-2">Title</span></label>
-                    <label class="px-2"><input type="radio" wire:model.live="searchType" value="company"><span class="pl-2">Company</span></label>
-                    <label class="px-2"><input type="radio" wire:model.live="searchType" value="balances.name"><span class="pl-2">Account</span></label>
-                </div>
-            </div>
-            <div class="flex flex-col sm:flex-row justify-between items-start px-2 sm:px-2 py-0 gap-2">                
-                <!-- Search Word -->
+            <!-- Search -->
+            <div class="flex flex-col sm:flex-row justify-between items-start px-2 sm:px-4 py-4 gap-4">
+                <!-- Search -->
                 <div class="relative w-full">
                     <div class="absolute top-0.5 bottom-0 left-4 text-slate-700">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
                     <input wire:model.live="search" type="search"
                         class="w-full rounded-lg pl-10 font-sm placeholder-zinc-400 focus:outline-none focus:ring-0 focus:border-orange-400 border-2 border-zinc-200"
-                        placeholder="Search by {{ ($searchType == 'balances.name') ? 'account' : $searchType }}">
-                    @if ($search != '')
-                    <div class="absolute top-0.5 bottom-0 right-2 text-slate-700">
-                        <a wire:click.prevent="clearSearch" title="Clear Search" class="cursor-pointer">
-                            <span class="text-red-600 hover:text-red-400 px-2">
-                                <i class="fa-solid fa-circle-xmark"></i>
-                            </span>
-                        </a>
-                    </div>
-                    @endif
-                </div>               
-                
+                        placeholder="Search by name">
+                </div>
                 <!-- Pagination -->
                 <div class="relative w-32">
                     <div class="absolute top-0 bottom-0 left-4 text-slate-700">
@@ -384,160 +342,6 @@
                     </select>
                 </div>
             </div>
-
-            {{ var_dump($criteria) }}
-            <!-- Criteria -->
-            @if (
-                $search != '' ||
-                    $userID > 0 ||
-                    $types != 2 ||
-                    $initialDateTo != $dateTo ||
-                    $initialDateFrom != $dateFrom ||
-                    $cat > 0 ||
-                    $bal > 0 ||
-                    (!in_array('0', $this->selectedTags) && count($this->selectedTags) != 0) ||
-                    $initialValueTo != $valueTo ||
-                    $initialValueFrom != $valueFrom ||
-                    $freq != '' ||
-                    $sour != '' ||
-                    $compa != '')
-                <div class="flex flex-row justify-between mx-4 pb-1 border-b-2 border-b-green-600">
-                    <span class="text-lg text-zinc-800 px-2">Criteria</span>
-                    <a wire:click.prevent="resetAll" title="Clear All">
-                        <i class="fa-solid fa-square-xmark text-red-600 hover:text-black cursor-pointer"></i>
-                    </a>
-                    </span>
-                </div>
-
-                <div class="flex flex-row justify-between items-center py-2 my-2 mx-4 rounded-md bg-gray-200">
-                    <div class="flex flex-wrap text-xs text-white capitalize w-full p-2 gap-3 sm:gap-4">
-                        <!-- Search -->
-                        @if ($search != '')
-                            <div class="flex relative">
-                                <span
-                                    class="bg-green-600 opacity-75 p-2 rounded-lg">{{ $search != '' ? 'Search' : '' }}</span>
-                                <a wire:click.prevent="clearSearch" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif
-                        <!-- User -->
-                        @if ($userID > 0)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-yellow-600 opacity-75 p-2 rounded-lg">{{ $userID > 0 ? 'User (' . $criteria['user'] . ')' : '' }}</span>
-                                <a wire:click.prevent="clearFilterUser" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif
-                        <!-- Types -->
-                        @if ($types != 2)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-yellow-600 opacity-75 p-2 rounded-lg">{{ $types == 1 ? 'Type (income)' : 'Type (expense)' }}</span>
-                                <a wire:click.prevent="clearFilterTypes" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif
-                        <!-- Date -->
-                        @if ($initialDateTo != $dateTo || $initialDateFrom != $dateFrom)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-violet-400 p-2 rounded-lg">{{ $initialDateTo != $dateTo || $initialDateFrom != $dateFrom ? 'Dates (' . date('d-m-Y', strtotime($dateFrom)) . ' to ' . date('d-m-Y', strtotime($dateTo)) . ')' : '' }}</span>
-                                <a wire:click.prevent="clearFilterDate" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif
-                        <!-- Category -->
-                        @if ($cat > 0)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-yellow-600 opacity-75 p-2 rounded-lg">{{ $cat > 0 ? 'Category (' . $cat . ')' : '' }}</span>
-                                <a wire:click.prevent="clearFilterCategory" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif
-                        <!-- Balance -->
-                        @if ($bal > 0)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-yellow-600 opacity-75 p-2 rounded-lg">{{ $bal > 0 ? 'Account (' . $bal . ')' : '' }}</span>
-                                <a wire:click.prevent="clearFilterBalance" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif
-                        <!-- Tags -->
-                        @if (!in_array('0', $this->selectedTags) && count($this->selectedTags) != 0)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-orange-600 opacity-75 p-2 rounded-lg">{{ !in_array('0', $this->selectedTags) && count($this->selectedTags) != 0 ? 'Tags (' . implode(', ', $tagNames) . ')' : '' }}</span>
-                                <a wire:click.prevent="clearFilterTag" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif
-                        <!-- Value -->
-                        @if ($initialValueTo != $valueTo || $initialValueFrom != $valueFrom)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-blue-600 opacity-75 p-2 rounded-lg">{{ $initialValueTo != $valueTo || $initialValueFrom != $valueFrom ? 'Value (' . $valueFrom . ' - ' . $valueTo . ')' : '' }}</span>
-                                <a wire:click.prevent="clearFilterValue" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif   
-                        <!-- Frequency -->
-                        @if ($freq != '')
-                            <div class="flex relative">
-                                <span
-                                    class="bg-green-600 opacity-75 p-2 rounded-lg">{{ $freq != '' ? $freq : '' }}</span>
-                                <a wire:click.prevent="clearFilterFrequency" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif  
-                        <!-- Source -->
-                        @if ($sour != '')
-                            <div class="flex relative">
-                                <span
-                                    class="bg-green-600 opacity-75 p-2 rounded-lg">{{ $sour != '' ? $sour : '' }}</span>
-                                <a wire:click.prevent="clearFilterSource" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif 
-                        <!-- Company -->
-                        @if ($compa != '')
-                            <div class="flex relative">
-                                <span
-                                    class="bg-green-600 opacity-75 p-2 rounded-lg">{{ $compa != '' ? $compa : '' }}</span>
-                                <a wire:click.prevent="clearFilterCompany" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif                    
-
-                    </div>
-
-                </div>
-            @endif
-
             <!-- Bulk Actions -->
             @if (count($okselections) > 0)
             <!-- <div> selections -> {{ var_dump($selections)}}</div>
@@ -569,7 +373,6 @@
                 </div>
             @endif
 
-            @if($total > 0)
             <!-- Export -->
             <div class="flex flex-row justify-end items-end sm:flex-row sm:justify-end gap-2 pt-2 px-0 mx-4">
 
@@ -586,8 +389,8 @@
                             </button>
                     </form>
                 </div>
-            </div>    
-            @endif    
+
+            </div>        
 
             <!-- TABLE -->
             <div class="px-0 sm:px-4 pb-0 ">
@@ -597,53 +400,50 @@
                         <table class="min-w-full ">
                             <!-- TABLE HEADER -->
                             <thead>
-                                <tr class="text-black text-left text-sm font-normal capitalize">
+                                <tr class="text-black text-left text-sm font-normal uppercase">
                                     <th></th>                                    
-                                    <th wire:click="sorting('id')" scope="col"
+                                    <th wire:click="sorting('entries.id')" scope="col"
                                         class="p-2 hover:cursor-pointer hover:text-slate-600 {{ $column == 'entries.id' ? 'text-orange-600' : '' }}">
                                         id {!! $sortLink !!}</th>
                                     @if($isAdmin)
-                                    <th wire:click="sorting('user_id')" scope="col"
+                                        <!-- <th scope="col" class="p-2 text-center capitalize">user</th> -->
+                                        <th wire:click="sorting('entries.user_id')" scope="col"
                                         class="p-2 hover:cursor-pointer hover:text-slate-600 {{ $column == 'entries.user_id' ? 'text-orange-600' : '' }}">
                                         user {!! $sortLink !!}</th>
                                     @endif
-                                    <th wire:click="sorting('date')" scope="col"
+                                    <th wire:click="sorting('entries.date')" scope="col"
                                         class="p-2 hover:cursor-pointer hover:text-slate-600 {{ $column == 'entries.date' ? 'text-orange-600' : '' }}">
                                         date {!! $sortLink !!}</th>
-                                    <th wire:click="sorting('title')" scope="col"
+                                    <th wire:click="sorting('entries.title')" scope="col"
                                         class="p-2 hover:cursor-pointer hover:text-slate-600 {{ $column == 'entries.title' ? 'text-orange-600' : '' }}">
                                         title {!! $sortLink !!}</th>
-                                        <th wire:click="sorting('company')" scope="col"
+                                        <th wire:click="sorting('entries.company')" scope="col"
                                         class="p-2 hover:cursor-pointer hover:text-slate-600 {{ $column == 'entries.company' ? 'text-orange-600' : '' }}">
                                         company {!! $sortLink !!}</th>
                                     <!-- <th wire:click="sorting('entries.type')" scope="col"
                                         class="p-2 hover:cursor-pointer hover:text-orange-600 {{ $column == 'type' ? 'text-orange-600' : '' }}">
                                         type {!! $sortLink !!}</th> -->
-                                    <th wire:click="sorting('value')" scope="col"
+                                    <th wire:click="sorting('entries.value')" scope="col"
                                         class="p-2 hover:cursor-pointer hover:text-slate-600 {{ $column == 'entries.value' ? 'text-orange-600' : '' }}">
-                                        (€) {!! $sortLink !!}</th>
-                                    <th wire:click="sorting('frequency')" scope="col"
-                                        class="p-2 hover:cursor-pointer hover:text-slate-600 {{ $column == 'entries.frequency' ? 'text-orange-600' : '' }}">
+                                        value (€) {!! $sortLink !!}</th>
+                                    <th wire:click="sorting('entries.frequency')" scope="col"
+                                        class="p-2 hover:cursor-pointer hover:text-slate-600 {{ $column == 'entries.value' ? 'text-orange-600' : '' }}">
                                         frequency {!! $sortLink !!}</th>
-                                    <th wire:click="sorting('balance_source')" scope="col"
-                                        class="p-2 hover:cursor-pointer hover:text-slate-600 {{ $column == 'balance_source' ? 'text-orange-600' : '' }}">
-                                        source {!! $sortLink !!}</th>
-                                    <th wire:click="sorting('balance_name')" scope="col"
-                                        class="p-2 hover:cursor-pointer hover:text-slate-600 {{ $column == 'balance_name' ? 'text-orange-600' : '' }}">
-                                        account {!! $sortLink !!}</th>                             
-                                    <th wire:click="sorting('category_name')" scope="col"
-                                        class="p-2 hover:cursor-pointer hover:text-slate-600 {{ $column == 'category_name' ? 'text-orange-600' : '' }}">
+                                    <th scope="col" class="p-2 text-center capitalize">source</th>
+                                    <th scope="col" class="p-2 text-center capitalize">account</th>                             
+                                    <th wire:click="sorting('entries.category_id')" scope="col"
+                                        class="p-2 hover:cursor-pointer hover:text-slate-600 {{ $column == 'entries.category_id' ? 'text-orange-600' : '' }}">
                                         category {!! $sortLink !!}</th>
-                                    <th scope="col" class="p-2 text-center">tags</th>
-                                    <th scope="col" class="text-center">Files</th>
-                                    <th scope="col" class="p-2 text-center">actions</th>
+                                    <th scope="col" class="p-2 text-center capitalize">tags</th>
+                                    <th scope="col" class="capitalize text-center">Files</th>
+                                    <th scope="col" class="p-2 text-center capitalize">actions</th>
                                 </tr>
                             </thead>
                             <!-- TABLE BODY -->
                             <tbody>
                                 @foreach ($entries as $entry)
                                     <tr
-                                        class="text-black text-sm leading-6 even:bg-zinc-200 odd:bg-gray-300 transition-all duration-1000 hover:bg-yellow-400">
+                                        class="text-black text-sm leading-6 even:bg-zinc-200 odd:bg-gray-300 transition-all duration-1000 hover:bg-orange-400">
                                         <td class="p-2 text-center"><input wire:model.live="selections" type="checkbox"
                                                 class="text-green-600 outline-none focus:ring-0 checked:bg-green-500"
                                                 value={{ intval($entry->id) }} 
@@ -666,9 +466,9 @@
                                         <td class="p-2">{{ $entry->company }}</td>
                                         <td class="p-2 {{ $entry->type == 0 ? 'text-red-600' : 'text-green-600' }}">{{ $entry->value }}</td>
                                         <td class="p-2">{{ $entry->frequency }}</td>
-                                        <td class="p-2">{{ $entry->balance_source }}</td>                                                                                
-                                        <td class="p-2">{{ $entry->balance_name }}</td>
-                                        <td class="p-2">{{ $entry->category_name }}</td>
+                                        <td class="p-2">{{ $entry->balance->source }}</td>                                                                                
+                                        <td class="p-2">{{ $entry->balance->name }}</td>
+                                        <td class="p-2">{{ $entry->category->name }}</td>
                                         <td class="p-2">
                                             @foreach ($entry->tags as $tags)
                                                 {{$tags->name}} 
@@ -730,7 +530,7 @@
                         <div
                             class="flex flex-row justify-between items-center bg-black text-white rounded-lg p-4 mx-2 sm:mx-0">
                             <span>No entries found in the system.</span>
-                            <a wire:click.prevent="resetAll" title="Reset">
+                            <a wire:click.prevent="clearSearch" title="Reset">
                                 <i
                                     class="fa-lg fa-solid fa-circle-xmark cursor-pointer px-2 text-red-600 hover:text-red-400 transition duration-1000 ease-in-out"></i>
                             </a>

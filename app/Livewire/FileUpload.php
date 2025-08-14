@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Entry;
 use App\Models\File;
+use App\Services\EntryService;
 use App\Services\FileService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -19,6 +20,7 @@ class FileUpload extends Component
 
     // Dependency Injection to use the Service
     protected FileService $fileService;
+    protected EntryService $entryService;
 
     protected $rules = [
         'files' => 'array|min:1|max:5',
@@ -37,8 +39,10 @@ class FileUpload extends Component
     // Hook Runs on every request, immediately after the component is instantiated, but before any other lifecycle methods are called
     public function boot(
         FileService $fileService,
+        EntryService $entryService,
     ) {
         $this->fileService = $fileService;
+        $this->entryService = $entryService;
     }
 
     public function mount(Entry $entry)
@@ -67,11 +71,9 @@ class FileUpload extends Component
     }
 
     public function render()
-    {
-        // resticted access - only user who owns the entry has access
-        if ($this->entry->user_id !== Auth::id()) {
-            abort(403);
-        }  
+    {            
+
+        $this->entryService->authorization($this->entry);
 
         return view('livewire.file-upload', [
             'entry' => $this->entry

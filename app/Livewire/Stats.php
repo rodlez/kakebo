@@ -4,12 +4,11 @@ namespace App\Livewire;
 
 use App\Models\Entry;
 use App\Services\EntryService;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class EntriesShow extends Component
+class Stats extends Component
 {
-    public Entry $entry;
+     public Entry $entry;
 
     // Dependency Injection to use the Service
     protected EntryService $entryService;
@@ -28,12 +27,11 @@ class EntriesShow extends Component
 
     public function render()
     {
-        
-        $this->entryService->authorization($this->entry);        
 
-        return view('livewire.entries-show', [
-            'entry' => $this->entry
+        return view('livewire.stats', [
+            'todayBalance' => $this->entryService->getStatsTime('today'),
+            'weekBalance' => $this->entryService->getStatsTime('week'),
+            'monthBalance' => $this->entryService->getStatsTime('month'),
         ]);
-    }    
-   
+    }
 }

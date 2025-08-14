@@ -1,12 +1,18 @@
 <?php
 
 use App\Http\Controllers\ArchiveController;
+use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EntryController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\TagController;
 use App\Livewire\Archive;
 use App\Livewire\ArchiveShow;
+use App\Livewire\Balances;
+use App\Livewire\BalancesCreate;
+use App\Livewire\BalancesEdit;
+use App\Livewire\BalancesShow;
 use App\Livewire\Categories;
 use App\Livewire\CategoriesCreate;
 use App\Livewire\CategoriesEdit;
@@ -19,10 +25,12 @@ use App\Livewire\FileUpload;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
+use App\Livewire\Stats;
 use App\Livewire\Tags;
 use App\Livewire\TagsCreate;
 use App\Livewire\TagsEdit;
 use App\Livewire\TagsShow;
+use App\Livewire\Users;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -45,15 +53,45 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/entries/create', EntriesCreate::class)->name('entries.create');
     Route::get('/entries/show/{entry}', EntriesShow::class)->name('entries.show');
     Route::delete('/entries/{entry}', [EntryController::class, 'destroy'])->name('entries.destroy');
-    Route::get('/entries/edit/{entry}', EntriesEdit::class)->name('entries.edit');
+    Route::get('/entries/edit/{entry}', EntriesEdit::class)->name('entries.edit');    
 
-    
+    // EXCEL 
+    Route::get('/entries/export', [EntryController::class, 'exportAll'])->name('entries.exportall');
+
+    Route::post('/entries/export', [EntryController::class, 'export'])->name('entries.export');
+
+    Route::post('/entries/exportselected', [EntryController::class, 'exportSelected'])->name('entries.exportselected');
+    Route::post('/entries/exportbulk', [EntryController::class, 'exportBulk'])->name('entries.exportbulk');
 
     /* FILES */
     Route::get('/entries/{entry}/file', FileUpload::class)->name('files.upload');
-    Route::delete('/sports/{entry}/file/{file}', [FileController::class, 'destroy'])->name('files.destroy');
+    Route::delete('/sports/{entry}/file/{file}', [FileController::class, 'destroy'])->name('files.destroy');    
 
-    Route::delete('/sports/{entry}/file/{file}', [FileController::class, 'destroy'])->name('files.destroy');
+    /* PDF */
+    Route::get('/generate_pdf/{data}', [PDFController::class, 'generateEntryPDF'])->name('entries_pdf.generate');
+
+    /* STATS */
+    Route::get('/stats', Stats::class)->name('stats.index');
+
+    /* BALANCES */
+    Route::get('/balances', Balances::class)->name('balances.index');
+    Route::get('/balances/create', BalancesCreate::class)->name('balances.create');
+    Route::get('/balances/show/{balance}', BalancesShow::class)->name('balances.show');
+    Route::delete('/balances/{balance}', [BalanceController::class, 'destroy'])->name('balances.destroy');
+    Route::get('/balances/edit/{balance}', BalancesEdit::class)->name('balances.edit');
+
+});
+
+
+// ADMIN - CATEGORIES / TAGS / ARCHIVE
+
+Route::group(['middleware' => ['auth', 'admin']], function () {
+    //Route::get('admin-home', [App\Http\Controllers\AdminController::class, 'adminHome'])->name('admin.home');
+    /* ARCHIVE */
+    Route::get('/archive', Archive::class)->name('archive.index');
+    Route::get('/archive/show/{archive}', ArchiveShow::class)->name('archive.show');
+    Route::put('/archive/{archive}', [ArchiveController::class, 'restore'])->name('archive.restore');
+    Route::delete('/archive/{archive}', [ArchiveController::class, 'destroy'])->name('archive.destroy');
 
     /* CATEGORIES */
     Route::get('/categories', Categories::class)->name('categories.index');
@@ -71,18 +109,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('tags.destroy');
     Route::get('/tags/edit/{tag}', TagsEdit::class)->name('tags.edit');
 
-});
-
-
-// ADMIN TEST
-
-Route::group(['middleware' => ['auth', 'admin']], function () {
-    //Route::get('admin-home', [App\Http\Controllers\AdminController::class, 'adminHome'])->name('admin.home');
-    /* ARCHIVE */
-    Route::get('/archive', Archive::class)->name('archive.index');
-    Route::get('/archive/show/{archive}', ArchiveShow::class)->name('archive.show');
-    Route::put('/archive/{archive}', [ArchiveController::class, 'restore'])->name('archive.restore');
-    Route::delete('/archive/{archive}', [ArchiveController::class, 'destroy'])->name('archive.destroy');
+    /* USERS */
+    Route::get('/users', Users::class)->name('users.index');
 });
 
 

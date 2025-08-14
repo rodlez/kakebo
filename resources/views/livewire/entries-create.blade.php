@@ -19,6 +19,23 @@
             @csrf
 
             <div class="mx-auto w-11/12">
+                
+                <!-- Type -->
+                <h2 class="text-lg font-bold pt-2 pb-1 px-2">Type <span class="text-red-600">*</span></h2>
+
+                <div class="relative">
+                    <i class="fa-solid fa-pen-to-square  bg-gray-200 p-3 rounded-l-md mr-6"></i>
+                        <label>
+                            Gasto
+                            <input class="mr-4" type="radio" name="type" id="type" wire:model.live="type" 
+                                value="0" {{ $this->type == 0 ? 'checked' : '' }}/>                                                                
+                        </label>
+                        <label>
+                            Ingreso
+                            <input type="radio" name="type" id="type" wire:model.live="type" 
+                                value="1" {{ $this->type == 1 ? 'checked' : '' }}/>
+                        </label>
+                </div>
                 <!-- Date -->
                 <h2 class="text-lg font-bold pt-2 pb-1 px-2">Date <span class="text-red-600">*</span></h2>
 
@@ -52,23 +69,7 @@
                     @error('title')
                         {{ $message }}
                     @enderror
-                </div>
-                <!-- Type -->
-                <div
-                    class="flex flex-row justify-start items-center mt-6 py-2 px-2 rounded-md gap-3 {{ $type == 0 ? 'bg-orange-100' : 'bg-red-100' }}  ">
-                    <div>
-                        <h2 class="text-black text-lg font-semibold">Type</h2>
-                    </div>
-                    <div>
-                        <label class="inline-flex cursor-pointer pt-2">
-                            <input wire:model.live="type" name="type" id="type" type="checkbox"
-                                value="{{ old('type') }}" class="sr-only peer">
-                            <div
-                                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-white dark:peer-focus:ring-gray-600 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-orange-600">
-                            </div>
-                        </label>
-                    </div>
-                </div>
+                </div>                
                 <!-- Value -->
                 <h2 class="text-lg font-bold pt-2 pb-1 px-2">Value <span class="text-xs">(€)</span> <span
                         class="text-red-600">*</span></h2>
@@ -141,7 +142,26 @@
                     @error('category_id')
                         {{ $message }}
                     @enderror
-                </div>                
+                </div>   
+                <!-- Balance -->
+                <h2 class="text-lg font-bold pt-2 pb-1 px-2">Balance <span class="text-red-600">*</span></h2>
+                <div class="relative">
+                    <select wire:model.live="balance_id" name="balance_id" id="balance_id"
+                        class="w-full pl-12 rounded-lg bg-gray-50 border border-gray-200 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-orange-500 focus:border-orange-500">
+                        @foreach ($balances as $balance)
+                            <option value="{{ $balance->id }}" class="text-orange-600"
+                                @if (old('balance_id') == $balance->id) selected @endif>{{ $balance->name }}</option>
+                        @endforeach
+                    </select>
+                    <div class="absolute flex items-center inset-y-0 left-0 pointer-events-none">
+                        <i class="fa-solid fa-basketball bg-gray-200 p-1 rounded-l-md"></i>
+                    </div>
+                </div>
+                <div class="text-sm text-red-600 font-bold py-1 pl-12">
+                    @error('balance_id')
+                        {{ $message }}
+                    @enderror
+                </div>              
                 <!-- Tags -->
                 <h2 class="text-lg font-bold pt-2 pb-1 px-2">Tags <span class="text-red-600">*</span></h2>
 
@@ -172,7 +192,7 @@
                 <div class="flex">
                     <span><i class="bg-zinc-200 p-1 rounded-l-md fa-solid fa-circle-info"></i></span>
                     <div class="w-full">
-                        
+                        @livewire('texteditor.quill')
                     </div>
                 </div>
                 <!-- Errors -->

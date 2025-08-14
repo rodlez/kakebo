@@ -2,10 +2,14 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Texteditor\Quill;
+use App\Models\Balance;
 use App\Models\Category;
 use App\Models\Entry;
 use App\Models\Tag;
+use App\Services\EntryService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class EntriesEdit extends Component
@@ -18,6 +22,7 @@ class EntriesEdit extends Component
     public $frequency;
     public $info;
     public $category_id;
+    public $balance_id;
     public $selectedTags = [];
 
     protected $rules = [
@@ -29,26 +34,63 @@ class EntriesEdit extends Component
         'frequency'         => 'required',
         'info'              => 'nullable|min:3',
         'category_id'       => 'required',
+        'balance_id'        => 'required',
         'selectedTags'      => 'required',        
     ];
 
     protected $messages = [
         'category_id.required' => 'Select one category.',
+        'balance_id.required'  => 'Select one balance.',
         'selectedTags.required' => 'At least 1 tag must be selected.',
         'frequency.required' => 'Select one frequency.',
 
     ];
 
+    /* Quill Editor - removing spaces  */
+ 
+    public $listeners = [
+        Quill::EVENT_VALUE_UPDATED
+    ];
+    
+    public function quill_value_updated($value){
+
+       // Remove more than 2 consecutive whitespaces
+       if ( preg_match( '/(\s){2,}/s', $value ) === 1 ) {
+           $value = preg_replace( '/(\s){2,}/s', '', $value );           
+       }
+       
+       // Because Quill Editor includes <p><br></p> in case you type and then leave the input blank
+       if($value == "<p><br></p>" || $value == "<h1><br></h1>" || $value == "<h2><br></h2>" || $value == "<h3><br></h3>" || $value == "<p></p>" || $value == "<p> </p>") { 
+           $value = null;
+       }
+       
+       $this->info = $value;
+
+    }
+
     public Entry $entry;
+
+    // Dependency Injection to use the Service
+    protected EntryService $entryService;
+
+    // Hook Runs on every request, immediately after the component is instantiated, but before any other lifecycle methods are called
+    public function boot(
+        EntryService $entryService,
+    ) {
+        $this->entryService = $entryService;
+    }
 
     public function mount(Entry $entry)
     {
         $this->entry = $entry;
+        // If the user is not authorized inmediatly abort
+        $this->entryService->authorization($this->entry);
 
         $this->title = $this->entry->title;
         $this->type = $this->entry->type;
         $this->date = $this->entry->date;
         $this->category_id = $this->entry->category_id;
+        $this->balance_id = $this->entry->balance_id;
         $this->company = $this->entry->company;
         $this->value = $this->entry->value;
         $this->frequency = $this->entry->frequency;
@@ -77,13 +119,16 @@ class EntriesEdit extends Component
     {
         // Using Eloquent Collection Methods
         $categories     = Category::all()->sortBy('name', SORT_NATURAL|SORT_FLAG_CASE);    
+        $balances       = Balance::all()->sortBy('name', SORT_NATURAL|SORT_FLAG_CASE);    
         $tags           = Tag::all()->sortBy('name', SORT_NATURAL|SORT_FLAG_CASE);
+        
         //$frequencies    = Entry::all()->pluck('frequency');
         // TODO: get frequencies from the enum in the DB or a Constant in config
         $frequencies    = ['puntual','semanal','quincenal','mensual','bimensual','trimestral','semestral','anual'];
 
         return view('livewire.entries-edit', [
             'categories'        => $categories,
+            'balances'          => $balances,
             'tags'              => $tags,
             'frequencies'       => $frequencies,
         ]);

@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Category;
 use App\Models\Entry;
 use App\Models\Tag;
+use App\Models\User;
 use App\Services\FileService;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -48,8 +49,7 @@ class Archive extends Component
 
     public $tag = 0;
 
-    // test admin
-    public $admin;
+    public $userID = 0;
 
     // multiple batch selections
     public $selections = [];
@@ -77,7 +77,6 @@ class Archive extends Component
         $this->valueTo = Entry::onlyTrashed()->max('value');
         $this->initialValueTo = Entry::onlyTrashed()->max('value');
 
-        $this->admin = Auth::user()->is_admin;
     }
 
     public function activateFilter()
@@ -97,6 +96,7 @@ class Archive extends Component
         $this->compa = '';
         $this->cat = 0;
         $this->tag = 0;
+        $this->userID = 0;
     }
 
     public function clearSearch()
@@ -135,6 +135,11 @@ class Archive extends Component
     {
         $this->tag = 0;
     }
+
+    public function clearFilterUser()
+    {
+        $this->userID = 0;
+    }
     
 
     // Bulk Actions
@@ -151,7 +156,7 @@ class Archive extends Component
             $element->restore();
         }
 
-        return to_route('entries.index')->with('message', 'Entries restored.');
+        return to_route('archive.index')->with('message', 'Entries restored.');
     }
 
     public function bulkDelete()
@@ -206,11 +211,18 @@ class Archive extends Component
 
         $categories = Category::orderby('name', 'ASC')->get();
         $tags = Tag::orderby('name', 'ASC')->get();
+        $users = User::orderby('name', 'ASC')->get();
         $companies = Entry::onlyTrashed()->orderby('company', 'ASC')->select('company')->get();
+
 
         //$data = Entry::onlyTrashed()->orderby($this->orderColumn, $this->sortOrder)->get();
         $data = Entry::orderby($this->orderColumn, $this->sortOrder)->onlyTrashed()->select('*');      
 
+        // user filter
+        if ($this->userID != 0) {
+            $data = $data->where('user_id', '=', $this->userID);
+        }
+        
         // types filter
         if ($this->types != 2) {
             $data = $data->where('type', '=', $this->types);
@@ -271,6 +283,7 @@ class Archive extends Component
             'entries'       => $data,
             'categories'    => $categories,
             'tags'          => $tags,
+            'users'         => $users,
             'companies'     => $companies,
             'found'         => $found,
             'column'        => $this->orderColumn,

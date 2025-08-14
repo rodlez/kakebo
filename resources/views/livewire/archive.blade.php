@@ -42,6 +42,29 @@
             @if ($showFilters % 2 != 0) 
             <div id="filtrini" class="text-black bg-gray-200 rounded-lg mx-4 my-2 py-2 w-100">
 
+                <!-- Users -->
+                <div
+                    class="flex flex-col justify-start items-start sm:flex-row sm:justify-between sm:items-center gap-1 px-4 py-2">
+                    <div class="w-full px-2 md:w-60 md:mx-auto md:text-start">
+                        <span><i class="text-yellow-600 fa-lg fa-solid fa-sitemap"></i></span>
+                        <span class="px-2">Users (<span
+                                class="font-semibold text-sm">{{ $users->count() }}</span>)</span>
+                    </div>
+                    <div class="flex flex-row items-center w-full md:w-1/2 md:text-start">
+                        <select wire:model.live="userID" class="rounded-lg w-full md:w-80">
+                            <option value="0">All</option>
+                            @foreach ($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
+                        </select>
+                        @if ($userID > 0)
+                            <a wire:click.prevent="clearFilterUser" title="Reset Filter" class="cursor-pointer">
+                                <span class="text-red-600 hover:text-red-400 px-2"><i
+                                        class="fa-solid fa-circle-xmark"></i></span>
+                            </a>
+                        @endif
+                    </div>
+                </div>
                 <!-- Types -->
                 <div
                     class="flex flex-col justify-start items-start sm:flex-row sm:justify-between sm:items-center gap-1 px-4 py-2">
@@ -52,12 +75,12 @@
                     <div class="flex flex-row items-center w-full md:w-1/2 md:text-start">
                         <select wire:model.live="types" class="rounded-lg w-full md:w-80">
                             <option value="2">All</option>
-                            <option value="0">0 - Gasto</option>
-                            <option value="1">1 - Ingreso</option>
+                            <option value="0">Gastos</option>
+                            <option value="1">Ingresos</option>
                         </select>
                         @if ($types != 2)
                             <a wire:click.prevent="clearFilterTypes" title="Reset Filter" class="cursor-pointer">
-                                X<span class="text-red-600 hover:text-red-400 px-2"><i
+                                <span class="text-red-600 hover:text-red-400 px-2"><i
                                         class="fa-solid fa-circle-xmark"></i></span>
                             </a>
                         @endif
@@ -177,7 +200,7 @@
                         </select>
                         @if ($compa != '')
                             <a wire:click.prevent="clearFilterCompany" title="Reset Filter" class="cursor-pointer">
-                                X<span class="text-red-600 hover:text-red-400 px-2"><i
+                                <span class="text-red-600 hover:text-red-400 px-2"><i
                                         class="fa-solid fa-circle-xmark"></i></span>
                             </a>
                         @endif
@@ -201,7 +224,7 @@
                         </select>
                         @if ($cat > 0)
                             <a wire:click.prevent="clearFilterCategory" title="Reset Filter" class="cursor-pointer">
-                                X<span class="text-red-600 hover:text-red-400 px-2"><i
+                                <span class="text-red-600 hover:text-red-400 px-2"><i
                                         class="fa-solid fa-circle-xmark"></i></span>
                             </a>
                         @endif
@@ -225,7 +248,7 @@
                         </select>
                         @if ($tag > 0)
                             <a wire:click.prevent="clearFilterTag" title="Reset Filter" class="cursor-pointer">
-                                X<span class="text-red-600 hover:text-red-400 px-2"><i
+                                <span class="text-red-600 hover:text-red-400 px-2"><i
                                         class="fa-solid fa-circle-xmark"></i></span>
                             </a>
                         @endif
@@ -379,7 +402,6 @@
                                                     </button>
                                                 </form>                                           
                                                 <!-- Delete -->
-                                                 @if($admin == 1)
                                                 <form action="{{ route('archive.destroy', $archive->id) }}" method="POST">
                                                 <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
                                                 @csrf
@@ -394,7 +416,6 @@
                                                                 class="fa-solid fa-trash"></i></span>
                                                     </button>
                                                 </form>                                               
-                                                @endif
                                             </div>
                                         </td>
                                     </tr>

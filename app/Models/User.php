@@ -58,4 +58,15 @@ class User extends Authenticatable
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
+
+    /**
+     * Get the entries associated with the user.
+     */
+    public function entries()
+    {
+        return $this->hasMany(
+            Entry::class,
+            foreignKey: 'user_id'
+        );
+    }
 }

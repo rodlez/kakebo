@@ -19,7 +19,10 @@
                 <span class="text-xl text-white font-bold capitalize sm:mt-8 mx-4">Information</span>
                 <div class="flex flex-row justify-end items-end gap-4 w-fit sm:mt-8 mx-2">
                     <!-- PDF -->
-                    PDF
+                    <a href="{{ route('entries_pdf.generate', $entry) }}" title="Download as PDF">
+                        <i
+                            class="fa-solid fa-file-pdf text-white hover:text-orange-600 transition-all duration-500"></i>
+                    </a>
                     <!-- Edit -->
                     <a href="{{ route('entries.edit', $entry) }}" title="Edit">
                         <i class="fa-solid fa-pencil text-white hover:text-blue-600 transition-all duration-500"></i>
@@ -99,6 +102,34 @@
                 </div>
                 <span
                     class="w-full px-8 sm:px-2 {{ $entry->type == 0 ? 'text-red-600' : 'text-orange-600' }}">{{ $entry->value }} €</span>                
+            </div>
+            <!-- Account -->
+            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">
+                <div class="flex flex-row justify-start items-center gap-2">
+                    <i class="fa-solid fa-route w-6 text-center"></i>
+                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Account</span>
+                </div>
+                <span class="w-full px-8 sm:px-2">
+                    @if (isset($entry->balance->name))  
+                        <span> {{ $entry->balance->name }}</span>
+                    @else 
+                        <span>-</span>
+                    @endif                     
+            </span>
+            </div>
+            <!-- Source -->
+            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">
+                <div class="flex flex-row justify-start items-center gap-2">
+                    <i class="fa-solid fa-route w-6 text-center"></i>
+                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Source</span>
+                </div>
+                <span class="w-full px-8 sm:px-2">
+                    @if (isset($entry->balance->source))  
+                        <span> {{ $entry->balance->source }}</span>
+                    @else 
+                        <span>-</span>
+                    @endif                     
+            </span>
             </div>
             <!-- Frequency -->
             <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">

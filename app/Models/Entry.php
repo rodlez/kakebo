@@ -15,6 +15,7 @@ class Entry extends Model
     protected $fillable = [
         'user_id',
         'category_id',
+        'balance_id',
         'type',
         'title',
         'company',
@@ -43,6 +44,17 @@ class Entry extends Model
         return $this->belongsTo(
             Category::class,
             foreignKey: 'category_id'
+        );
+    }
+
+    /**
+     * Get the balance associated with the Entry.
+     */
+    public function balance()
+    {
+        return $this->belongsTo(
+            Balance::class,
+            foreignKey: 'balance_id'
         );
     }
 
