@@ -40,13 +40,30 @@ class EntryController extends Controller
      */
     public function export(Request $request) 
     {   
+        
+        //dd($request);
+        $criteriaSelection = json_decode($request->criteriaSelection, true);
+        
+        $criteriaName = $this->entryService->getCriteriaFilename($criteriaSelection);
+        //dd($resultado);
         //dd($request->entries);
+        $criteria = $request->criteriaSelection;
+        //dd($criteria);
+
         // listEntries is a string, remove [ ] from start and end of the string
         $stringListEntries = substr($request->entries, 1, -1);
 
         // convert string to array of Ids
         $listIds = explode(',',$stringListEntries);
-        $excelFileName = Auth::user()->name . '_TotalEntries('. count($listIds) .').xlsx';                
+
+        // File name
+        if($criteria != '[]')
+        {
+            $excelFileName = 'Kakebo_'. date('Y-m-d',time()) . '_CRITERIA_' . $criteriaName . 'Total('. count($listIds) .').xlsx';
+        }
+        else{
+            $excelFileName = 'Kakebo_'. date('Y-m-d',time()) . '_User_' . Auth::user()->name . '_TotalEntries('. count($listIds) .').xlsx';
+        }
         
         return Excel::download(new EntryExport(false, $listIds, $this->entryService),  $excelFileName);
     }

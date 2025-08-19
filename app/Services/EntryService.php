@@ -92,4 +92,25 @@ class EntryService
     {
         return User::where('id','=',$userID)->value('name');        
     }
+
+    /**
+     * Get Criteria for Export Excel filename
+     * Given an associative array, sort and return a string
+     */
+
+    public function getCriteriaFilename(array $criteriaSelection): string
+    {
+        ksort($criteriaSelection);
+        //$criterin = implode('_', $criterias);
+        //dd($criterias);
+        $resultado = '';
+        foreach ($criteriaSelection as $key => $value) {
+            $resultado .= $key . '_';
+            $resultado .= $value . '_';
+        }
+        $resultado = str_replace(' ','-',$resultado);
+        $resultado = str_replace(',','',$resultado); 
+        
+        return $resultado;
+    }
 }
