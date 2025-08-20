@@ -19,21 +19,24 @@
                         title="Create New Tag">New</a>
                 </div>
             </div>
-            <!-- FILTERS-->
 
-            <div class="flex flex-col bg-violet-400 w-11/12 mx-auto my-4">
+
+            <!-- FILTERS-->
+            <div class="flex flex-col w-11/12 mx-auto my-4">
                 
-                <div class="flex flex-row justify-between items-center bg-red-400 w-full border-b-2 border-b-green-400">
-                    <span>FILTERS</span>
+                <div class="flex flex-row justify-between items-center w-full border-b-2 border-b-green-800">
+                    <span class="font-bold uppercase bg-green-800 rounded-sm text-white py-2 px-3  my-1">
+                        <a wire:click="activateFilter" class="cursor-pointer" title="{{($showFilters % 2 != 0) ? 'Close Filters' : 'Open Filters'}}">filters</a>
+                    </span>
                     <!-- Open/Close Buttons -->
                     <div>
                         @if ($showFilters % 2 != 0)
-                            <a wire:click="activateFilter" class="cursor-pointer tooltip">
-                                <i class="fa-solid fa-minus"></i>
+                            <a wire:click="activateFilter" class="cursor-pointer" title="Close Filters">
+                                <i class="text-red-800 fa-solid fa-xmark"></i>
                             </a>
                         @else
-                            <a wire:click="activateFilter" class="cursor-pointer tooltip">
-                                <i class="fa-solid fa-plus"></i>
+                            <a wire:click="activateFilter" class="cursor-pointer" title="Open Filters">
+                                <i class="text-green-800 fa-solid fa-caret-down"></i>
                             </a>
                         @endif
                     </div>
@@ -41,50 +44,54 @@
 
                 @if ($showFilters % 2 != 0)
                 <!-- Filters Options -->    
-                <div class="flex flex-col bg-gray-300 py-2">
+                <div class="flex flex-col bg-green-800 opacity-95 py-2 my-1 rounded-sm text-white">
 
-                    <!-- USERS -->
                     @if ($isAdmin)
-                    <!-- 1 ROW FILTER -->
-                    <div class="flex flex-row justify-between gap-0 bg-blue-400 w-1/2 p-0">
+                    <!-- 2 ROW FILTER -->
+
+                    <div class="flex flex-row p-1 my-1">
+                        <!-- USERS -->
+                        <div class="flex flex-row justify-between w-1/2">                    
                         
-                        <div class="w-5/12 bg-pink-200 ml-1">
-                            <span><i class="text-yellow-600 fa fa-user"></i></span>
-                            <span class="px-2">Users (<span
-                                    class="font-semibold text-sm">{{ $users->count() }}</span>)</span>                            
-                        </div>                        
-                        <div class="flex flex-row w-6/12 bg-violet-400 justify-end">                            
-                            <select wire:model.live="userID" class="rounded-lg w-full text-end">
-                                <option value="0">All</option>
-                                @foreach ($users as $user)
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                @endforeach
-                            </select>
-                                                        
-                        </div>
-                        <div class="w-1/12">
-                            @if ($userID > 0)
-                                <a wire:click.prevent="clearFilterUser" title="Reset Filter User" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-red-400 px-1 justify-center items-center"><i
-                                            class="fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            @endif
+                            <div class="w-5/12">
+                                <span><i class="text-white fa fa-user"></i></span>
+                                <span class="px-2">Users (<span
+                                        class="font-semibold text-sm">{{ $users->count() }}</span>)</span>                            
+                            </div>                        
+                            <div class="flex flex-row w-6/12 justify-end">                            
+                                <select wire:model.live="userID" class="w-full rounded-sm bg-gray-100 text-end text-green-800">
+                                    <option value="0">All</option>
+                                    @foreach ($users as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    @endforeach
+                                </select>
+                                                            
+                            </div>
+                            <div class="w-1/12">
+                                @if ($userID > 0)
+                                    <a wire:click.prevent="clearFilterUser" title="Reset Filter User" class="cursor-pointer">
+                                        <span class="text-red-400 hover:text-red-600 px-1 justify-center items-center"><i
+                                                class="fa-solid fa-circle-xmark"></i></span>
+                                    </a>
+                                @endif
+                            </div>
+
                         </div>
 
                     </div>
                     @endif
 
                     <!-- 2 ROW FILTER -->
-                    <div class="flex flex-row bg-yellow-400 p-1">
+                    <div class="flex flex-row p-1 my-1">
                         <!-- TYPES -->
-                        <div class="flex flex-row justify-between gap-0 bg-blue-400 w-1/2">
+                        <div class="flex flex-row justify-between w-1/2">
                             
-                            <div class="w-5/12 bg-pink-200">
-                                <span><i class="fa fa-wallet"></i></span>
+                            <div class="w-5/12">
+                                <span><i class="text-white fa fa-wallet"></i></span>
                                 <span class="px-2">Types</span>                            
                             </div>                        
-                            <div class="flex flex-row w-6/12 bg-violet-400 justify-end">                            
-                                <select wire:model.live="types" class="rounded-lg w-full text-end">
+                            <div class="flex flex-row w-6/12 justify-end">                            
+                                <select wire:model.live="types" class="w-full rounded-sm bg-gray-100 text-end text-green-800">
                                 <option value="2">All</option>
                                 <option value="0">Expense</option>
                                 <option value="1">Income</option>
@@ -103,15 +110,15 @@
                         </div>
 
                         <!-- Frequency -->
-                        <div class="flex flex-row justify-between gap-0 bg-blue-400 w-1/2">
+                        <div class="flex flex-row justify-between w-1/2">
                                 
-                            <div class="w-5/12 bg-pink-200">
-                                <span><i class="fa fa-clock"></i></span>
+                            <div class="w-5/12">
+                                <span><i class="text-white fa fa-clock"></i></span>
                                 <span class="px-2">Frequency (<span
                                     class="font-semibold text-sm">{{ $frequencies->count() }}</span>)</span>                            
                             </div>                        
-                            <div class="flex flex-row w-6/12 bg-violet-400 justify-end">                            
-                                <select wire:model.live="freq" class="rounded-lg w-full text-end">
+                            <div class="flex flex-row w-6/12 justify-end">                            
+                                <select wire:model.live="freq" class="w-full rounded-sm bg-gray-100 text-end text-green-800">
                                     <option value="0">All</option>
                                 @foreach ($frequencies as $frequency)
                                     <option value="{{ $frequency->frequency }}">{{ $frequency->frequency }}</option>
@@ -133,17 +140,17 @@
                     </div>
 
                     <!-- 2 ROW FILTER -->
-                    <div class="flex flex-row bg-yellow-400 p-1">
+                    <div class="flex flex-row p-1 my-1">
                         <!-- Source -->
-                        <div class="flex flex-row justify-between gap-0 bg-blue-400 w-1/2">
+                        <div class="flex flex-row justify-between w-1/2">
                             
-                            <div class="w-5/12 bg-pink-200">
-                                <span><i class="fa fa-money-bill"></i></span>
+                            <div class="w-5/12">
+                                <span><i class="text-white fa fa-money-bill"></i></span>
                                 <span class="px-2">Source (<span
                                 class="font-semibold text-sm">{{ $sources->count() }}</span>)</span>                            
                             </div>                        
-                            <div class="flex flex-row w-6/12 bg-violet-400 justify-end">                            
-                                <select wire:model.live="sour" class="rounded-lg w-full text-end">
+                            <div class="flex flex-row w-6/12 justify-end">                            
+                                <select wire:model.live="sour" class="w-full rounded-sm bg-gray-100 text-end text-green-800">
                                     <option value="0">All</option>
                                     @foreach ($sources as $source)
                                         <option value="{{ $source->source }}">{{ $source->source }}</option>
@@ -162,15 +169,15 @@
                         </div>
 
                         <!-- Balance -->
-                        <div class="flex flex-row justify-between gap-0 bg-blue-400 w-1/2">
+                        <div class="flex flex-row justify-between w-1/2">
                                 
-                            <div class="w-5/12 bg-pink-200">
-                                <span><i class="fa fa-piggy-bank"></i></span>
+                            <div class="w-5/12">
+                                <span><i class="text-white fa fa-piggy-bank"></i></span>
                                 <span class="px-2">Balance (<span
                                 class="font-semibold text-sm">{{ $balances->count() }}</span>)</span>                            
                             </div>                        
-                            <div class="flex flex-row w-6/12 bg-violet-400 justify-end">                            
-                                <select wire:model.live="bal" class="rounded-lg w-full text-end">
+                            <div class="flex flex-row w-6/12 justify-end">                            
+                                <select wire:model.live="bal" class="w-full rounded-sm bg-gray-100 text-end text-green-800">
                                     <option value="0">All</option>
                                     @foreach ($balances as $balance)
                                         <option value="{{ $balance->name }}">{{ $balance->name }}</option>
@@ -192,17 +199,17 @@
                     </div>
 
                     <!-- 2 ROW FILTER -->
-                    <div class="flex flex-row bg-yellow-400 p-1">
+                    <div class="flex flex-row p-1 my-1">
                         <!-- Company -->
-                        <div class="flex flex-row justify-between gap-0 bg-blue-400 w-1/2">
+                        <div class="flex flex-row justify-between w-1/2">
                             
-                            <div class="w-5/12 bg-pink-200">
-                                <span><i class="fa fa-industry"></i></span>
+                            <div class="w-5/12">
+                                <span><i class="text-white fa fa-industry"></i></span>
                                 <span class="px-2">Company (<span
                                 class="font-semibold text-sm">{{ $companies->count() }}</span>)</span>                            
                             </div>                        
-                            <div class="flex flex-row w-6/12 bg-violet-400 justify-end">                            
-                                <select wire:model.live="compa" class="rounded-lg w-full text-end">
+                            <div class="flex flex-row w-6/12 justify-end">                            
+                                <select wire:model.live="compa" class="w-full rounded-sm bg-gray-100 text-end text-green-800">
                                     <option value="0">All</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->company }}">{{ $company->company }}</option>
@@ -221,15 +228,15 @@
                         </div>
 
                         <!-- Category -->
-                        <div class="flex flex-row justify-between gap-0 bg-blue-400 w-1/2">
+                        <div class="flex flex-row justify-between w-1/2">
                                 
-                            <div class="w-5/12 bg-pink-200">
-                                <span><i class="fa fa-tag"></i></span>
+                            <div class="w-5/12">
+                                <span><i class="text-white fa fa-tag"></i></span>
                                 <span class="px-2">Category (<span
                                 class="font-semibold text-sm">{{ count($categories) }}</span>)</span>                            
                             </div>                        
-                            <div class="flex flex-row w-6/12 bg-violet-400 justify-end">                            
-                                <select wire:model.live="cat" class="rounded-lg w-full text-end">
+                            <div class="flex flex-row w-6/12 justify-end">                            
+                                <select wire:model.live="cat" class="w-full rounded-sm bg-gray-100 text-end text-green-800">
                                     <option value="0">All</option>
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->name }}">{{ $category->name }}</option>
@@ -251,16 +258,16 @@
                     </div>
 
                     <!-- 2 ROW FILTER DATE-->
-                    <div class="flex flex-row bg-yellow-400 p-1">
+                    <div class="flex flex-row p-1 my-1">
                         <!-- Date From -->
-                        <div class="flex flex-row justify-between gap-0 bg-blue-400 w-1/2">
+                        <div class="flex flex-row justify-between w-1/2">
                             
-                            <div class="w-5/12 bg-pink-200">
-                                <span><i class="fa fa-calendar"></i></span>
+                            <div class="w-5/12">
+                                <span><i class="text-white fa fa-calendar"></i></span>
                                 <span class="px-2">Date <span class="text-sm font-bold">from</span></span>                            
                             </div>                        
-                            <div class="flex flex-row w-6/12 bg-violet-400 justify-end">                            
-                                <input type="date" class="rounded-lg w-full text-end" placeholder="From"
+                            <div class="flex flex-row w-6/12 justify-end">                            
+                                <input type="date" class="w-full rounded-sm bg-gray-100 text-end text-green-800" placeholder="From"
                                     wire:model.live="dateFrom">                                                                                            
                             </div>
                             <div class="w-1/12">
@@ -276,14 +283,14 @@
                         </div>
 
                         <!-- Date To -->
-                        <div class="flex flex-row justify-between gap-0 bg-blue-400 w-1/2">
+                        <div class="flex flex-row justify-between w-1/2">
                             
-                            <div class="w-5/12 bg-pink-200">
-                                <span><i class="fa fa-calendar"></i></span>
+                            <div class="w-5/12">
+                                <span><i class="text-white fa fa-calendar"></i></span>
                                 <span class="px-2">Date <span class="text-sm font-bold">to</span></span>                            
                             </div>                        
-                            <div class="flex flex-row w-6/12 bg-violet-400 justify-end">                            
-                                <input type="date" class="rounded-lg w-full text-end" placeholder="From"
+                            <div class="flex flex-row w-6/12 justify-end">                            
+                                <input type="date" class="w-full rounded-sm bg-gray-100 text-end text-green-800" placeholder="From"
                                     wire:model.live="dateTo">                                                                                            
                             </div>
                             <div class="w-1/12">
@@ -309,16 +316,16 @@
 
 
                     <!-- 2 ROW FILTER VALUE-->
-                    <div class="flex flex-row bg-yellow-400 p-1">
+                    <div class="flex flex-row p-1 my-1">
                         <!-- Value From -->
-                        <div class="flex flex-row justify-between gap-0 bg-blue-400 w-1/2">
+                        <div class="flex flex-row justify-between w-1/2">
                             
-                            <div class="w-5/12 bg-pink-200">
-                                <span><i class="fa fa-eur"></i></span>
+                            <div class="w-5/12">
+                                <span><i class="text-white fa fa-eur"></i></span>
                                 <span class="px-2">Value <span class="text-sm font-bold">from</span></span>                            
                             </div>                        
-                            <div class="flex flex-row w-6/12 bg-violet-400 justify-end">                            
-                                <input type="number" class="rounded-lg w-full text-end" placeholder="From"
+                            <div class="flex flex-row w-6/12 justify-end">                            
+                                <input type="number" class="w-full rounded-sm bg-gray-100 text-end text-green-800" placeholder="From"
                                     wire:model.live="valueFrom">                                                                                            
                             </div>
                             <div class="w-1/12">
@@ -335,14 +342,14 @@
                         </div>
 
                         <!-- Value To -->
-                        <div class="flex flex-row justify-between gap-0 bg-blue-400 w-1/2">
+                        <div class="flex flex-row justify-between w-1/2">
                             
-                            <div class="w-5/12 bg-pink-200">
-                                <span><i class="fa fa-eur"></i></span>
+                            <div class="w-5/12">
+                                <span><i class="text-white fa fa-eur"></i></span>
                                 <span class="px-2">Value <span class="text-sm font-bold">to</span></span>                            
                             </div>                        
-                            <div class="flex flex-row w-6/12 bg-violet-400 justify-end">                            
-                                <input type="number" class="rounded-lg w-full text-end" placeholder="From"
+                            <div class="flex flex-row w-6/12 justify-end">                            
+                                <input type="number" class="w-full rounded-sm bg-gray-100 text-end text-green-800" placeholder="From"
                                     wire:model.live="valueTo">                                                                                            
                             </div>
                             <div class="w-1/12">
@@ -370,84 +377,113 @@
 
 
                     <!-- 1 ROW FILTER -->
-                    <div class="flex flex-row justify-between gap-0 bg-blue-400 w-1/2 p-0">
+                    <div class="flex flex-row p-1 my-1">
+                        <!-- TAGS -->
+                        <div class="flex flex-row justify-between w-1/2">
                         
-                        <div class="w-5/12 bg-pink-200 ml-1 mr-0">
-                            <span><i class="text-yellow-600 fa fa-tags"></i></span>
-                            <span class="px-2">Tags (<span
-                                class="font-semibold text-sm">{{ count($tags) }}</span>)</span>                            
-                        </div>                        
-                        <div class="flex flex-row w-6/12 bg-violet-400 justify-end">                            
-                            <select wire:model.live="selectedTags" class="rounded-lg w-full text-end" name="selectedTags" id="selectedTags" multiple>
-                                <option value="0">All</option>
-                                @foreach ($tags as $tag)
-                                    <option value="{{ $tag['id'] }}">{{ $tag['name'] }}</option>
-                                @endforeach
-                            </select>                                                        
-                        </div>
-                        <div class="w-1/12">
-                            @if ($selectedTags != [])
-                                <a wire:click="clearFilterTag" title="Reset Filter Tags" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-red-400 px-2"><i
-                                            class="fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            @endif
-                        </div>
+                            <div class="w-5/12">
+                                <span><i class="text-white fa fa-tags"></i></span>
+                                <span class="px-2">Tags (<span
+                                    class="font-semibold text-sm">{{ count($tags) }}</span>)</span>                            
+                            </div>                        
+                            <div class="flex flex-row w-6/12 justify-end ml-1">                            
+                                <select wire:model.live="selectedTags" class="w-full rounded-sm bg-gray-100 text-end text-green-800 px-4" name="selectedTags" id="selectedTags" multiple>
+                                    <option value="0">All</option>
+                                    @foreach ($tags as $tag)
+                                        <option value="{{ $tag['id'] }}">{{ $tag['name'] }}</option>
+                                    @endforeach
+                                </select>                                                        
+                            </div>
+                            <div class="w-1/12">
+                                @if ($selectedTags != [])
+                                    <a wire:click="clearFilterTag" title="Reset Filter Tags" class="cursor-pointer">
+                                        <span class="text-red-600 hover:text-red-400 px-2"><i
+                                                class="fa-solid fa-circle-xmark"></i></span>
+                                    </a>
+                                @endif
+                            </div>
 
+                        </div>
                     </div>
                 
                 </div> 
                 @endif
 
             </div>   
-            
-            <!-- Search -->
 
+
+            <!-- SEARCH -->
+            
             <!-- Search Type-->
-            <div class="flex flex-row sm:flex-col justify-start items-start px-2 sm:px-4 py-2 gap-2">
-                <div class="border-blue-600 border-b-2 w-full sm:w-full">
-                    <span class="px-2 text-lg text-zinc-800 font-bold uppercase">Search</span>
+            <div class="flex flex-col w-11/12 mx-auto">
+
+                <div class="flex flex-row justify-between items-center w-full border-b-2 border-b-blue-800">
+                    <span class="font-bold uppercase bg-blue-800 rounded-sm text-white py-2 px-3  my-1">
+                        <a wire:click="activateSearch" class="cursor-pointer" title="{{($showSearch % 2 != 0) ? 'Close Search' : 'Open Search'}}">search</a>
+                    </span>
+                    <!-- Open/Close Buttons -->
+                    <div>
+                        @if ($showSearch % 2 != 0)
+                            <a wire:click="activateSearch" class="cursor-pointer" title="Close Search">
+                                <i class="text-red-800 fa-solid fa-xmark"></i>
+                            </a>
+                        @else
+                            <a wire:click="activateSearch" class="cursor-pointer" title="Open Search">
+                                <i class="text-blue-800 fa-solid fa-caret-down"></i>
+                            </a>
+                        @endif
+                    </div>
                 </div>
-                <div class="text-sm">
-                    <label class="px-2"><input type="radio" wire:model.live="searchType" value="title"><span class="pl-3">Title</span></label>
-                    <label class="px-2"><input type="radio" wire:model.live="searchType" value="company"><span class="pl-3">Company</span></label>
-                    <label class="px-2"><input type="radio" wire:model.live="searchType" value="balances.name"><span class="pl-3">Account</span></label>
+
+                @if ($showSearch % 2 != 0)
+
+                <div class="flex flex-col bg-blue-800 py-2 my-1 rounded-sm">
+
+                    <div class="flex flex-row gap-2 text-sm w-full mb-0">
+                        <div class="flex flex-row w-2/12 bg-blue-100 rounded-sm p-2 ml-2 items-center gap-2">
+                            <i class="fa-solid fa-text-width"></i>
+                            <span class="capitalize">title</span>    
+                            <input type="radio" wire:model.live="searchType" value="title" class="cursor-pointer">
+                        </div>
+                        <div class="flex flex-row w-2/12 bg-blue-100 rounded-sm p-2 items-center gap-2">
+                            <i class="fa-solid fa-industry"></i>
+                            <span class="capitalize">company</span>    
+                            <input type="radio" wire:model.live="searchType" value="company" class="cursor-pointer">
+                        </div>
+                        <div class="flex flex-row w-2/12 bg-blue-100 rounded-sm p-2 items-center gap-2">
+                            <i class="fa-solid fa-piggy-bank"></i>
+                            <span class="capitalize">account</span>    
+                            <input type="radio" wire:model.live="searchType" value="balances.name" class="cursor-pointer">
+                        </div>         
+                    </div>
+                    <!-- Search Word -->
+                    <div class="relative w-full p-2">
+                        <div class="absolute top-3 bottom-0 left-4 text-gray-600">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                        <input wire:model.live="search" type="search"
+                            class="w-full bg-gray-100 rounded-sm pl-8 py-1 text-sm placeholder-gray-600 focus:outline-none focus:ring-0 focus:border-blue-400 border-2 border-blue-800"
+                            placeholder="Search by {{ ($searchType == 'balances.name') ? 'account' : $searchType }}">
+                        @if ($search != '')
+                        <div class="absolute top-3 bottom-0 right-4 text-slate-700">
+                            <a wire:click.prevent="clearSearch" title="Clear Search" class="cursor-pointer">
+                                <span class="text-red-600 hover:text-red-400">
+                                    <i class="fa-sm fa-solid fa-xmark"></i>
+                                </span>
+                            </a>
+                        </div>
+                        @endif
+                    </div>
+
                 </div>
+
+                @endif
+
             </div>
-            <div class="flex flex-col sm:flex-row justify-between items-center px-4 sm:px-4 pb-2 gap-2">                
-                <!-- Search Word -->
-                <div class="relative w-full">
-                    <div class="absolute top-0.5 bottom-0 left-2 text-slate-700">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
-                    <input wire:model.live="search" type="search"
-                        class="w-full rounded-lg pl-8 font-sm placeholder-zinc-400 focus:outline-none focus:ring-0 focus:border-blue-400 border-2 border-zinc-200"
-                        placeholder="Search by {{ ($searchType == 'balances.name') ? 'account' : $searchType }}">
-                    @if ($search != '')
-                    <div class="absolute top-0.5 bottom-0 right-2 text-slate-700">
-                        <a wire:click.prevent="clearSearch" title="Clear Search" class="cursor-pointer">
-                            <span class="text-red-600 hover:text-red-400 px-2">
-                                <i class="fa-solid fa-circle-xmark"></i>
-                            </span>
-                        </a>
-                    </div>
-                    @endif
-                </div>               
-                
-                <!-- Pagination -->
-                <div class="relative w-32">
-                    <div class="absolute top-0 bottom-0 left-4 text-slate-700">
-                        <i class="fa-solid fa-book-open"></i>
-                    </div>
-                    <select wire:model.live="perPage"
-                        class="w-full rounded-lg text-end focus:outline-none focus:ring-0 focus:border-blue-400 border-2 border-zinc-200 ">
-                        <option value="3">3</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </div>
-            </div>  
+
+
+
+  
             
             <!-- Criteria
             {{ var_dump($criteria) }}
@@ -457,49 +493,74 @@
             {{ $search }} -->
             <!-- Criteria -->
             
-                @if (count($criteria) > 0)
-                <div class="flex flex-row justify-between mx-4 pb-1 border-b-2 border-b-violet-600">
-                    <span class="text-lg text-zinc-800 font-bold uppercase px-2">Criteria</span>
-                    <a wire:click.prevent="resetAll" title="Clear All">
-                        <i class="fa-solid fa-square-xmark text-red-600 hover:text-black cursor-pointer"></i>
-                    </a>
-                    </span>
-                </div>
+            @if (count($criteria) > 0)
 
-                <div class="flex flex-row justify-between items-center py-2 my-2 mx-4 rounded-md bg-gray-200">
-                    <div class="flex flex-wrap text-xs text-white capitalize w-full p-2 gap-3 sm:gap-4">
+                <!-- Criteria Type-->
+                <div class="flex flex-col w-11/12 mx-auto py-2">
+                    <div class="flex flex-row justify-between items-center w-full border-b-2 border-b-orange-400">
+                        <span class="italic capitalize bg-orange-400 rounded-sm text-white py-2 px-3  my-1">
+                            filters & search criteria
+                        </span>
+                        <!-- Clear ALL Criteria for search and filters -->
+                        <div>
+                            <a wire:click.prevent="resetAll" title="Clear All">
+                                <i class="fa-lg fa-solid fa-square-xmark text-red-600 hover:text-black cursor-pointer"></i>
+                            </a>
+                        </div>
+                    </div>              
+
+
+
+
+                
+
+                <div class="flex flex-col bg-gray-300 py-2 my-1 rounded-sm">
+
+                    <div class="flex flex-wrap text-xs capitalize w-full p-2 gap-3 sm:gap-4">
                         <!-- Search -->
                         @if ($search != '')
-                            <div class="flex relative">
-                                <span
-                                    class="bg-green-600 opacity-75 p-2 rounded-lg">{{ $search != '' ? 'Search (' . $criteria['searchType'] . ')' : '' }}</span>
-                                <a wire:click.prevent="clearSearch" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
+                            <div class="flex relative">                                
+                                <div
+                                    class="bg-blue-200 p-2 rounded-sm border-2 border-white">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    <span class="uppercase font-bold">search</span>
+                                    <span class="italic">({{ $criteria['searchType'] }})</span>
+                                </div>
+                                <a wire:click.prevent="clearSearch" title="Clear Search" class="cursor-pointer">
+                                    <span class="text-red-600 hover:text-red-500 px-2 absolute -top-2 -right-4"><i
                                             class="fa-lg fa-solid fa-circle-xmark"></i></span>
                                 </a>
                             </div>
                         @endif
                         <!-- User -->
                         @if ($userID > 0)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-yellow-600 opacity-75 p-2 rounded-lg">{{ $userID > 0 ? 'User (' . $criteria['user'] . ')' : '' }}</span>
-                                <a wire:click.prevent="clearFilterUser" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
+                            <div class="flex relative">                                
+                                <div
+                                    class="bg-green-200 p-2 rounded-sm border-2 border-white">
+                                    <i class="fa-solid fa-user"></i>
+                                    <span class="uppercase font-bold">user</span>
+                                    <span class="italic">({{ $criteria['user'] }})</span>
+                                </div>
+                                <a wire:click.prevent="clearFilterUser" title="Clear Filter User" class="cursor-pointer">
+                                    <span class="text-red-600 hover:text-red-500 px-2 absolute -top-2 -right-4"><i
                                             class="fa-lg fa-solid fa-circle-xmark"></i></span>
                                 </a>
                             </div>
                         @endif
                         <!-- Types -->
                         @if ($types != 2)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-yellow-600 opacity-75 p-2 rounded-lg">{{ $types == 1 ? 'Type (income)' : 'Type (expense)' }}</span>
-                                <a wire:click.prevent="clearFilterTypes" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
+                        <div class="flex relative">                                
+                                <div
+                                    class="bg-green-200 p-2 rounded-sm border-2 border-white">
+                                    <i class="fa-solid fa-wallet"></i>
+                                    <span class="uppercase font-bold">type</span>
+                                    <span class="italic">({{ $types == 1 ? 'income' : 'expense' }})</span>
+                                </div>
+                                <a wire:click.prevent="clearFilterTypes" title="Clear Filter Type" class="cursor-pointer">
+                                    <span class="text-red-600 hover:text-red-500 px-2 absolute -top-2 -right-4"><i
                                             class="fa-lg fa-solid fa-circle-xmark"></i></span>
                                 </a>
-                            </div>
+                            </div>                            
                         @endif
                         <!-- Date -->
                         @if ($initialDateTo != $dateTo || $initialDateFrom != $dateFrom)
@@ -593,6 +654,8 @@
                     </div>
 
                 </div>
+
+                </div>
             @endif
 
             <!-- Bulk Actions -->
@@ -674,6 +737,20 @@
             </div>    
             @endif    
            
+
+            <!-- Pagination -->
+                <div class="relative w-32">
+                    <div class="absolute top-0 bottom-0 left-4 text-slate-700">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <select wire:model.live="perPage"
+                        class="w-full rounded-lg text-end focus:outline-none focus:ring-0 focus:border-blue-400 border-2 border-zinc-200 ">
+                        <option value="3">3</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
 
             <!-- TABLE -->
             <div class="px-0 sm:px-4 pb-0">

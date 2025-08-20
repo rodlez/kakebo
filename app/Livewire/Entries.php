@@ -27,6 +27,7 @@ class Entries extends Component
     public $perPage = 25;
 
     // search
+    public $showSearch = 1;
     public $search = '';
     public $searchType = 'title';
 
@@ -34,7 +35,7 @@ class Entries extends Component
     public $fullView = false;
 
     // filters    
-    public $showFilters = 1;
+    public $showFilters = 0;
 
     public $types = 2;
 
@@ -214,6 +215,11 @@ class Entries extends Component
     public function activateFullView(bool $activate)
     {
         $this->fullView = $activate;
+    }
+
+    public function activateSearch()
+    {
+        $this->showSearch++;
     }
 
     public function activateFilter()
