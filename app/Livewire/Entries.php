@@ -27,7 +27,7 @@ class Entries extends Component
     public $perPage = 25;
 
     // search
-    public $showSearch = 1;
+    public $showSearch = 0;
     public $search = '';
     public $searchType = 'title';
 
@@ -101,8 +101,22 @@ class Entries extends Component
         
         if($this->search != '')
         {
-            $this->criteria['search'] = $this->search;         
-            ($this->searchType == 'balances.name') ? $this->criteria['searchType'] = 'Account': $this->criteria['searchType'] = $this->searchType;        
+            $this->criteria['search'] = $this->search;     
+            
+            switch ($this->searchType) {
+                case 'entries.id':
+                    $this->criteria['searchType'] = 'Id';
+                    break;
+                case 'balances.name':
+                    $this->criteria['searchType'] = 'Account';
+                    break;
+                
+                default:
+                    $this->criteria['searchType'] = $this->searchType;
+                    break;
+            }
+
+            //($this->searchType == 'balances.name') ? $this->criteria['searchType'] = 'Account': $this->criteria['searchType'] = $this->searchType;        
         }else{
             unset($this->criteria['search']);
             unset($this->criteria['searchType']);

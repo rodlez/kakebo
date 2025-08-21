@@ -53,13 +53,13 @@
                         <!-- USERS -->
                         <div class="flex flex-row justify-between w-1/2">                    
                         
-                            <div class="w-5/12">
+                            <div class="w-5/12 px-1">
                                 <span><i class="text-white fa fa-user"></i></span>
-                                <span class="px-2">Users (<span
-                                        class="font-semibold text-sm">{{ $users->count() }}</span>)</span>                            
+                                <span class="px-0">Users <span
+                                        class="text-xs">({{ $users->count() }})</span></span>                            
                             </div>                        
                             <div class="flex flex-row w-6/12 justify-end">                            
-                                <select wire:model.live="userID" class="w-full rounded-sm bg-gray-100 text-end text-green-800">
+                                <select wire:model.live="userID" class="w-full rounded-sm bg-gray-100 text-end text-green-800 cursor-pointer">
                                     <option value="0">All</option>
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -86,12 +86,12 @@
                         <!-- TYPES -->
                         <div class="flex flex-row justify-between w-1/2">
                             
-                            <div class="w-5/12">
+                            <div class="w-5/12 px-1">
                                 <span><i class="text-white fa fa-wallet"></i></span>
-                                <span class="px-2">Types</span>                            
+                                <span>Types</span>                            
                             </div>                        
                             <div class="flex flex-row w-6/12 justify-end">                            
-                                <select wire:model.live="types" class="w-full rounded-sm bg-gray-100 text-end text-green-800">
+                                <select wire:model.live="types" class="w-full rounded-sm bg-gray-100 text-end text-green-800 cursor-pointer">
                                 <option value="2">All</option>
                                 <option value="0">Expense</option>
                                 <option value="1">Income</option>
@@ -112,13 +112,13 @@
                         <!-- Frequency -->
                         <div class="flex flex-row justify-between w-1/2">
                                 
-                            <div class="w-5/12">
+                            <div class="w-5/12 px-1">
                                 <span><i class="text-white fa fa-clock"></i></span>
-                                <span class="px-2">Frequency (<span
-                                    class="font-semibold text-sm">{{ $frequencies->count() }}</span>)</span>                            
+                                <span>Frequency <span
+                                    class="text-xs">({{ $frequencies->count() }})</span></span>                            
                             </div>                        
                             <div class="flex flex-row w-6/12 justify-end">                            
-                                <select wire:model.live="freq" class="w-full rounded-sm bg-gray-100 text-end text-green-800">
+                                <select wire:model.live="freq" class="w-full rounded-sm bg-gray-100 text-end text-green-800 cursor-pointer">
                                     <option value="0">All</option>
                                 @foreach ($frequencies as $frequency)
                                     <option value="{{ $frequency->frequency }}">{{ $frequency->frequency }}</option>
@@ -144,13 +144,13 @@
                         <!-- Source -->
                         <div class="flex flex-row justify-between w-1/2">
                             
-                            <div class="w-5/12">
+                            <div class="w-5/12 px-1">
                                 <span><i class="text-white fa fa-money-bill"></i></span>
-                                <span class="px-2">Source (<span
-                                class="font-semibold text-sm">{{ $sources->count() }}</span>)</span>                            
+                                <span>Source <span
+                                class="text-xs">({{ $sources->count() }})</span></span>                            
                             </div>                        
                             <div class="flex flex-row w-6/12 justify-end">                            
-                                <select wire:model.live="sour" class="w-full rounded-sm bg-gray-100 text-end text-green-800">
+                                <select wire:model.live="sour" class="w-full rounded-sm bg-gray-100 text-end text-green-800 cursor-pointer">
                                     <option value="0">All</option>
                                     @foreach ($sources as $source)
                                         <option value="{{ $source->source }}">{{ $source->source }}</option>
@@ -171,13 +171,13 @@
                         <!-- Balance -->
                         <div class="flex flex-row justify-between w-1/2">
                                 
-                            <div class="w-5/12">
+                            <div class="w-5/12 px-1">
                                 <span><i class="text-white fa fa-piggy-bank"></i></span>
-                                <span class="px-2">Balance (<span
-                                class="font-semibold text-sm">{{ $balances->count() }}</span>)</span>                            
+                                <span>Balance <span
+                                class="text-xs">({{ $balances->count() }})</span></span>                            
                             </div>                        
                             <div class="flex flex-row w-6/12 justify-end">                            
-                                <select wire:model.live="bal" class="w-full rounded-sm bg-gray-100 text-end text-green-800">
+                                <select wire:model.live="bal" class="w-full rounded-sm bg-gray-100 text-end text-green-800 cursor-pointer">
                                     <option value="0">All</option>
                                     @foreach ($balances as $balance)
                                         <option value="{{ $balance->name }}">{{ $balance->name }}</option>
@@ -203,13 +203,13 @@
                         <!-- Company -->
                         <div class="flex flex-row justify-between w-1/2">
                             
-                            <div class="w-5/12">
+                            <div class="w-5/12 px-1">
                                 <span><i class="text-white fa fa-industry"></i></span>
-                                <span class="px-2">Company (<span
-                                class="font-semibold text-sm">{{ $companies->count() }}</span>)</span>                            
+                                <span>Company <span
+                                class="text-xs">({{ $companies->count() }})</span></span>                            
                             </div>                        
                             <div class="flex flex-row w-6/12 justify-end">                            
-                                <select wire:model.live="compa" class="w-full rounded-sm bg-gray-100 text-end text-green-800">
+                                <select wire:model.live="compa" class="w-full rounded-sm bg-gray-100 text-end text-green-800 cursor-pointer">
                                     <option value="0">All</option>
                                     @foreach ($companies as $company)
                                         <option value="{{ $company->company }}">{{ $company->company }}</option>
@@ -230,13 +230,13 @@
                         <!-- Category -->
                         <div class="flex flex-row justify-between w-1/2">
                                 
-                            <div class="w-5/12">
+                            <div class="w-5/12 px-1">
                                 <span><i class="text-white fa fa-tag"></i></span>
-                                <span class="px-2">Category (<span
-                                class="font-semibold text-sm">{{ count($categories) }}</span>)</span>                            
+                                <span>Category <span
+                                class="text-xs">({{ count($categories) }})</span></span>                            
                             </div>                        
                             <div class="flex flex-row w-6/12 justify-end">                            
-                                <select wire:model.live="cat" class="w-full rounded-sm bg-gray-100 text-end text-green-800">
+                                <select wire:model.live="cat" class="w-full rounded-sm bg-gray-100 text-end text-green-800 cursor-pointer">
                                     <option value="0">All</option>
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->name }}">{{ $category->name }}</option>
@@ -262,12 +262,12 @@
                         <!-- Date From -->
                         <div class="flex flex-row justify-between w-1/2">
                             
-                            <div class="w-5/12">
+                            <div class="w-5/12 px-1">
                                 <span><i class="text-white fa fa-calendar"></i></span>
-                                <span class="px-2">Date <span class="text-sm font-bold">from</span></span>                            
+                                <span>Date <span class="text-sm font-bold">from</span></span>                            
                             </div>                        
                             <div class="flex flex-row w-6/12 justify-end">                            
-                                <input type="date" class="w-full rounded-sm bg-gray-100 text-end text-green-800" placeholder="From"
+                                <input type="date" class="w-full rounded-sm bg-gray-100 text-end text-green-800 cursor-pointer" placeholder="From"
                                     wire:model.live="dateFrom">                                                                                            
                             </div>
                             <div class="w-1/12">
@@ -285,12 +285,12 @@
                         <!-- Date To -->
                         <div class="flex flex-row justify-between w-1/2">
                             
-                            <div class="w-5/12">
+                            <div class="w-5/12 px-1">
                                 <span><i class="text-white fa fa-calendar"></i></span>
-                                <span class="px-2">Date <span class="text-sm font-bold">to</span></span>                            
+                                <span>Date <span class="text-sm font-bold">to</span></span>                            
                             </div>                        
                             <div class="flex flex-row w-6/12 justify-end">                            
-                                <input type="date" class="w-full rounded-sm bg-gray-100 text-end text-green-800" placeholder="From"
+                                <input type="date" class="w-full rounded-sm bg-gray-100 text-end text-green-800 cursor-pointer" placeholder="From"
                                     wire:model.live="dateTo">                                                                                            
                             </div>
                             <div class="w-1/12">
@@ -306,12 +306,24 @@
                         </div> 
                 
                     </div>
+                    
+                    <!-- Filter Error Date -->                                       
+                    @if ($dateFrom > $dateTo)
+                        <!-- 2 ROW FILTER VALUE-->
+                        <div class="flex flex-row p-1 my-1">
+                            <!-- Value From -->
+                            <div class="flex flex-row justify-between w-1/2">
+                                
+                                <div class="w-5/12 px-1">                                                            
+                                </div>                        
+                                <div class="flex flex-row w-6/12 justify-end rounded-sm bg-green-100 border-1 border-gray-200"> 
+                                        <span class="italic text-sm text-red-500 p-1 px-2"> Date from is bigger than Date To</span>
+                                </div>
+                                <div class="w-1/12">                                    
+                                </div>
 
-                    <!-- Filter Error Date -->                    
-                    @if ($dateTo < $dateFrom)
-                    <div class="flex flex-col bg-gray-200 w-full">
-                        <span class="text-sm text-red-600 px-2"> Date To must be bigger than Date From</span>
-                    </div>
+                            </div> 
+                        </div>
                     @endif
 
 
@@ -320,12 +332,12 @@
                         <!-- Value From -->
                         <div class="flex flex-row justify-between w-1/2">
                             
-                            <div class="w-5/12">
+                            <div class="w-5/12 px-1">
                                 <span><i class="text-white fa fa-eur"></i></span>
-                                <span class="px-2">Value <span class="text-sm font-bold">from</span></span>                            
+                                <span>Value <span class="text-sm font-bold">from</span></span>                            
                             </div>                        
                             <div class="flex flex-row w-6/12 justify-end">                            
-                                <input type="number" class="w-full rounded-sm bg-gray-100 text-end text-green-800" placeholder="From"
+                                <input type="number" class="w-full rounded-sm bg-gray-100 text-end text-green-800 cursor-pointer" placeholder="From"
                                     wire:model.live="valueFrom">                                                                                            
                             </div>
                             <div class="w-1/12">
@@ -344,12 +356,12 @@
                         <!-- Value To -->
                         <div class="flex flex-row justify-between w-1/2">
                             
-                            <div class="w-5/12">
+                            <div class="w-5/12 px-1">
                                 <span><i class="text-white fa fa-eur"></i></span>
-                                <span class="px-2">Value <span class="text-sm font-bold">to</span></span>                            
+                                <span>Value <span class="text-sm font-bold">to</span></span>                            
                             </div>                        
                             <div class="flex flex-row w-6/12 justify-end">                            
-                                <input type="number" class="w-full rounded-sm bg-gray-100 text-end text-green-800" placeholder="From"
+                                <input type="number" class="w-full rounded-sm bg-gray-100 text-end text-green-800 cursor-pointer" placeholder="From"
                                     wire:model.live="valueTo">                                                                                            
                             </div>
                             <div class="w-1/12">
@@ -367,11 +379,23 @@
                 
                     </div>
 
-                    <!-- Filter Error Value -->                    
-                    @if ($valueTo < $valueFrom)
-                    <div class="flex flex-col bg-gray-200 w-full">
-                        <span class="text-sm text-red-600 px-2"> Value To must be bigger than Value From</span>
-                    </div>
+                    <!-- Filter Error Value -->                                       
+                    @if ($valueFrom > $valueTo)
+                        <!-- 2 ROW FILTER VALUE-->
+                        <div class="flex flex-row p-1 my-1">
+                            <!-- Value From -->
+                            <div class="flex flex-row justify-between w-1/2">
+                                
+                                <div class="w-5/12 px-1">                                                            
+                                </div>                        
+                                <div class="flex flex-row w-6/12 justify-end rounded-sm bg-green-100 border-1 border-gray-200"> 
+                                        <span class="italic text-sm text-red-500 p-1 px-2"> Value from is bigger than Value To</span>
+                                </div>
+                                <div class="w-1/12">                                    
+                                </div>
+
+                            </div> 
+                        </div>
                     @endif
                     
 
@@ -381,13 +405,13 @@
                         <!-- TAGS -->
                         <div class="flex flex-row justify-between w-1/2">
                         
-                            <div class="w-5/12">
+                            <div class="w-5/12 px-1">
                                 <span><i class="text-white fa fa-tags"></i></span>
-                                <span class="px-2">Tags (<span
-                                    class="font-semibold text-sm">{{ count($tags) }}</span>)</span>                            
+                                <span>Tags <span
+                                    class="text-xs">({{ count($tags) }})</span></span>                            
                             </div>                        
                             <div class="flex flex-row w-6/12 justify-end ml-1">                            
-                                <select wire:model.live="selectedTags" class="w-full rounded-sm bg-gray-100 text-end text-green-800 px-4" name="selectedTags" id="selectedTags" multiple>
+                                <select wire:model.live="selectedTags" class="w-full rounded-sm bg-gray-100 text-end text-green-800 cursor-pointer px-4" name="selectedTags" id="selectedTags" multiple>
                                     <option value="0">All</option>
                                     @foreach ($tags as $tag)
                                         <option value="{{ $tag['id'] }}">{{ $tag['name'] }}</option>
@@ -441,6 +465,11 @@
 
                     <div class="flex flex-row gap-2 text-sm w-full mb-0">
                         <div class="flex flex-row w-2/12 bg-blue-100 rounded-sm p-2 ml-2 items-center gap-2">
+                            <i class="fa-solid fa-fingerprint"></i>
+                            <span class="capitalize">id</span>    
+                            <input type="radio" wire:model.live="searchType" value="entries.id" class="cursor-pointer">
+                        </div>
+                        <div class="flex flex-row w-2/12 bg-blue-100 rounded-sm p-2 ml-2 items-center gap-2">
                             <i class="fa-solid fa-text-width"></i>
                             <span class="capitalize">title</span>    
                             <input type="radio" wire:model.live="searchType" value="title" class="cursor-pointer">
@@ -481,282 +510,322 @@
 
             </div>
 
-
-
-  
             
-            <!-- Criteria
-            {{ var_dump($criteria) }}
-            Total
-            {{ count($criteria)}}
-            Search
-            {{ $search }} -->
-            <!-- Criteria -->
-            
+            <!-- CRITERIA -->            
+
             @if (count($criteria) > 0)
-
-                <!-- Criteria Type-->
+                
                 <div class="flex flex-col w-11/12 mx-auto py-2">
-                    <div class="flex flex-row justify-between items-center w-full border-b-2 border-b-orange-400">
-                        <span class="italic capitalize bg-orange-400 rounded-sm text-white py-2 px-3  my-1">
+
+                    <!-- HEADER - Filters and Search Criteria -->
+                    <div class="flex flex-row justify-between items-center w-full border-b-2 border-b-slate-600">
+                        <span class="text-white italic capitalize bg-slate-600 rounded-sm text-white py-2 px-3  my-1">
                             filters & search criteria
                         </span>
                         <!-- Clear ALL Criteria for search and filters -->
                         <div>
+                            <span class="text-xs italic font-semibold px-1"> Clear all filters</span>
                             <a wire:click.prevent="resetAll" title="Clear All">
-                                <i class="fa-lg fa-solid fa-square-xmark text-red-600 hover:text-black cursor-pointer"></i>
+                                <i class="fa-lg fa-solid fa-square-xmark text-red-600 hover:text-red-400 cursor-pointer"></i>
                             </a>
                         </div>
-                    </div>              
+                    </div>      
 
+                    
+                    <!-- Filters and Search Criteria -->
+                    <div class="flex flex-col bg-slate-200 py-2 my-1 rounded-sm">
 
-
-
-                
-
-                <div class="flex flex-col bg-gray-300 py-2 my-1 rounded-sm">
-
-                    <div class="flex flex-wrap text-xs capitalize w-full p-2 gap-3 sm:gap-4">
-                        <!-- Search -->
-                        @if ($search != '')
-                            <div class="flex relative">                                
-                                <div
-                                    class="bg-blue-200 p-2 rounded-sm border-2 border-white">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                    <span class="uppercase font-bold">search</span>
-                                    <span class="italic">({{ $criteria['searchType'] }})</span>
+                        <div class="flex flex-wrap text-xs capitalize w-full p-2 gap-3 sm:gap-4">
+                            <!-- Search -->
+                            @if ($search != '')
+                                <div class="flex relative">                                
+                                    <div
+                                        class="bg-blue-200 p-2 rounded-sm border-2 border-white">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                        <span class="uppercase font-bold">search</span>
+                                        <span class="italic">({{ $criteria['searchType'] }})</span>
+                                    </div>
+                                    <a wire:click.prevent="clearSearch" title="Clear Search" class="cursor-pointer">
+                                        <span class="text-red-600 hover:text-red-500 px-2 absolute -top-2 -right-4"><i
+                                                class="fa-lg fa-solid fa-circle-xmark"></i></span>
+                                    </a>
                                 </div>
-                                <a wire:click.prevent="clearSearch" title="Clear Search" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-red-500 px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif
-                        <!-- User -->
-                        @if ($userID > 0)
-                            <div class="flex relative">                                
-                                <div
-                                    class="bg-green-200 p-2 rounded-sm border-2 border-white">
-                                    <i class="fa-solid fa-user"></i>
-                                    <span class="uppercase font-bold">user</span>
-                                    <span class="italic">({{ $criteria['user'] }})</span>
+                            @endif
+                            <!-- User -->
+                            @if ($userID > 0)
+                                <div class="flex relative">                                
+                                    <div
+                                        class="bg-green-200 p-2 rounded-sm border-2 border-white">
+                                        <i class="fa-solid fa-user"></i>
+                                        <span class="uppercase font-bold">user</span>
+                                        <span class="italic">({{ $criteria['user'] }})</span>
+                                    </div>
+                                    <a wire:click.prevent="clearFilterUser" title="Clear Filter User" class="cursor-pointer">
+                                        <span class="text-red-600 hover:text-red-500 px-2 absolute -top-2 -right-4"><i
+                                                class="fa-lg fa-solid fa-circle-xmark"></i></span>
+                                    </a>
                                 </div>
-                                <a wire:click.prevent="clearFilterUser" title="Clear Filter User" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-red-500 px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif
-                        <!-- Types -->
-                        @if ($types != 2)
-                        <div class="flex relative">                                
-                                <div
-                                    class="bg-green-200 p-2 rounded-sm border-2 border-white">
-                                    <i class="fa-solid fa-wallet"></i>
-                                    <span class="uppercase font-bold">type</span>
-                                    <span class="italic">({{ $types == 1 ? 'income' : 'expense' }})</span>
+                            @endif
+                            <!-- Types -->
+                            @if ($types != 2)
+                                <div class="flex relative">                                
+                                    <div
+                                        class="bg-green-200 p-2 rounded-sm border-2 border-white">
+                                        <i class="fa-solid fa-wallet"></i>
+                                        <span class="uppercase font-bold">type</span>
+                                        <span class="italic">({{ $types == 1 ? 'income' : 'expense' }})</span>
+                                    </div>
+                                    <a wire:click.prevent="clearFilterTypes" title="Clear Filter Type" class="cursor-pointer">
+                                        <span class="text-red-600 hover:text-red-500 px-2 absolute -top-2 -right-4"><i
+                                                class="fa-lg fa-solid fa-circle-xmark"></i></span>
+                                    </a>
+                                </div>                            
+                            @endif
+                            <!-- Frequency -->
+                            @if ($freq != 0)
+                                <div class="flex relative">                                
+                                    <div
+                                        class="bg-green-200 p-2 rounded-sm border-2 border-white">
+                                        <i class="fa-solid fa-clock"></i>
+                                        <span class="uppercase font-bold">frequency</span>
+                                        <span class="italic">({{ $criteria['frequency'] }})</span>
+                                    </div>
+                                    <a wire:click.prevent="clearFilterFrequency" title="Clear Filter Frequency" class="cursor-pointer">
+                                        <span class="text-red-600 hover:text-red-500 px-2 absolute -top-2 -right-4"><i
+                                                class="fa-lg fa-solid fa-circle-xmark"></i></span>
+                                    </a>
+                                </div>                            
+                            @endif
+                            <!-- Source -->
+                            @if ($sour != 0)
+                                <div class="flex relative">                                
+                                    <div
+                                        class="bg-green-200 p-2 rounded-sm border-2 border-white">
+                                        <i class="fa-solid fa-money-bill"></i>
+                                        <span class="uppercase font-bold">source</span>
+                                        <span class="italic">({{ $criteria['source'] }})</span>
+                                    </div>
+                                    <a wire:click.prevent="clearFilterSource" title="Clear Filter Source" class="cursor-pointer">
+                                        <span class="text-red-600 hover:text-red-500 px-2 absolute -top-2 -right-4"><i
+                                                class="fa-lg fa-solid fa-circle-xmark"></i></span>
+                                    </a>
                                 </div>
-                                <a wire:click.prevent="clearFilterTypes" title="Clear Filter Type" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-red-500 px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>                            
-                        @endif
-                        <!-- Date -->
-                        @if ($initialDateTo != $dateTo || $initialDateFrom != $dateFrom)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-violet-400 p-2 rounded-lg">{{ $initialDateTo != $dateTo || $initialDateFrom != $dateFrom ? 'Date (' . date('d-m-Y', strtotime($dateFrom)) . ' to ' . date('d-m-Y', strtotime($dateTo)) . ')' : '' }}</span>
-                                <a wire:click.prevent="clearFilterDate" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif
-                        <!-- Category -->
-                        @if ($cat > 0)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-yellow-600 opacity-75 p-2 rounded-lg">{{ $cat > 0 ? 'Category (' . $cat . ')' : '' }}</span>
-                                <a wire:click.prevent="clearFilterCategory" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif
-                        <!-- Balance -->
-                        @if ($bal > 0)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-yellow-600 opacity-75 p-2 rounded-lg">{{ $bal > 0 ? 'Account (' . $bal . ')' : '' }}</span>
-                                <a wire:click.prevent="clearFilterBalance" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif
-                        <!-- Tags -->
-                        @if (!in_array('0', $this->selectedTags) && count($this->selectedTags) != 0)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-orange-600 opacity-75 p-2 rounded-lg">{{ !in_array('0', $this->selectedTags) && count($this->selectedTags) != 0 ? 'Tags (' . implode(', ', $tagNames) . ')' : '' }}</span>
-                                <a wire:click.prevent="clearFilterTag" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif
-                        <!-- Value -->
-                        @if ($initialValueTo != $valueTo || $initialValueFrom != $valueFrom)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-blue-600 opacity-75 p-2 rounded-lg">{{ $initialValueTo != $valueTo || $initialValueFrom != $valueFrom ? 'Value (' . $valueFrom . ' to ' . $valueTo . ')' : '' }}</span>
-                                <a wire:click.prevent="clearFilterValue" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif   
-                        <!-- Frequency -->
-                        @if ($freq != 0)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-green-600 opacity-75 p-2 rounded-lg">{{ $freq != 0 ? 'Frequency (' . $freq . ')' : '' }}</span>
-                                <a wire:click.prevent="clearFilterFrequency" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif  
-                        <!-- Source -->
-                        @if ($sour != 0)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-green-600 opacity-75 p-2 rounded-lg">{{ $sour != 0 ? 'Source (' . $sour . ')' : '' }}</span>
-                                <a wire:click.prevent="clearFilterSource" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif 
-                        <!-- Company -->
-                        @if ($compa != 0)
-                            <div class="flex relative">
-                                <span
-                                    class="bg-green-600 opacity-75 p-2 rounded-lg">{{ $compa != 0 ? 'Company (' . $compa . ')' : '' }}</span>
-                                <a wire:click.prevent="clearFilterCompany" title="Clear" class="cursor-pointer">
-                                    <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
-                                            class="fa-lg fa-solid fa-circle-xmark"></i></span>
-                                </a>
-                            </div>
-                        @endif                    
+                            @endif
+                            <!-- Balance -->
+                            @if ($bal > 0)
+                                <div class="flex relative">                                
+                                    <div
+                                        class="bg-green-200 p-2 rounded-sm border-2 border-white">
+                                        <i class="fa-solid fa-piggy-bank"></i>
+                                        <span class="uppercase font-bold">balance</span>
+                                        <span class="italic">({{ $criteria['balance'] }})</span>
+                                    </div>
+                                    <a wire:click.prevent="clearFilterBalance" title="Clear Filter Balance" class="cursor-pointer">
+                                        <span class="text-red-600 hover:text-red-500 px-2 absolute -top-2 -right-4"><i
+                                                class="fa-lg fa-solid fa-circle-xmark"></i></span>
+                                    </a>
+                                </div>                            
+                            @endif
+                            <!-- Company -->
+                            @if ($compa != 0)
+                                <div class="flex relative">                                
+                                    <div
+                                        class="bg-green-200 p-2 rounded-sm border-2 border-white">
+                                        <i class="fa-solid fa-industry"></i>
+                                        <span class="uppercase font-bold">company</span>
+                                        <span class="italic">({{ $criteria['company'] }})</span>
+                                    </div>
+                                    <a wire:click.prevent="clearFilterCompany" title="Clear Filter Company" class="cursor-pointer">
+                                        <span class="text-red-600 hover:text-red-500 px-2 absolute -top-2 -right-4"><i
+                                                class="fa-lg fa-solid fa-circle-xmark"></i></span>
+                                    </a>
+                                </div>
+                            @endif
+                            <!-- Category -->
+                            @if ($cat > 0)
+                                <div class="flex relative">                                
+                                    <div
+                                        class="bg-green-200 p-2 rounded-sm border-2 border-white">
+                                        <i class="fa-solid fa-tag"></i>
+                                        <span class="uppercase font-bold">category</span>
+                                        <span class="italic">({{ $criteria['category'] }})</span>
+                                    </div>
+                                    <a wire:click.prevent="clearFilterCategory" title="Clear Filter Category" class="cursor-pointer">
+                                        <span class="text-red-600 hover:text-red-500 px-2 absolute -top-2 -right-4"><i
+                                                class="fa-lg fa-solid fa-circle-xmark"></i></span>
+                                    </a>
+                                </div>
+                            @endif
+                            <!-- Date -->
+                            @if ($initialDateTo != $dateTo || $initialDateFrom != $dateFrom)
+                                <div class="flex relative">
+                                    <div
+                                        class="bg-green-200 p-2 rounded-sm border-2 border-white">
+                                        <i class="fa-solid fa-calendar"></i>
+                                        <span class="uppercase font-bold">date</span>
+                                        <span class="lowercase">{{ '(' . date('d-m-Y', strtotime($dateFrom)) . ' to ' . date('d-m-Y', strtotime($dateTo)) . ')' }}</span>
+                                    </div>                                
+                                    <a wire:click.prevent="clearFilterDate" title="Clear Filter Date" class="cursor-pointer">
+                                        <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
+                                                class="fa-lg fa-solid fa-circle-xmark"></i></span>
+                                    </a>
+                                </div>
+                            @endif
+                            <!-- Value -->
+                            @if ($initialValueTo != $valueTo || $initialValueFrom != $valueFrom)
+                                <div class="flex relative">
+                                    <div
+                                        class="bg-green-200 p-2 rounded-sm border-2 border-white">
+                                        <i class="fa-solid fa-eur"></i>
+                                        <span class="uppercase font-bold">value</span>
+                                        <span class="lowercase">{{ '(' . $valueFrom . ' to ' . $valueTo . ')' }}</span>
+                                    </div>                                
+                                    <a wire:click.prevent="clearFilterValue" title="Clear Filter Value" class="cursor-pointer">
+                                        <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
+                                                class="fa-lg fa-solid fa-circle-xmark"></i></span>
+                                    </a>
+                                </div>
+                            @endif
+                            
+                            <!-- Tags -->
+                            @if (!in_array('0', $this->selectedTags) && count($this->selectedTags) != 0)
+                                <div class="flex relative">
+                                    <div
+                                        class="bg-green-200 p-2 rounded-sm border-2 border-white">
+                                        <i class="fa-solid fa-tags"></i>
+                                        <span class="uppercase font-bold">tags</span>
+                                        <span class="capitalize">{{ '(' . implode(', ', $tagNames) . ')' }}</span>
+                                    </div>                                
+                                    <a wire:click.prevent="clearFilterTag" title="Clear Filter Tag" class="cursor-pointer">
+                                        <span class="text-red-600 hover:text-black px-2 absolute -top-2 -right-4"><i
+                                                class="fa-lg fa-solid fa-circle-xmark"></i></span>
+                                    </a>
+                                </div>
+                            @endif                                            
+
+                        </div>
 
                     </div>
 
                 </div>
 
-                </div>
             @endif
+
+            <!-- TABLE HEADER -->
+
+            @if($total > 0)
+            <!-- Export -->
+            <div class="flex flex-row justify-between items-end w-11/12 bg-gray-100 border-2 border-black mx-auto py-0 my-4 rounded-sm">
+
+                <!-- Entries Found -->
+                <div class="flex flex-row p-2 font-bold text-white bg-amber-600 border-1 border-r-black w-6/12">Entries Found ({{ $search != '' ? $found : $total }})</div>
+
+                <!-- Normal or Full View of the information in the Entries Table -->            
+                <div class="flex flex-row justify-start text-xs gap-4 px-2 py-1 w-3/12">
+                    
+                    <div>
+                        <a wire:click="activateFullView({{0}})" class="{{($fullView === false) ? 'font-bold' : 'text-slate-500 hover:text-black transition duration-1000 ease-in-out cursor-pointer'}}  "> 
+                            <span class="">Normal View </span> <i class="{{($fullView === false) ? 'text-green-600' : '' }} fa-solid fa-eye"></i>                            
+                        </a>
+                    </div>
+                
+                    <div>
+                        <a wire:click="activateFullView({{1}})" class="{{($fullView === true) ? 'font-bold' : 'text-slate-500 hover:text-black transition duration-1000 ease-in-out cursor-pointer' }} ">
+                            <span class="">Full View </span> <i class="{{($fullView === true) ? 'text-green-600' : '' }} fa-solid fa-maximize"></i>                           
+                        </a>
+                    </div>
+                    
+                </div> 
+                
+                <!-- Export ALL Entries found as Excel file -->
+                <div class="flex flex-row justify-start w-2/12 py-1">
+                    
+                    <form action="{{ route('entries.export') }}" method="POST">
+                            <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
+                            @csrf
+                            <input type="hidden" id="entries" name="entries"
+                                value="{{ $entriesRaw->pluck('id') }}">
+                            <input type="hidden" id="criteriaSelection" name="criteriaSelection"
+                                value="{{ json_encode($this->criteria) }}">
+                            <button
+                                class="text-white text-sm rounded-sm p-1 bg-green-600 hover:bg-green-400 transition duration-1000 ease-in-out cursor-pointer"
+                                title="Export All as Excel file">                                
+                                <i class="fa-lg fa-solid fa-file-export"></i>
+                                <span class="text-xs font-semibold">Export as Excel file</span>
+                            </button>
+                    </form>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex-flex-col">
+                    <div class="flex flex-row justify-end px-2 text-xs capitalize font-semibold">pagination</div>
+                    <div class="relative w-32 bg-gray-300 rounded-sm">
+                        <div class="absolute top-0 bottom-0 left-4 text-slate-700">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <select wire:model.live="perPage"
+                            class="w-full rounded-sm text-end focus:outline-none focus:ring-0 focus:border-blue-400 border-2 border-zinc-200 ">
+                            <option value="3">3</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+                
+            </div>    
+            @endif
+
 
             <!-- Bulk Actions -->
             @if (count($okselections) > 0)
             <!-- <div> selections -> {{ var_dump($selections)}}</div>
             <div>listEntriesIds -> {{ var_dump($listEntriesIds)}}</div>
             <div>okselections -> {{ var_dump($okselections)}}</div> -->
-                <div class="px-2 sm:px-4 pt-1">
-                    <div class="flex flex-row justify-start items-center gap-4 py-1 px-4 mb-0 rounded-lg bg-zinc-200">
-                        <span class="text-sm font-semibold">Bulk Actions</span>
-                        <a wire:click.prevent="bulkClear" class="cursor-pointer" title="Unselect All">
-                            <span><i class="fa-solid fa-rotate-right text-green-600 hover:text-green-500"></i></span>
-                        </a>
-                        <a wire:click.prevent="bulkDelete" wire:confirm="Are you sure you want to delete this items?"
-                            class="cursor-pointer text-red-600 hover:text-red-500" title="Delete">
-                            <span><i class="fa-sm fa-solid fa-trash"></i></span>
-                            <span>({{ count($okselections) }})</span>
-                        </a>
+                <div class="flex flex-row w-11/12 mx-auto justify-end bg-gray-200 rounded-sm p-2 gap-4">
+                    
+                        <div class="w-6/12 justify-start">
+                            <span class="text-sm font-semibold bg-black text-white rounded-sm p-1">Bulk Actions</span>
+                        </div>
+                
+                        <div class="w-2/12 justify-center items-center text-center bg-blue-600 text-white rounded-sm p-1 hover:bg-blue-400 transition duration-1000 ease-in-out">                            
+                            <a wire:click.prevent="bulkClear" class="cursor-pointer" title="Unselect All">
+                                <i class=" fa-sm fa-solid fa-rotate-right"></i>
+                                <span class="text-xs font-semibold">Unselect all</span>
+                            </a>
+                        </div>
+                        
+                        <div class="w-2/12 ijustify-center items-center text-center bg-red-600 text-white rounded-sm p-1 hover:bg-red-400 transition duration-1000 ease-in-out">                            
+                            <a wire:click.prevent="bulkDelete" wire:confirm="Are you sure you want to delete this items?"
+                                class="cursor-pointer" title="Delete">
+                                <i class="fa-sm fa-solid fa-trash"></i>
+                                <span class="text-xs font-semibold">Delete ({{ count($okselections) }})</span>
+                            </a>
+                        </div>
 
-                        <form action="{{ route('entries.exportbulk') }}" method="POST">
-                                <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
-                                @csrf
-                                <input type="hidden" id="listEntriesBulk" name="listEntriesBulk"
-                                    value="{{ implode(',', $okselections) }}">
-                                <button class="cursor-pointer text-blue-600" title="Export Selection">
-                                    <i class="fa-solid fa-file-export"></i>
-                                </button>
-                        </form>
-
-                    </div>
+                        <div class="w-2/12 justify-center items-center text-center bg-green-600 text-white rounded-sm p-1 hover:tbg-green-400 transition duration-1000 ease-in-out">                
+                            <form action="{{ route('entries.exportbulk') }}" method="POST">
+                                    <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
+                                    @csrf
+                                    <input type="hidden" id="listEntriesBulk" name="listEntriesBulk"
+                                        value="{{ implode(',', $okselections) }}">
+                                    <button class="cursor-pointer" title="Export Selection">
+                                        <i class="fa-sm fa-solid fa-file-export"></i>
+                                        <span class="text-xs font-semibold">Export as Excel ({{ count($okselections) }})</span>                                        
+                                    </button>
+                            </form>
+                        </div>   
+                        
                 </div>
             @endif
+               
 
-            @if($total > 0)
-            <!-- Export -->
-            <div class="flex flex-row justify-between items-end sm:flex-row sm:justify-between gap-2 pt-0 mt-2 px-0 mx-4 border-2 border-yellow-600">
-
-                <!-- Entries Found -->
-                <div class="flex flex-row p-2 font-bold">Entries Found ({{ $search != '' ? $found : $total }})</div>
-
-                <div class="flex flex-row p-0">
-
-                    <!-- Normal or Full View of the information in the Entries Table -->            
-                    <div class="flex flex-row sm:flex-row justify-begin items-end px-4 sm:px-4 py-2 gap-2 text-xs">
-                        
-                        <div class="pl-2">
-                            <a wire:click="activateFullView({{0}})" class="{{($fullView === false) ? 'font-bold' : 'text-gray-400'}} cursor-pointer"> 
-                                <span class="">Normal View </span> <i class="fa-solid fa-eye"></i>                            
-                            </a>
-                        </div>
-                    
-                        <div>
-                            <a wire:click="activateFullView({{1}})" class="{{($fullView === true) ? 'font-bold' : 'text-gray-400'}} cursor-pointer">
-                                <span class="">Full View </span> <i class="fa-solid fa-maximize"></i>                           
-                            </a>
-                        </div>
-                        
-                    </div>
-                
-                    <!-- Export ALL Entries found as Excel file -->
-                    <div class="flex flex-row gap-2 items-end pb-2 mr-2">
-                        <form action="{{ route('entries.export') }}" method="POST">
-                                <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
-                                @csrf
-                                <input type="hidden" id="entries" name="entries"
-                                    value="{{ $entriesRaw->pluck('id') }}">
-                                <input type="hidden" id="criteriaSelection" name="criteriaSelection"
-                                    value="{{ json_encode($this->criteria) }}">
-                                <button
-                                    class="text-white text-sm sm:text-md rounded-md p-1 bg-green-600 hover:bg-green-400 transition duration-1000 ease-in-out cursor-pointer"
-                                    title="Export All as Excel file">
-                                    <i class="fa-solid fa-file-export"></i>
-                                </button>
-                        </form>
-                    </div>
-                
-                </div>
-                
-            </div>    
-            @endif    
-           
-
-            <!-- Pagination -->
-                <div class="relative w-32">
-                    <div class="absolute top-0 bottom-0 left-4 text-slate-700">
-                        <i class="fa-solid fa-book-open"></i>
-                    </div>
-                    <select wire:model.live="perPage"
-                        class="w-full rounded-lg text-end focus:outline-none focus:ring-0 focus:border-blue-400 border-2 border-zinc-200 ">
-                        <option value="3">3</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                </div>
-
+            @if ($entries->count())
             <!-- TABLE -->
-            <div class="px-0 sm:px-4 pb-0">
+            <div class="w-11/12 mx-auto">
                 <div class="overflow-x-auto">
 
-                    @if ($entries->count())
+                    
                         <table class="min-w-full ">
                             <!-- TABLE HEADER -->
                             <thead>
@@ -900,28 +969,31 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    @else
-                        <div
-                            class="flex flex-row justify-between items-center bg-black text-white rounded-lg p-4 mx-2 sm:mx-0">
-                            <span>No entries found in the system.</span>
-                            <a wire:click.prevent="resetAll" title="Reset">
-                                <i
-                                    class="fa-lg fa-solid fa-circle-xmark cursor-pointer px-2 text-red-600 hover:text-red-400 transition duration-1000 ease-in-out"></i>
-                            </a>
-                            </span>
-                        </div>
-                    @endif
 
                 </div>
 
             </div>
+            @else
+                <div
+                    class="flex flex-row justify-between items-center bg-black text-white rounded-sm w-11/12 mx-auto p-4">
+                    <span>No entries found in the system.</span>
+                    <a wire:click.prevent="resetAll" title="Reset">
+                        <i
+                            class="fa-lg fa-solid fa-circle-xmark cursor-pointer px-2 text-red-600 hover:text-red-400 transition duration-1000 ease-in-out"></i>
+                    </a>
+                    </span>
+                </div>            
+            @endif       
+
+
             <!-- Pagination Links -->
             <div class="py-2 px-4">
                 {{ $entries->links() }}
             </div>
             <!-- To the Top Button -->
             <button onclick="topFunction()" id="myBtn" title="Go to top"><i
-                    class="fa-solid fa-angle-up"></i></button>
+                    class="fa-solid fa-angle-up"></i></button>            
+            
             <!-- Footer -->
             <div class="flex flex-row justify-end items-center py-4 px-4 bg-orange-400 sm:rounded-b-lg">
                 <a href="{{ route('dashboard') }}">
@@ -929,12 +1001,6 @@
                         title="Go Back"></i>
                 </a>
             </div>
-
-            
-            
-
-
-
 
 
         </div>
