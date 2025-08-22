@@ -1,5 +1,5 @@
 <div class="max-w-7xl mx-auto sm:pb-8 sm:px-6 lg:px-8">
-
+{{request()->routeIs('entries.create')}}
     <!-- Sitemap -->
     <div class="flex flex-row justify-start items-start gap-1 text-sm py-3 px-4 text-slate-500">
         <a href="/entries" class="hover:text-orange-600">Entries</a> /

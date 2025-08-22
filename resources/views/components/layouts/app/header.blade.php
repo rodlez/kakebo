@@ -4,22 +4,44 @@
         @include('partials.head')
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
-        <flux:header container class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+        <flux:header container class="border-b border-zinc-200 {{(auth()->user()->is_admin) ? 'bg-amber-300' : 'bg-zinc-100'}} dark:border-zinc-700 dark:bg-zinc-900 p-1">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
-            <a href="{{ route('dashboard') }}" class="ms-2 me-5 flex items-center space-x-2 rtl:space-x-reverse lg:ms-0" wire:navigate>
+            <a href="{{ route('dashboard') }}" class="ms-2 me-5 flex items-center space-x-2 rtl:space-x-reverse lg:ms-0" title="Home" wire:navigate>
                 <x-app-logo />
             </a>
 
             <flux:navbar class="-mb-px max-lg:hidden">
-                <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                    {{ __('Dashboard') }}
+
+                <flux:navbar.item :href="route('entries.index')" :current="request()->routeIs('entries.index')" wire:navigate>
+                    {{ __('Entries') }}
                 </flux:navbar.item>
+                <flux:navbar.item :href="route('balances.index')" :current="request()->routeIs('balances.index')" wire:navigate>
+                    {{ __('Accounts') }}
+                </flux:navbar.item>
+                @if(auth()->user()->is_admin == 1)
+                    <flux:navbar.item :href="route('categories.index')" :current="request()->routeIs('categories.index')" wire:navigate>
+                        {{ __('Categories') }}
+                    </flux:navbar.item>
+                    <flux:navbar.item :href="route('tags.index')" :current="request()->routeIs('tags.index')" wire:navigate>
+                        {{ __('Tags') }}
+                    </flux:navbar.item>                    
+                    <flux:navbar.item :href="route('archive.index')" :current="request()->routeIs('archive.index')" wire:navigate>
+                        {{ __('Archive') }}
+                    </flux:navbar.item>
+                    <flux:navbar.item :href="route('users.index')" :current="request()->routeIs('users.index')" wire:navigate>
+                        {{ __('Users') }}
+                    </flux:navbar.item>
+                @endif
+                <flux:navbar.item :href="route('stats.index')" :current="request()->routeIs('stats.index')" wire:navigate>
+                    {{ __('Stats') }}
+                </flux:navbar.item>
+
             </flux:navbar>
 
             <flux:spacer />
 
-            <flux:navbar class="me-1.5 space-x-0.5 rtl:space-x-reverse py-0!">
+            <!-- <flux:navbar class="me-1.5 space-x-0.5 rtl:space-x-reverse py-0!">
                 <flux:tooltip :content="__('Search')" position="bottom">
                     <flux:navbar.item class="!h-10 [&>div>svg]:size-5" icon="magnifying-glass" href="#" :label="__('Search')" />
                 </flux:tooltip>
@@ -41,7 +63,7 @@
                         label="Documentation"
                     />
                 </flux:tooltip>
-            </flux:navbar>
+            </flux:navbar> -->
 
             <!-- Desktop User Menu -->
             <flux:dropdown position="top" align="end">
@@ -97,14 +119,34 @@
             </a>
 
             <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Platform')">
-                    <flux:navlist.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                      {{ __('Dashboard') }}
+                <!-- <flux:navlist.group :heading="__('Platform')">                     -->
+                    <flux:navlist.item :href="route('entries.index')" :current="request()->routeIs('entries.index')" wire:navigate>
+                      {{ __('Entries') }}
                     </flux:navlist.item>
-                </flux:navlist.group>
+                    <flux:navlist.item :href="route('balances.index')" :current="request()->routeIs('balances.index')" wire:navigate>
+                      {{ __('Accounts') }}
+                    </flux:navlist.item>
+                    @if(auth()->user()->is_admin == 1)
+                        <flux:navlist.item :href="route('categories.index')" :current="request()->routeIs('categories.index')" wire:navigate>
+                            {{ __('Categories') }}
+                        </flux:navlist.item>
+                        <flux:navlist.item :href="route('tags.index')" :current="request()->routeIs('tags.index')" wire:navigate>
+                            {{ __('Tags') }}
+                        </flux:navlist.item>                    
+                        <flux:navlist.item :href="route('archive.index')" :current="request()->routeIs('archive.index')" wire:navigate>
+                            {{ __('Archive') }}
+                        </flux:navlist.item>
+                        <flux:navlist.item :href="route('users.index')" :current="request()->routeIs('users.index')" wire:navigate>
+                            {{ __('Users') }}
+                        </flux:navlist.item>
+                    @endif
+                    <flux:navlist.item :href="route('stats.index')" :current="request()->routeIs('stats.index')" wire:navigate>
+                      {{ __('Stats') }}
+                    </flux:navlist.item>
+                <!-- </flux:navlist.group> -->
             </flux:navlist>
 
-            <flux:spacer />
+            <!-- <flux:spacer />
 
             <flux:navlist variant="outline">
                 <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
@@ -114,7 +156,7 @@
                 <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
                     {{ __('Documentation') }}
                 </flux:navlist.item>
-            </flux:navlist>
+            </flux:navlist> -->
         </flux:sidebar>
 
         {{ $slot }}
