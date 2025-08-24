@@ -27,12 +27,12 @@ class Entries extends Component
     public $perPage = 25;
 
     // search
-    public $showSearch = 0;
+    public $showSearch = 1;
     public $search = '';
-    public $searchType = 'title';
+    public $searchType = 'company';
 
-    // normal or full view of the entry table
-    public $fullView = false;
+    // small or full view of the entry table
+    public $smallView = false;
 
     // filters    
     public $showFilters = 0;
@@ -226,9 +226,9 @@ class Entries extends Component
         $this->initialValueTo = Entry::max('value');
     }
 
-    public function activateFullView(bool $activate)
+    public function activatesmallView(bool $activate)
     {
-        $this->fullView = $activate;
+        $this->smallView = $activate;
     }
 
     public function activateSearch()
@@ -546,6 +546,12 @@ class Entries extends Component
         $total = $data->count();
         $dataRaw =  clone $data;
 
+        // TEST STATS
+        $dataStats = clone $data;
+        //$testini = $dataStats->toArray();
+        $stats = $this->entryService->getTotalStats($dataStats->get());
+
+
         // TEST SELECTIONS IN FILTERS
         $dataEntriesIds = clone $data;
 
@@ -587,7 +593,8 @@ class Entries extends Component
             'found'             => $found,
             'column'            => $this->orderColumn,
             'total'             => $total,
-            'tagNames'          => $this->tagNames,           
+            'tagNames'          => $this->tagNames, 
+            'stats'             => $stats,          
         ]);
     }
 

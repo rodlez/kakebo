@@ -113,4 +113,35 @@ class EntryService
         
         return $resultado;
     }
+
+
+    // test stats
+
+    public function getTotalStats(mixed $entries): mixed
+    {
+        //dd($entries);
+
+        $stats = [];
+        $stats['incomes'] = 0;
+        $stats['expenses'] = 0;
+
+        //$incomes = 0;
+        //$expenses = 0;
+
+        foreach ($entries as $entry) 
+        {
+            //dd($entry);
+            if($entry->type == 1)
+            {
+                $stats['incomes'] = $stats['incomes'] + $entry->value;
+            } else
+            {
+                $stats['expenses'] = $stats['expenses'] + $entry->value;
+            }
+        }
+
+        //dd($stats);
+        return $stats;
+    }
+
 }
