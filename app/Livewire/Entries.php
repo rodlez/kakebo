@@ -31,8 +31,14 @@ class Entries extends Component
     public $search = '';
     public $searchType = 'company';
 
+    // stats
+    public $showStats = 1;
+    
     // small or full view of the entry table
     public $smallView = false;
+
+    // font size table
+    public $smallFont = true;
 
     // filters    
     public $showFilters = 0;
@@ -231,9 +237,19 @@ class Entries extends Component
         $this->smallView = $activate;
     }
 
+    public function activatesmallFont(bool $activate)
+    {
+        $this->smallFont = $activate;
+    }
+
     public function activateSearch()
     {
         $this->showSearch++;
+    }
+
+     public function activateStats()
+    {
+        $this->showStats++;
     }
 
     public function activateFilter()
@@ -458,10 +474,11 @@ class Entries extends Component
             ->join('entry_tag', 'entries.id', '=', 'entry_tag.entry_id')
             ->distinct('entries.id')
             ->orderby($this->orderColumn, $this->sortOrder);
+        
            
         /* resticted access - user can only access his entries, Admin can access all the entries */
         if (!$this->isAdmin) {               
-            $data = $data->where('user_id', '=', Auth::id());
+            $data = $data->where('entries.user_id', '=', Auth::id());
         }
         
         /* -------------------------------- FILTERS --------------------------- */
@@ -544,12 +561,14 @@ class Entries extends Component
         }
 
         $total = $data->count();
-        $dataRaw =  clone $data;
+        $dataRaw =  clone $data;      
 
-        // TEST STATS
+        
+        // TEST STATS - deep copy, clone maintain the references  
         $dataStats = clone $data;
-        //$testini = $dataStats->toArray();
-        $stats = $this->entryService->getTotalStats($dataStats->get());
+        $dataStats = $dataStats->get()->toArray();
+        //dd($dataStats);
+        $stats = $this->entryService->getTotalStats($dataStats);
 
 
         // TEST SELECTIONS IN FILTERS
@@ -593,7 +612,7 @@ class Entries extends Component
             'found'             => $found,
             'column'            => $this->orderColumn,
             'total'             => $total,
-            'tagNames'          => $this->tagNames, 
+            'tagNames'          => $this->tagNames,
             'stats'             => $stats,          
         ]);
     }

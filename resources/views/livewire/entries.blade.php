@@ -141,7 +141,7 @@
                             
                             <div class="w-5/12 px-1">
                                 <span><i class="fa fa-money-bill"></i></span>
-                                <span>Source <span
+                                <span>Payment <span
                                 class="text-xs">({{ $sources->count() }})</span></span>                            
                             </div>                        
                             <div class="flex flex-row w-6/12 justify-end">                            
@@ -594,10 +594,10 @@
                                         <div
                                             class="bg-green-800 p-2 rounded-sm border-1 border-green-600">
                                             <i class="fa-solid fa-money-bill"></i>
-                                            <span class="uppercase font-bold">source</span>
+                                            <span class="uppercase font-bold">payment</span>
                                             <span>({{ $criteria['source'] }})</span>
                                         </div>
-                                        <a wire:click.prevent="clearFilterSource" title="Clear Filter Source" class="cursor-pointer">
+                                        <a wire:click.prevent="clearFilterSource" title="Clear Filter Payment" class="cursor-pointer">
                                             <span class="text-red-600 hover:text-red-500 px-2 absolute -top-2 -right-5"><i
                                                     class="fa-lg fa-solid fa-circle-xmark"></i></span>
                                         </a>
@@ -699,211 +699,315 @@
                         
                         @else
 
-                            <span class="font-bold text-sm italic p-2">No filters or search active.</span>
+                            <span class="font-normal text-sm italic p-2">No filters or search active.</span>
 
                         @endif
                     
                     </div>
 
-                    
-
             </div>
 
+
+            @if($total > 0)  
             <!-- STATS -->
             <div class="flex flex-col my-2">
-                                
-                <!-- HEADER - Filters and Search Criteria -->
-                <div class="flex flex-row justify-between items-center p-2 text-white bg-yellow-400">
-                    <span class="text-lg capitalize">stats</span>                    
-                </div>
 
-                <!-- Filters and Search Criteria -->
-                <div class="flex flex-col bg-zinc-200 py-0 my-0 text-xs">                    
-                    <div class="flex flex-row">
-                        <span class="p-2">Total: {{$stats['incomes'] - $stats['expenses']}}</span>    
-                        <span class="p-2">Total Income: {{$stats['incomes']}}</span>    
-                        <span class="p-2">Total Expenses: {{$stats['expenses']}}</span>    
+                <div class="flex flex-row justify-between items-center w-full text-white bg-yellow-800">
+                    <span class="capitalize text-lg px-2">
+                        <a wire:click="activateStats" class="cursor-pointer" title="{{($showStats % 2 != 0) ? 'Close Stats' : 'Open Stats'}}">stats</a>
+                    </span>
+                    <!-- Open/Close Buttons -->
+                    <div class="p-2">
+                        @if ($showStats % 2 != 0)
+                            <a wire:click="activateStats" class="cursor-pointer" title="Close Stats">
+                                <i class="fa-solid fa-xmark"></i>
+                            </a>
+                        @else
+                            <a wire:click="activateStats" class="cursor-pointer" title="Open Stats">
+                                <i class="fa-solid fa-caret-down"></i>
+                            </a>
+                        @endif
                     </div>
                 </div>
 
+               @if ($showStats % 2 != 0)
+                <div class="flex flex-col lg:flex-row justify-between bg-zinc-200 p-2 text-xs gap-2 md:gap-4">       
+                    @if($isAdmin)
+                    <div class="flex flex-row text-xs">                        
+                        <span class="font-bold">Users <span class="font-normal">({{ $stats['users'] }})</span></span>    
+                    </div>       
+                    @endif      
+                    <div class="flex flex-row text-xs">
+                        <div class="flex flex-row justify-between w-full gap-4">
+                            <span class="font-bold">Days <span class="font-normal">({{ $stats['days'] }})</span></span>  
+                            <div class="flex flex-col text-xs items-end gap-0">                                
+                                <span class="p-0">{{ date('d-m-Y', strtotime($stats['dateFrom'])) }}</span>
+                                <span class="p-0">{{ date('d-m-Y', strtotime($stats['dateTo'])) }}</span>                                    
+                            </div>                              
+                        </div>
+                    </div>
+                    <div class="flex flex-row md:flex-wrap text-xs">
+                        <div class="flex flex-row justify-between w-full gap-4">
+                            <div class="flex flex-col">
+                                <span class="p-0 font-bold">Balance </span>    
+                            </div>
+                            <div class="flex flex-col">
+                                <div class="flex flex-row text-end gap-2">                                
+                                    <div class="flex flex-col">
+                                        <span>Incomes ({{$stats['numberIncomes']}})</span>
+                                        <span>Expenses ({{$stats['numberExpenses']}})</span>    
+                                        <span class="font-bold">Total</span>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="text-green-600">{{$stats['incomes']}} €</span>
+                                        <span class="text-red-600">{{$stats['expenses']}} €</span>
+                                        <span class="{{($stats['incomes'] - $stats['expenses'] > 0) ? 'text-green-600' : 'text-red-600'}}">{{$stats['incomes'] - $stats['expenses']}} €</span>
+                                    </div>
+                                </div>                        
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-row md:flex-wrap text-xs">
+                        <div class="flex flex-row justify-between w-full gap-4">
+                            <span class="p-0 font-bold">Payment</span>    
+                            <div class="flex flex-col text-end">
+                                <span>Cash ({{$stats['sourceCash']}})</span>
+                                <span>Card ({{$stats['sourceCard']}})</span>
+                                <span>Stocks ({{$stats['sourceStocks']}})</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-row md:flex-wrap text-xs">                        
+                        <div class="flex flex-row justify-between w-full gap-4">
+                            <span class="font-bold">Accounts ({{$stats['numberAccounts']}})</span>  
+                            <div class="flex flex-col">
+                                @if($stats['numberAccounts'] > 0)
+                                    <select class="text-end" multiple>                              
+                                        @foreach ($stats['accounts'] as $account)                            
+                                            <option value="">{{$account}}</option>
+                                        @endforeach
+                                    </select>    
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-row md:flex-wrap text-xs">                        
+                        <div class="flex flex-row justify-between w-full gap-4">    
+                            <span class="font-bold">Companies ({{$stats['numberCompanies']}})</span> 
+                            <div class="flex flex-col">
+                                @if($stats['numberCompanies'] > 0)
+                                    <select class="text-end" multiple>                              
+                                        @foreach ($stats['companies'] as $company)                            
+                                            <option value="">{{$company}}</option>
+                                        @endforeach
+                                    </select>    
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-row md:flex-wrap text-xs">                        
+                        <div class="flex flex-row justify-between w-full gap-4">
+                            <span class="font-bold">Categories ({{$stats['numberCategories']}})</span> 
+                            <div class="flex flex-col">
+                                @if($stats['numberCategories'] > 0)
+                                    <select class="text-end" multiple>                              
+                                        @foreach ($stats['categories'] as $category)                            
+                                            <option value="">{{$category}}</option>
+                                        @endforeach
+                                    </select>    
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                @endif
+                
             </div>  
-            
-            
-            
+            @endif
+    
 
             <!-- TABLE ENTRIES HEADER AND BULK ACTIONS -->
-
             @if($total > 0)
 
-            <div class="flex flex-row justify-between md:items-end bg-amber-600 text-white mt-4">
+                <div class="flex flex-row justify-between md:items-end bg-amber-600 text-white mt-4">
 
-                <!-- Entries Found -->
-                <div class="p-2">
-                    <span class="uppercase font-bold text-white">Entries Found ({{ $search != '' ? $found : $total }})</span>
-                </div>       
-                
-                <!-- Pagination -->
-                <div class="flex flex-row justify-center items-center p-2 gap-4">
+                    <!-- Entries Found -->
+                    <div class="p-2">
+                        <span class="text-lg text-white">Entries Found ({{ $search != '' ? $found : $total }})</span>
+                    </div>       
                     
-                        <i class="fa-solid fa-book-open"></i>
+                    <!-- Pagination -->
+                    <div class="flex flex-row justify-center items-center p-2 gap-4">
+                        
+                        <i class="fa-solid fa-book-open" title="Pagination"></i>
                         <select wire:model.live="perPage"
-                            class="w-full bg-gray-200 rounded-sm text-black text-end focus:outline-none focus:ring-0 focus:border-gray-400 border-2 border-zinc-200 ">
+                            class="w-full bg-gray-200 rounded-sm text-black text-end focus:outline-none focus:ring-0 focus:border-gray-400 border-2 border-zinc-200 "
+                            title="Entries per Page">
                             <option value="3">3</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
                             <option value="100">100</option>
                         </select>
 
-                </div>
-                
-            </div>  
-            
-            <div class="flex flex-col md:flex-row justify-start md:justify-between items-start md:items-end text-xs font-bold bg-zinc-200 p-2 py-4">
-                
-                <div class="flex flex-row gap-4">
+                    </div>
                     
-                    <!-- Normal or Full View of the information in the Entries Table -->            
-                    <div class="flex flex-row gap-2 font-normal px-2">
+                </div>  
 
-                        <div><span class="capitalize underline font-bold">table info</span></div>
-                        
-                        @if($smallView === false)
-                        <div>
-                            <a wire:click="activatesmallView({{1}})" 
-                                class="hover:text-green-600 transition duration-1000 ease-in-out cursor-pointer"
-                                title="Normal Table View"> 
-                                <span class="px-1">small</span><i class="fa-solid fa-down-left-and-up-right-to-center"></i>                            
-                            </a>
-                        </div>
+                <!-- TABLE INFO / FONT / EXPORT ALL / BULK ACTIONS -->
+                <div class="flex flex-col justify-between p-2 text-xs bg-zinc-200">
 
-                            @else
-                            <div>
-                                <a wire:click="activatesmallView({{0}})" 
-                                    class="hover:text-green-600 transition duration-1000 ease-in-out cursor-pointer"
-                                    title="Expand Table View">
-                                    <span class="px-1">big</span><i class="fa-solid fa-maximize"></i>                           
-                                </a>
+                    <!-- TABLE INFO / FONT / EXPORT ALL -->
+                    <div class="flex flex-row">                    
+
+                        <!-- TABLE INFO / FONT -->
+                        <div class="flex flex-col w-full">
+                            <div class="flex flex-col md:flex-row justify-start gap-0 md:gap-2">
+                                <div class="flex flex-row gap-5 md:gap-2">
+                                    <span class="capitalize underline font-bold">table info</span>
+                                    @if($smallView)                                
+                                        <a wire:click="activatesmallView({{0}})" 
+                                            class="hover:text-green-600 transition duration-1000 ease-in-out cursor-pointer"
+                                            title="See more Info"> 
+                                            <span class="px-1">more</span><i class="fa-solid fa-up-right-and-down-left-from-center"></i>                            
+                                        </a>                               
+                                            @else                                    
+                                            <a wire:click="activatesmallView({{1}})" 
+                                                class="hover:text-green-600 transition duration-1000 ease-in-out cursor-pointer"
+                                                title="See less Info">
+                                                <span class="px-1">less</span><i class="fa-solid fa-down-left-and-up-right-to-center"></i>                           
+                                            </a> 
+                                    @endif
+                                </div>
+                                <div class="flex flex-row gap-5 md:gap-2">
+                                    <span class="capitalize underline font-bold">table font</span>
+                                    @if($smallFont)
+                                            <a wire:click="activatesmallFont({{0}})" 
+                                                class="hover:text-green-600 transition duration-1000 ease-in-out cursor-pointer"
+                                                title="Big Font"> 
+                                                <span class="px-0">big</span><i class="fa-lg fa-solid fa-a"></i>                            
+                                            </a>
+                                            @else
+                                                <a wire:click="activatesmallFont({{1}})" 
+                                                    class="hover:text-green-600 transition duration-1000 ease-in-out cursor-pointer"
+                                                    title="Small Font">
+                                                    <span class="px-0">small</span><i class="fa-solid fa-a"></i>                           
+                                                </a>
+                                        @endif
+                                </div>    
                             </div>
-
-                        @endif
-                        
-                    </div> 
-
-                    <!-- Export ALL Entries found as Excel file -->
-                    <div class="flex flex-row px-2">
-
-                        <form action="{{ route('entries.export') }}" method="POST">
-                            <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
-                            @csrf
-                            <input type="hidden" id="entries" name="entries"
-                                value="{{ $entriesRaw->pluck('id') }}">
-                            <input type="hidden" id="criteriaSelection" name="criteriaSelection"
-                                value="{{ json_encode($this->criteria) }}">                        
-                            <button
-                                class="hover:text-amber-600 transition duration-1000 ease-in-out cursor-pointer"
-                                title="Export All as Excel file">
-                                <i class="text-green-600 fa-solid fa-file-export"></i>                                 
-                                <span class="text-xs font-normal px-1">export all</span>
-                            </button>                            
-                        </form>
-                    
-                    </div>
-
-                </div>
-                
-                <div class="flex flex-row py-2 md:py-0 text-xs px-2">
-                <!-- Bulk Actions -->
-                @if (count($okselections) > 0)
-                        
-                    <div class="flex flex-wrap md:flex-row justify-start items-end md:justify-end font-normal gap-4">
-                        
-                        <div class="flex flex-row gap-2">
-                            <span class="font-bold capitalize underline">bulk actions </span>
-                            <span>selected ({{ count($okselections) }})</span>
                         </div>
-                
-                        <div>                            
-                            <a wire:click.prevent="bulkClear" class="cursor-pointer" title="Unselect Entries">
-                                <i class="fa-solid fa-rotate-right text-blue-600"></i>
-                            </a>
-                        </div>
-                        
-                        <div>                            
-                            <a wire:click.prevent="bulkDelete" wire:confirm="Are you sure you want to delete this items?"
-                                class="cursor-pointer" title="Delete Selected">
-                                <i class="fa-solid fa-trash text-red-600"></i>
-                            </a>
-                        </div>
-
-                        <div>                
-                            <form action="{{ route('entries.exportbulk') }}" method="POST">
-                                    <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
-                                    @csrf
-                                    <input type="hidden" id="listEntriesBulk" name="listEntriesBulk"
-                                        value="{{ implode(',', $okselections) }}">
-                                    <button class="cursor-pointer" title="Export Selected as Excel file">
-                                        <i class="fa-solid fa-file-export text-green-600"></i>
-                                    </button>
+                        <!-- EXPORT ALL -->
+                        <div class="flex flex-col w-full items-end">
+                            <form action="{{ route('entries.export') }}" method="POST">
+                                <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
+                                @csrf
+                                <input type="hidden" id="entries" name="entries"
+                                    value="{{ $entriesRaw->pluck('id') }}">
+                                <input type="hidden" id="criteriaSelection" name="criteriaSelection"
+                                    value="{{ json_encode($this->criteria) }}">                        
+                                <button
+                                    class="hover:text-amber-600 transition duration-1000 ease-in-out cursor-pointer"
+                                    title="Export All as Excel file">
+                                    <i class="text-green-600 fa-solid fa-file-export"></i>                                 
+                                    <span class="text-xs font-normal px-1">export all</span>
+                                </button>                            
                             </form>
-                        </div>   
-                            
-                    </div>
-                @else
-                    <div class="flex flex-row gap-2"><span class="font-bold underline">Bulk actions</span><span class="italic text-xs font-normal"> no selections</span></div>
-                @endif
-                </div>
+                        </div>
 
-            </div>
+                    </div>    
+
+                    <!-- BULK ACTIONS -->
+                    <div class="flex flex-row justify-between md:justify-end py-2 gap-2">
+                        @if (count($okselections) > 0)
+
+                            <div class="flex flex-row gap-2">                            
+                                <span class="font-bold capitalize underline">bulk actions </span>
+                                <span>selected ({{ count($okselections) }})</span>
+                            </div>
+                    
+                            <div class="flex flex-row gap-2">                            
+                                <a wire:click.prevent="bulkClear" class="cursor-pointer" title="Unselect Entries">
+                                    <i class="fa-solid fa-rotate-right text-blue-600"></i>
+                                </a>
+                                                    
+                                <a wire:click.prevent="bulkDelete" wire:confirm="Are you sure you want to delete this items?"
+                                    class="cursor-pointer" title="Delete Selected">
+                                    <i class="fa-solid fa-trash text-red-600"></i>
+                                </a>
+                                            
+                                <form action="{{ route('entries.exportbulk') }}" method="POST">
+                                        <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
+                                        @csrf
+                                        <input type="hidden" id="listEntriesBulk" name="listEntriesBulk"
+                                            value="{{ implode(',', $okselections) }}">
+                                        <button class="cursor-pointer" title="Export Selected as Excel file">
+                                            <i class="fa-solid fa-file-export text-green-600"></i>
+                                        </button>
+                                </form>
+                            </div> 
+                                
+                            @else
+                                <div class="flex flex-row gap-2">
+                                    <span class="font-bold capitalize underline">Bulk actions</span>
+                                    <span class="italic text-xs font-normal"> no selections</span>
+                                </div>
+                            @endif
+                    </div>
+
+
+                </div>
+                      
 
             @endif
                
 
             @if ($entries->count())
             <!-- TABLE -->
-            <div class="bg-amber-600 text-white my-0">
+            <div class="bg-black text-white my-0">
                 <div class="overflow-x-auto">
-
                         <table class="min-w-full ">
                             <!-- TABLE HEADER -->
                             <thead>
                                 <tr class="text-left text-sm font-normal capitalize">
                                     <th></th>                                    
                                     <th wire:click="sorting('id')" scope="col"
-                                        class="p-2 hover:cursor-pointer {{ $column == 'entries.id' ? 'text-black' : '' }}">
+                                        class="p-2 hover:cursor-pointer {{ $column == 'id' ? 'text-yellow-400' : '' }}">
                                         id {!! $sortLink !!}</th>
                                     @if($isAdmin)
                                     <th wire:click="sorting('user_id')" scope="col"
-                                        class="p-2 hover:cursor-pointer {{ $column == 'user_id' ? 'text-black' : '' }}">
+                                        class="p-2 hover:cursor-pointer {{ $column == 'user_id' ? 'text-yellow-400' : '' }}">
                                         User {!! $sortLink !!}</th>
                                     @endif
                                     <th wire:click="sorting('date')" scope="col"
-                                        class="p-2 hover:cursor-pointer {{ $column == 'date' ? 'text-black' : '' }}">
+                                        class="p-2 hover:cursor-pointer {{ $column == 'date' ? 'text-yellow-400' : '' }}">
                                         Date {!! $sortLink !!}</th>
                                     @if(!$smallView)
                                     <th wire:click="sorting('title')" scope="col"
-                                        class="p-2 hover:cursor-pointer {{ $column == 'title' ? 'text-black' : '' }}">
+                                        class="p-2 hover:cursor-pointer {{ $column == 'title' ? 'text-yellow-400' : '' }}">
                                         Title {!! $sortLink !!}</th>
                                     @endif
                                     <th wire:click="sorting('company')" scope="col"
-                                        class="p-2 hover:cursor-pointer {{ $column == 'company' ? 'text-black' : '' }}">
+                                        class="p-2 hover:cursor-pointer {{ $column == 'company' ? 'text-yellow-400' : '' }}">
                                         Company {!! $sortLink !!}</th>
                                     <!-- <th wire:click="sorting('entries.type')" scope="col"
                                         class="p-2 hover:cursor-pointer hover:text-black {{ $column == 'type' ? 'text-black' : '' }}">
                                         type {!! $sortLink !!}</th> -->
                                     <th wire:click="sorting('value')" scope="col"
-                                        class="p-2 hover:cursor-pointer {{ $column == 'value' ? 'text-black' : '' }}">
+                                        class="p-2 hover:cursor-pointer {{ $column == 'value' ? 'text-yellow-400' : '' }}">
                                         Value <span class="text-sm">(€)</span> {!! $sortLink !!}</th>
                                     <th wire:click="sorting('frequency')" scope="col"
-                                        class="p-2 hover:cursor-pointer {{ $column == 'frequency' ? 'text-black' : '' }}">
+                                        class="p-2 hover:cursor-pointer {{ $column == 'frequency' ? 'text-yellow-400' : '' }}">
                                         Frequency {!! $sortLink !!}</th>
                                     <th wire:click="sorting('balance_source')" scope="col"
-                                        class="p-2 hover:cursor-pointer {{ $column == 'balance_source' ? 'text-black' : '' }}">
-                                        source {!! $sortLink !!}</th>
+                                        class="p-2 hover:cursor-pointer {{ $column == 'balance_source' ? 'text-yellow-400' : '' }}">
+                                        payment {!! $sortLink !!}</th>
                                     <th wire:click="sorting('balance_name')" scope="col"
-                                            class="p-2 hover:cursor-pointer {{ $column == 'balance_name' ? 'text-black' : '' }}">
+                                            class="p-2 hover:cursor-pointer {{ $column == 'balance_name' ? 'text-yellow-400' : '' }}">
                                             account {!! $sortLink !!}</th>
                                     <th wire:click="sorting('category_name')" scope="col"
-                                        class="p-2 hover:cursor-pointer {{ $column == 'category_name' ? 'text-black' : '' }}">
+                                        class="p-2 hover:cursor-pointer {{ $column == 'category_name' ? 'text-yellow-400' : '' }}">
                                         category {!! $sortLink !!}</th>
                                     @if(!$smallView)
                                         <th scope="col" class="p-2 text-center">tags</th>                                    
@@ -916,7 +1020,8 @@
                             <tbody>
                                 @foreach ($entries as $entry)
                                     <tr
-                                        class="text-black text-sm leading-6 even:bg-zinc-200 odd:bg-gray-300 transition-all duration-1000 hover:bg-yellow-400">
+                                        class="text-black {{$smallFont ? 'text-xs' : 'text-sm'}} leading-6 {{in_array($entry->id, $okselections) ? 'bg-green-200' : 'even:bg-zinc-200 odd:bg-gray-300'}} transition-all duration-1000 hover:bg-yellow-400">
+                                                
                                         <td class="p-2 text-center"><input wire:model.live="selections" type="checkbox"
                                                 class="text-green-600 outline-none focus:ring-0 checked:bg-green-500"
                                                 value={{ intval($entry->id) }} 
@@ -924,25 +1029,25 @@
                                                 {{ in_array($entry->id, $selections) ? 'checked' : '' }}
                                                 >
                                         </td>
-                                        <td class="p-2 pr-12 text-xs">{{ $entry->id }}</td>
+                                        <td class="p-2 pr-12 {{ $column == 'id' ? 'bg-yellow-400 font-bold text-black transition-all duration-1000' : '' }}">{{ $entry->id }}</td>
                                         @if($isAdmin)
-                                            <td class="p-2 pr-12 text-xs">{{ $entry->user->name }}</td>
+                                            <td class="p-2 pr-12 {{ $column == 'user_id' ? 'bg-yellow-400 font-bold text-slate-800 transition-all duration-1000' : '' }}">{{ $entry->user->name }}</td>
                                         @endif
-                                        <td class="p-2 pr-12 text-xs">{{ date('d-m-Y', strtotime($entry->date)) }}</td>
+                                        <td class="p-2 pr-12 {{ $column == 'date' ? 'bg-yellow-400 font-bold text-black transition-all duration-1000' : '' }}">{{ date('d-m-Y', strtotime($entry->date)) }}</td>
                                         @if(!$smallView)
-                                        <td class="p-2 pr-12 text-xs"> {{ $entry->title }}</td>
+                                        <td class="p-2 pr-12 {{ $column == 'title' ? 'bg-yellow-400 font-bold text-black transition-all duration-1000' : '' }}"> {{ $entry->title }}</td>
                                         @endif
                                         <!-- <td class="p-2">{{ $entry->type == 0 ? 'G' : 'I' }}</td> -->
-                                        <td class="p-2 pr-12 text-xs"> <a
+                                        <td class="p-2 pr-12 {{ $column == 'company' ? 'bg-yellow-400 font-bold text-black transition-all duration-1000' : '' }}"> <a
                                                 href="{{ route('entries.show', $entry) }}">{{ $entry->company }}</a>
                                         </td>
-                                        <td class="p-2 pr-16 text-xs {{ $entry->type == 0 ? 'text-red-600' : 'text-green-600' }}">{{ $entry->value }}</td>
-                                        <td class="p-2 pr-12 text-xs">{{ $entry->frequency }}</td>
-                                        <td class="p-2 pr-12 text-xs">{{ $entry->balance_source }}</td>                                                                                
-                                        <td class="p-2 pr-12 text-xs">{{ $entry->balance_name }}</td>
-                                        <td class="p-2 pr-12 text-xs">{{ $entry->category_name }}</td>
+                                        <td class="p-2 pr-16 {{ $column == 'value' ? 'bg-yellow-400 font-bold text-black transition-all duration-1000' : '' }} {{ $entry->type == 0 ? 'text-red-600' : 'text-green-600' }}">{{ $entry->value }}</td>
+                                        <td class="p-2 pr-12 {{ $column == 'frequency' ? 'bg-yellow-400 font-bold text-black transition-all duration-1000' : '' }}">{{ $entry->frequency }}</td>
+                                        <td class="p-2 pr-12 {{ $column == 'balance_source' ? 'bg-yellow-400 font-bold text-black transition-all duration-1000' : '' }}">{{ $entry->balance_source }}</td>                                                                                
+                                        <td class="p-2 pr-12 {{ $column == 'balance_name' ? 'bg-yellow-400 font-bold text-black transition-all duration-1000' : '' }}">{{ $entry->balance_name }}</td>
+                                        <td class="p-2 pr-12 {{ $column == 'category_name' ? 'bg-yellow-400 font-bold text-black transition-all duration-1000' : '' }}">{{ $entry->category_name }}</td>
                                         @if(!$smallView)
-                                        <td class="p-2 text-xs">
+                                        <td class="p-2">
                                             @foreach ($entry->tags as $tags)
                                                 {{$tags->name}} 
                                             @endforeach
@@ -1008,7 +1113,7 @@
             </div>
             @else
                 <div
-                    class="flex flex-row justify-between items-center bg-black text-white rounded-sm w-11/12 mx-auto p-4">
+                    class="flex flex-row justify-between items-center bg-black text-white rounded-sm w-full mx-auto p-4">
                     <span>No entries found in the system.</span>
                     <a wire:click.prevent="resetAll" title="Reset">
                         <i

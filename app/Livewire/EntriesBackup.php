@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Entry;
 use App\Models\Tag;
 use App\Models\User;
+use App\Services\EntryService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -17,7 +18,7 @@ class Entries extends Component
     use WithPagination;
 
     // Dependency Injection to use the Service
-    
+    protected EntryService $entryService;     
     
     // order and pagination
     public $orderColumn = 'entries.id';
@@ -26,7 +27,18 @@ class Entries extends Component
     public $perPage = 25;
 
     // search
+    public $showSearch = 1;
     public $search = '';
+    public $searchType = 'company';
+
+    // stats
+    public $showStats = 1;
+    
+    // small or full view of the entry table
+    public $smallView = false;
+
+    // font size table
+    public $smallFont = false;
 
     // filters    
     public $showFilters = 0;
@@ -43,21 +55,32 @@ class Entries extends Component
     public $valueTo;
     public $initialValueTo;
 
-    public $freq = '';
-    public $compa = '';
+    public $freq = 0;
+    public $sour = 0;
+    public $compa = 0;
     public $cat = 0;
     public $bal = 0;
     public $tag = 0;
+    public $selectedTags = [];
+    public $tagNames = [];
     public $userID = 0;
 
     public $isAdmin = 0;
 
 
     // multiple batch selections
-    public $selections = [];   
-    
+    public $selections = [];       
     public $listEntriesIds = [];
     public $okselections = [];
+
+    // TEST CRITERIA
+    public $criteria = [];
+
+    public function boot(
+        EntryService $entryService,
+    ) {
+        $this->entryService = $entryService;
+    }
 
     public function updated()
     {
@@ -79,6 +102,101 @@ class Entries extends Component
             //dd($this->selections);
             //dd($this->listEntriesIds);
         }
+
+        // CRITERIA  
+        
+        if($this->search != '')
+        {
+            $this->criteria['search'] = $this->search;     
+            
+            switch ($this->searchType) {
+                case 'entries.id':
+                    $this->criteria['searchType'] = 'Id';
+                    break;
+                case 'balances.name':
+                    $this->criteria['searchType'] = 'Account';
+                    break;
+                
+                default:
+                    $this->criteria['searchType'] = $this->searchType;
+                    break;
+            }
+
+            //($this->searchType == 'balances.name') ? $this->criteria['searchType'] = 'Account': $this->criteria['searchType'] = $this->searchType;        
+        }else{
+            unset($this->criteria['search']);
+            unset($this->criteria['searchType']);
+        } 
+        if($this->userID != 0)
+        {
+            $this->criteria['user'] = $this->entryService->getUserName($this->userID);
+        }else{
+            unset($this->criteria['user']);
+        }       
+        if($this->types != 2)
+        {
+            ($this->types == 1) ? $this->criteria['types'] = 'Income' : $this->criteria['types'] = 'Expense';
+        }
+        else{
+            unset($this->criteria['types']);
+        }          
+        if($this->initialDateTo != $this->dateTo || $this->initialDateFrom != $this->dateFrom )
+        {
+            $this->criteria['date'] = date('d-m-Y', strtotime($this->dateFrom)) . ' to ' . date('d-m-Y', strtotime($this->dateTo));
+        }
+        else{
+            unset($this->criteria['date']);
+        }  
+        if($this->initialValueTo != $this->valueTo || $this->initialValueFrom != $this->valueFrom)
+        {
+            $this->criteria['value'] = $this->valueFrom . ' to ' . $this->valueTo;
+        }
+        else{
+            unset($this->criteria['value']);
+        }  
+        if($this->cat != 0)
+        {
+            $this->criteria['category'] = $this->cat;
+        } 
+        else{
+            unset($this->criteria['category']);
+        }  
+        if($this->bal != 0)
+        {
+            $this->criteria['balance'] = $this->bal;
+        }        
+        else{
+            unset($this->criteria['balance']);
+        }  
+        if($this->freq != 0)
+        {
+            $this->criteria['frequency'] = $this->freq;
+        }
+        else{
+            unset($this->criteria['frequency']);
+        }  
+        if($this->sour != 0)
+        {
+            $this->criteria['source'] = $this->sour;
+        }
+        else{
+            unset($this->criteria['source']);
+        }  
+        if($this->compa != 0)
+        {
+            $this->criteria['company'] = $this->compa;
+        }
+        else{
+            unset($this->criteria['company']);
+        }  
+        if(!in_array('0', $this->selectedTags) && count($this->selectedTags) != 0)
+        {
+            $this->tagNames = $this->entryService->getTagNames($this->selectedTags);
+            $this->criteria['tags'] = implode(', ', $this->tagNames);
+        }
+        else{
+            unset($this->criteria['tags']);
+        }  
     }
 
     public function mount() {       
@@ -90,10 +208,10 @@ class Entries extends Component
 
     public function InitializeDataUser()
     {
-        $this->dateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->min('date')));
-        $this->initialDateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->min('date')));
-        $this->dateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->max('date')));
-        $this->initialDateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->max('date')));
+        $this->dateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->min('entries.date')));
+        $this->initialDateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->min('entries.date')));
+        $this->dateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->max('entries.date')));
+        $this->initialDateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->max('entries.date')));
 
         $this->valueFrom = Entry::where('user_id', Auth::id())->min('value');
         $this->initialValueFrom = Entry::where('user_id', Auth::id())->min('value');
@@ -103,15 +221,35 @@ class Entries extends Component
 
     public function InitializeDataAdmin()
     {
-        $this->dateFrom = date('Y-m-d', strtotime(Entry::min('date')));
-        $this->initialDateFrom = date('Y-m-d', strtotime(Entry::min('date')));
-        $this->dateTo = date('Y-m-d', strtotime(Entry::max('date')));
-        $this->initialDateTo = date('Y-m-d', strtotime(Entry::max('date')));
+        $this->dateFrom = date('Y-m-d', strtotime(Entry::min('entries.date')));
+        $this->initialDateFrom = date('Y-m-d', strtotime(Entry::min('entries.date')));
+        $this->dateTo = date('Y-m-d', strtotime(Entry::max('entries.date')));
+        $this->initialDateTo = date('Y-m-d', strtotime(Entry::max('entries.date')));
 
         $this->valueFrom = Entry::min('value');
         $this->initialValueFrom = Entry::min('value');
         $this->valueTo = Entry::max('value');
         $this->initialValueTo = Entry::max('value');
+    }
+
+    public function activatesmallView(bool $activate)
+    {
+        $this->smallView = $activate;
+    }
+
+    public function activatesmallFont(bool $activate)
+    {
+        $this->smallFont = $activate;
+    }
+
+    public function activateSearch()
+    {
+        $this->showSearch++;
+    }
+
+     public function activateStats()
+    {
+        $this->showStats++;
     }
 
     public function activateFilter()
@@ -129,41 +267,51 @@ class Entries extends Component
     public function clearFiltersUser()
     {
         $this->types = 2;
-        $this->dateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->min('date')));
-        $this->dateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->max('date')));        
+        $this->dateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->min('entries.date')));
+        $this->dateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->max('entries.date')));        
         $this->valueFrom = Entry::where('user_id', Auth::id())->min('value');
         $this->valueTo = Entry::where('user_id', Auth::id())->max('value');
-        $this->freq = '';
-        $this->compa = '';
+        $this->freq = 0;
+        $this->sour = 0;
+        $this->compa = 0;
         $this->cat = 0;
         $this->bal = 0;
         $this->tag = 0;
+        $this->selectedTags = [];
         $this->userID = 0;
+        $this->criteria = [];
     }
 
     public function clearFiltersAdmin()
     {
         $this->types = 2;
-        $this->dateFrom = date('Y-m-d', strtotime(Entry::min('date')));
-        $this->dateTo = date('Y-m-d', strtotime(Entry::max('date')));        
+        $this->dateFrom = date('Y-m-d', strtotime(Entry::min('entries.date')));
+        $this->dateTo = date('Y-m-d', strtotime(Entry::max('entries.date')));        
         $this->valueFrom = Entry::min('value');
         $this->valueTo = Entry::max('value');
-        $this->freq = '';
-        $this->compa = '';
+        $this->freq = 0;
+        $this->sour = 0;
+        $this->compa = 0;
         $this->cat = 0;
+        $this->selectedTags = [];
         $this->bal = 0;
         $this->tag = 0;
         $this->userID = 0;
+        $this->criteria = [];
     }
 
     public function clearSearch()
     {
         $this->search = '';
+        $this->searchType = 'title';
+        unset($this->criteria['search']);
+        unset($this->criteria['searchType']);
     }
 
     public function clearFilterTypes()
     {
         $this->types = 2;
+        unset($this->criteria['types']);
     }
 
     public function clearFilterDate()
@@ -173,61 +321,78 @@ class Entries extends Component
     
     public function clearFilterDateUser()
     {
-        $this->dateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->min('date')));
-        $this->dateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->max('date')));
+        $this->dateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->min('entries.date')));
+        $this->dateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->max('entries.date')));
+        unset($this->criteria['date']);
     }
 
     public function clearFilterDateAdmin()
     {
-        $this->dateFrom = date('Y-m-d', strtotime(Entry::min('date')));
-        $this->dateTo = date('Y-m-d', strtotime(Entry::max('date')));
+        $this->dateFrom = date('Y-m-d', strtotime(Entry::min('entries.date')));
+        $this->dateTo = date('Y-m-d', strtotime(Entry::max('entries.date')));
+        unset($this->criteria['date']);
     }
 
     public function clearFilterValue()
     {
-        ($this->isAdmin) ? $this->clearFilterAdmin() : $this->clearFilterValueUser();
+        ($this->isAdmin) ? $this->clearFilterValueAdmin() : $this->clearFilterValueUser();
     }
 
     public function clearFilterValueUser()
     {
         $this->valueFrom = Entry::where('user_id', Auth::id())->min('value');
         $this->valueTo = Entry::where('user_id', Auth::id())->max('value');
+        unset($this->criteria['value']);
     }
 
-    public function clearFilterAdmin()
+    public function clearFilterValueAdmin()
     {
         $this->valueFrom = Entry::min('value');
         $this->valueTo = Entry::max('value');
+        unset($this->criteria['value']);
     }
 
     public function clearFilterFrequency()
     {
-        $this->freq = '';
+        $this->freq = 0;
+        unset($this->criteria['frequency']);
+    }
+
+    public function clearFilterSource()
+    {
+        $this->sour = 0;
+        unset($this->criteria['source']);
     }
 
     public function clearFilterCompany()
     {
-        $this->compa = '';
+        $this->compa = 0;
+        unset($this->criteria['company']);
     }
 
     public function clearFilterCategory()
     {
         $this->cat = 0;
+        unset($this->criteria['category']);
     }
 
     public function clearFilterBalance()
     {
         $this->bal = 0;
+        unset($this->criteria['balance']);
     }
 
     public function clearFilterTag()
     {
         $this->tag = 0;
+        $this->selectedTags = [];
+        unset($this->criteria['tags']);
     }
 
     public function clearFilterUser()
     {
         $this->userID = 0;
+        unset($this->criteria['user']);
     }
     
     // Bulk Actions
@@ -249,6 +414,13 @@ class Entries extends Component
         return to_route('entries.index')->with('message', 'Entries deleted.');
         //return to_route('entries')->with('message', __('generic.bulkDelete')); 
         //return $this->portfolioService->bulkDeletePortfolios($this->selections);
+    }
+
+    public function resetAll()
+    {
+        $this->clearFilters();
+        $this->clearSearch();
+        $this->bulkClear();
     }
 
     public function sorting($columnName = '')
@@ -275,32 +447,46 @@ class Entries extends Component
 
         $categories = Category::orderby('name', 'ASC')->get();
         $balances = Balance::orderby('name', 'ASC')->get();
+        $sources = Balance::orderby('source', 'ASC')->select('source')->distinct()->get();
         $tags = Tag::orderby('name', 'ASC')->get();
         $users = User::orderby('name', 'ASC')->get();
         $frequencies = Entry::orderby('frequency', 'ASC')->select('frequency')->distinct()->get();
         $companies = Entry::orderby('company', 'ASC')->select('company')->get();
-
-         /* resticted access - user can only access his entries, Admin can access all the entries */
-        if ($this->isAdmin) {
-            $data = Entry::orderby($this->orderColumn, $this->sortOrder)->select('*');    
-        }  
-        else {
-            $data = Entry::orderby($this->orderColumn, $this->sortOrder)->where('user_id', '=', Auth::id())->select('*');
-        }        
-
-        // $soft = Entry::orderby($this->orderColumn, $this->sortOrder)->onlyTrashed()->select('*');
-
-        // dd($soft->count());
+        
+        // Main Selection, Join tables sports, sport_categories and sports_tag
+        $data = Entry::select(
+            'entries.id as id',
+            'categories.name as category_name',
+            'balances.name as balance_name',
+            'balances.source as balance_source',
+            'entries.title as title',
+            'entries.user_id as user_id',
+            'entries.type as type',
+            'entries.company as company',
+            'entries.value as value',
+            'entries.frequency as frequency',
+            'entries.date as date',
+            'entries.info as info',
+            'entries.created_at as created_at',
+        )
+            ->join('categories', 'entries.category_id', '=', 'categories.id')
+            ->join('balances', 'entries.balance_id', '=', 'balances.id')
+            ->join('entry_tag', 'entries.id', '=', 'entry_tag.entry_id')
+            ->distinct('entries.id')
+            ->orderby($this->orderColumn, $this->sortOrder);
+           
+        /* resticted access - user can only access his entries, Admin can access all the entries */
+        if (!$this->isAdmin) {               
+            $data = $data->where('user_id', '=', Auth::id());
+        }
+        
+        /* -------------------------------- FILTERS --------------------------- */
 
         // user filter
         if ($this->userID != 0) {
             // TODO: When there is a filter, check if the current selections ids are in the current
-            // filtered data, if there are not, take the id from selections
-                        
-            $data = $data->where('user_id', '=', $this->userID);            
-
-
-            
+            // filtered data, if there are not, take the id from selections                        
+            $data = $data->where('entries.user_id', '=', $this->userID);                        
         }
 
         // types filter
@@ -311,8 +497,8 @@ class Entries extends Component
         // interval date filter
         if (isset($this->dateFrom)) {
             if ($this->dateFrom <= $this->dateTo) {                                
-                $data = $data->whereDate('date', '>=', $this->dateFrom)
-                ->whereDate('date', '<=', $this->dateTo);
+                $data = $data->whereDate('entries.date', '>=', $this->dateFrom)
+                ->whereDate('entries.date', '<=', $this->dateTo);
             }
             else {
                 //dd('errorcito');
@@ -329,6 +515,11 @@ class Entries extends Component
             $data = $data->where('frequency', '=', $this->freq);
         }
 
+        // source filter
+        if (!empty($this->sour)) {
+            $data = $data->where('balances.source', '=', $this->sour);
+        }
+
         // company filter
         if (!empty($this->compa)) {
             $data = $data->where('company', '=', $this->compa);
@@ -336,12 +527,12 @@ class Entries extends Component
 
         // category filter
         if ($this->cat != 0) {
-            $data = $data->where('entries.category_id', '=', $this->cat);
+            $data = $data->where('categories.name', '=', $this->cat);            
         }
 
         // balance filter
         if ($this->bal != 0) {
-            $data = $data->where('entries.balance_id', '=', $this->bal);
+            $data = $data->where('balances.name', '=', $this->bal);
         }
 
         // tag filter
@@ -350,15 +541,31 @@ class Entries extends Component
              $data = $data
              ->join('entry_tag', 'entries.id', '=', 'entry_tag.entry_id')
              ->where('entry_tag.tag_id', '=', $this->tag);
-        }        
+        }                    
 
-        // search
+        // tags filter        
+        if (!in_array('0', $this->selectedTags) && (count($this->selectedTags) != 0)) {
+            $data = $data->whereIn('entry_tag.tag_id', $this->selectedTags);
+        }
+
+        
+        // Search
         if (!empty($this->search)) {
-            $found = $data->where('title', 'like', '%' . $this->search . '%')->count();
+            // trim search in case copy paste or start the search with whitespaces
+            // search by id or name
+            //$entries->orWhere('id', "like", "%" . $this->search . "%");
+            //->orWhere('location', "like", "%" . $this->search . "%")
+            $data = $data->where($this->searchType, "like", "%" . trim($this->search) . "%");
+            $found = $data->count();
         }
 
         $total = $data->count();
         $dataRaw =  clone $data;
+
+        // TEST STATS
+        $dataStats = clone $data;
+        $stats = $this->entryService->getTotalStats($data->get());
+        
 
         // TEST SELECTIONS IN FILTERS
         $dataEntriesIds = clone $data;
@@ -370,6 +577,14 @@ class Entries extends Component
 
         $data = $data->paginate($this->perPage);
 
+
+        // if (!in_array('0', $this->selectedTags)) {
+        //     $this->tagNames = $this->entryService->getTagNames($this->selectedTags);
+        // } else {
+        //     $this->tagNames = [];
+        // }
+
+
         return view('livewire.entries', [
             // Styles
             'underlineMenuHeader'   => 'border-b-2 border-b-slate-600',
@@ -379,19 +594,22 @@ class Entries extends Component
             'focusColor'            => 'focus:ring-slate-500 focus:border-slate-500',
             // Data
             //'soft'          => $soft,
-            'listEntriesIds' => $this->listEntriesIds,
-            'okselections'  => $this->okselections,
-            'entriesRaw'    => $dataRaw,
-            'entries'       => $data,
-            'categories'    => $categories,
-            'balances'      => $balances,
-            'tags'          => $tags,
-            'users'         => $users,
-            'frequencies'   => $frequencies,
-            'companies'     => $companies,
-            'found'         => $found,
-            'column'        => $this->orderColumn,
-            'total'         => $total            
+            'listEntriesIds'    => $this->listEntriesIds,
+            'okselections'      => $this->okselections,
+            'entriesRaw'        => $dataRaw,
+            'entries'           => $data,
+            'categories'        => $categories,
+            'balances'          => $balances,
+            'sources'           => $sources,
+            'tags'              => $tags,
+            'users'             => $users,
+            'frequencies'       => $frequencies,
+            'companies'         => $companies,
+            'found'             => $found,
+            'column'            => $this->orderColumn,
+            'total'             => $total,
+            'tagNames'          => $this->tagNames, 
+            'stats'             => $stats,          
         ]);
     }
 

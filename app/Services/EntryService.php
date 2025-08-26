@@ -115,33 +115,149 @@ class EntryService
     }
 
 
-    // test stats
+    // test stats, do cases for user and for admin
 
-    public function getTotalStats(mixed $entries): mixed
+   public function getTotalStats(array $info): array
     {
-        //dd($entries);
-
-        $stats = [];
-        $stats['incomes'] = 0;
-        $stats['expenses'] = 0;
-
-        //$incomes = 0;
-        //$expenses = 0;
-
-        foreach ($entries as $entry) 
+               
+        //dd($info);
+        
+        if($info == [])
         {
-            //dd($entry);
-            if($entry->type == 1)
-            {
-                $stats['incomes'] = $stats['incomes'] + $entry->value;
-            } else
-            {
-                $stats['expenses'] = $stats['expenses'] + $entry->value;
-            }
+            return $result = [];
         }
 
-        //dd($stats);
-        return $stats;
+        else
+        {
+
+        $result = [];
+        // Users
+        $result['users'] = null;
+        $users = [];
+
+        foreach ($info as $key => $value) {
+            $users[] = $value['user_id'];
+        }
+//dd($users);
+        $result['users'] = count(array_unique($users));
+
+        // Incomes & Expenses
+        $result['incomes'] = 0;
+        $result['numberIncomes'] = 0;
+        $result['expenses'] = 0;
+        $result['numberExpenses'] = 0;
+
+        foreach ($info as $key => $value) 
+        {
+            if($value['type'] == 1)
+            {
+                $result['incomes'] = $result['incomes'] + $value['value'];
+                $result['numberIncomes']++;
+            } else
+            {
+                $result['expenses'] = $result['expenses'] + $value['value'];
+                $result['numberExpenses']++;
+            }            
+        }
+
+        // Dates
+        $result['days'] = null;        
+        $result['dateFrom'] = null;
+        $result['dateTo'] = null;
+        $dates = [];
+
+        foreach ($info as $key => $value) {
+            $dates[] = $value['date'];
+        }
+        
+        $result['days'] = count(array_unique($dates));
+        $result['dateFrom'] = min(array_unique($dates));
+        $result['dateTo'] = max(array_unique($dates));
+
+        
+
+        // Sources
+        $result['sourceCash'] = 0;
+        $result['sourceCard'] = 0;
+        $result['sourceStocks'] = 0;
+
+        foreach ($info as $key => $value) 
+        {
+            if($value['balance_source'] == 'cash')
+            {                
+                $result['sourceCash']++;
+            }
+            if($value['balance_source'] == 'card')
+            {                
+                $result['sourceCard']++;
+            }
+            if($value['balance_source'] == 'stocks')
+            {                
+                $result['sourceStocks']++;
+            }            
+        }
+       
+        // Accounts
+        $result['numberAccounts'] = 0;
+        $accounts = [];
+
+        foreach ($info as $key => $value) {
+            $accounts[] = $value['balance_name'];
+        }
+        natcasesort($accounts);
+        
+        $result['numberAccounts'] = count(array_unique($accounts));
+        $accounts = array_count_values($accounts);        
+        //$result['accounts'] = $accounts;
+        $accountini = [];
+
+        foreach ($accounts as $key => $value) {
+            $accountini[] = $key . ' (' . $value . ')';
+        }
+        $result['accounts'] = $accountini;
+        //dd($result['accounts']);
+
+        // Companies
+        $result['numberCompanies'] = 0;
+        $companies = [];
+
+        foreach ($info as $key => $value) {
+            $companies[] = $value['company'];
+        }
+        natcasesort($companies);
+        //dd($companies);
+        $result['numberCompanies'] = count(array_unique($companies));
+        $companies = array_count_values($companies);
+        $companini = [];
+
+        foreach ($companies as $key => $value) {
+            $companini[] = $key . ' (' . $value . ')';
+        }
+        $result['companies'] = $companini;
+
+        // Categories
+        $result['numberCategories'] = 0;
+        $categories = [];
+
+        foreach ($info as $key => $value) {
+            $categories[] = $value['category_name'];
+        }
+        natcasesort($categories);
+
+        $result['numberCategories'] = count(array_unique($categories));
+        //$result['categories'] = json_encode(array_count_values($categories));
+        $categories = array_count_values($categories);
+        $categorini = [];
+
+        foreach ($categories as $key => $value) {
+            $categorini[] = $key . ' (' . $value . ')';
+        }
+        $result['categories'] = $categorini;
+
+        //dd($result);
+        return $result;
+        }
+
     }
 
 }
