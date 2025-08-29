@@ -1,5 +1,25 @@
 <div class="w-full sm:max-w-10/12 mx-auto">
 
+@if (session('message'))
+
+    <div class="bg-green-400 text-white font-bold rounded-sm px-2 py-1 my-1">
+
+        <span>{{ session('message') }}</span>
+
+    </div>
+
+@endif
+
+@if (session('error'))
+
+    <div class="bg-red-400 text-white font-bold rounded-sm px-2 py-1 my-1">
+
+        <span>{{ session('error') }}</span>
+
+    </div>
+
+@endif
+
     <!-- Sitemap -->
     <div class="flex flex-row justify-between items-center gap-2 p-2 font-bold uppercase bg-black text-white rounded-sm">
         
@@ -14,7 +34,7 @@
         </div>
     </div>
 
-    <div class="overflow-hidden my-2 bg-zinc-100">
+    <div class="overflow-hidden py-2 bg-zinc-300">
 
             <!-- FILTERS-->
             <div class="flex flex-col bg-green-800 mx-auto">
@@ -831,11 +851,11 @@
             <!-- TABLE ENTRIES HEADER AND BULK ACTIONS -->
             @if($total > 0)
 
-                <div class="flex flex-row justify-between md:items-end bg-amber-600 text-white mt-4">
+                <div class="flex flex-row justify-between md:items-end bg-slate-900 text-white mt-4">
 
                     <!-- Entries Found -->
                     <div class="p-2">
-                        <span class="text-lg text-white">Entries Found ({{ $search != '' ? $found : $total }})</span>
+                        <span class="text-lg">Entries Found ({{ $search != '' ? $found : $total }})</span>
                     </div>       
                     
                     <!-- Pagination -->
@@ -863,33 +883,33 @@
 
                         <!-- TABLE INFO / FONT -->
                         <div class="flex flex-col w-full">
-                            <div class="flex flex-col md:flex-row justify-start gap-0 md:gap-2">
-                                <div class="flex flex-row gap-5 md:gap-2">
-                                    <span class="capitalize underline font-bold">table info</span>
+                            <div class="flex flex-col md:flex-row justify-start gap-0 md:gap-7">
+                                <div class="flex flex-row gap-5 md:gap-5">
+                                    <span class="capitalize font-bold">table info</span>
                                     @if($smallView)                                
-                                        <a wire:click="activatesmallView({{0}})" 
+                                        <a wire:click="activateSmallView({{0}})" 
                                             class="hover:text-green-600 transition duration-1000 ease-in-out cursor-pointer"
                                             title="See more Info"> 
                                             <span class="px-1">more</span><i class="fa-solid fa-up-right-and-down-left-from-center"></i>                            
                                         </a>                               
                                             @else                                    
-                                            <a wire:click="activatesmallView({{1}})" 
+                                            <a wire:click="activateSmallView({{1}})" 
                                                 class="hover:text-green-600 transition duration-1000 ease-in-out cursor-pointer"
                                                 title="See less Info">
                                                 <span class="px-1">less</span><i class="fa-solid fa-down-left-and-up-right-to-center"></i>                           
                                             </a> 
                                     @endif
                                 </div>
-                                <div class="flex flex-row gap-5 md:gap-2">
-                                    <span class="capitalize underline font-bold">table font</span>
+                                <div class="flex flex-row gap-5 md:gap-5">
+                                    <span class="capitalize font-bold">table font</span>
                                     @if($smallFont)
-                                            <a wire:click="activatesmallFont({{0}})" 
+                                            <a wire:click="activateSmallFont({{0}})" 
                                                 class="hover:text-green-600 transition duration-1000 ease-in-out cursor-pointer"
                                                 title="Big Font"> 
                                                 <span class="px-0">big</span><i class="fa-lg fa-solid fa-a"></i>                            
                                             </a>
                                             @else
-                                                <a wire:click="activatesmallFont({{1}})" 
+                                                <a wire:click="activateSmallFont({{1}})" 
                                                     class="hover:text-green-600 transition duration-1000 ease-in-out cursor-pointer"
                                                     title="Small Font">
                                                     <span class="px-0">small</span><i class="fa-solid fa-a"></i>                           
@@ -919,11 +939,11 @@
                     </div>    
 
                     <!-- BULK ACTIONS -->
-                    <div class="flex flex-row justify-between md:justify-end py-2 gap-2">
+                    <div class="flex flex-row justify-between md:justify-start py-2 gap-2">
                         @if (count($okselections) > 0)
 
                             <div class="flex flex-row gap-2">                            
-                                <span class="font-bold capitalize underline">bulk actions </span>
+                                <span class="font-bold capitalize">bulk actions </span>
                                 <span>selected ({{ count($okselections) }})</span>
                             </div>
                     
@@ -950,7 +970,7 @@
                                 
                             @else
                                 <div class="flex flex-row gap-2">
-                                    <span class="font-bold capitalize underline">Bulk actions</span>
+                                    <span class="font-bold capitalize">Bulk actions</span>
                                     <span class="italic text-xs font-normal"> no selections</span>
                                 </div>
                             @endif
@@ -967,7 +987,7 @@
             <!-- TABLE -->
             <div class="bg-black text-white my-0">
                 <div class="overflow-x-auto">
-                        <table class="min-w-full ">
+                        <table class="min-w-full">
                             <!-- TABLE HEADER -->
                             <thead>
                                 <tr class="text-left text-sm font-normal capitalize">
@@ -1043,7 +1063,7 @@
                                         </td>
                                         <td class="p-2 pr-16 {{ $column == 'value' ? 'bg-yellow-400 font-bold text-black transition-all duration-1000' : '' }} {{ $entry->type == 0 ? 'text-red-600' : 'text-green-600' }}">{{ $entry->value }}</td>
                                         <td class="p-2 pr-12 {{ $column == 'frequency' ? 'bg-yellow-400 font-bold text-black transition-all duration-1000' : '' }}">{{ $entry->frequency }}</td>
-                                        <td class="p-2 pr-12 {{ $column == 'balance_source' ? 'bg-yellow-400 font-bold text-black transition-all duration-1000' : '' }}">{{ $entry->balance_source }}</td>                                                                                
+                                        <td class="p-2 pr-16 {{ $column == 'balance_source' ? 'bg-yellow-400 font-bold text-black transition-all duration-1000' : '' }}">{{ $entry->balance_source }}</td>                                                                                
                                         <td class="p-2 pr-12 {{ $column == 'balance_name' ? 'bg-yellow-400 font-bold text-black transition-all duration-1000' : '' }}">{{ $entry->balance_name }}</td>
                                         <td class="p-2 pr-12 {{ $column == 'category_name' ? 'bg-yellow-400 font-bold text-black transition-all duration-1000' : '' }}">{{ $entry->category_name }}</td>
                                         @if(!$smallView)
@@ -1072,12 +1092,12 @@
                                                 <!-- Show -->
                                                 <a href="{{ route('entries.show', $entry) }}" title="Show">
                                                     <i
-                                                        class="fa-solid fa-circle-info text-orange-600 hover:text-black transition duration-1000 ease-in-out"></i>
+                                                        class="fa-solid fa-circle-info text-orange-600 hover:text-orange-700 transition duration-1000 ease-in-out"></i>
                                                 </a>
                                                 <!-- Upload File -->
                                                 <a href="{{ route('files.upload', $entry) }}" title="Upload File">
                                                     <span
-                                                        class="text-violet-600 hover:text-black transition-all duration-500 tooltip"><i
+                                                        class="text-violet-600 hover:text-violet-700 transition-all duration-500 tooltip"><i
                                                             class="fa-solid fa-file-arrow-up"></i>
                                                         <!-- <span class="tooltiptext">Upload File</span> -->
                                                     </span>
@@ -1085,7 +1105,7 @@
                                                 <!-- Edit -->
                                                 <a href="{{ route('entries.edit', $entry) }}" title="Edit">                                                    
                                                     <i
-                                                        class="fa-solid fa-pen-to-square text-green-600 hover:text-black transition duration-1000 ease-in-out"></i>
+                                                        class="fa-solid fa-pen-to-square text-green-600 hover:text-green-700 transition duration-1000 ease-in-out"></i>
                                                 </a>
                                                 <!-- Delete -->
                                                 <form action="{{ route('entries.destroy', $entry) }}" method="POST">
@@ -1095,9 +1115,10 @@
                                                     @method('DELETE')
                                                     <button
                                                         onclick="return confirm('Are you sure you want to delete the entry: {{ $entry->title }}?')"
-                                                        title="Delete this entry">                                                        
+                                                        title="Delete this entry"
+                                                        class="cursor-pointer">                                                        
                                                         <span
-                                                            class="text-red-600 hover:text-black transition-all duration-500"><i
+                                                            class="text-red-600 hover:text-red-700 transition-all duration-500"><i
                                                                 class="fa-solid fa-trash"></i></span>
                                                     </button>
                                                 </form>                                                

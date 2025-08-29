@@ -12,7 +12,7 @@ use Livewire\WithFileUploads;
 
 class FileUpload extends Component
 {
-     use WithFileUploads;
+    use WithFileUploads;
     
     public Entry $entry;
 
@@ -67,7 +67,7 @@ class FileUpload extends Component
             File::create($data);            
         }
         
-        return to_route('entries.show', $this->entry)->with('message', 'File(s) for (' . $this->entry->title . ') successfully uploaded.');
+        return to_route('entries.show', $this->entry)->with('message', 'File(s) successfully uploaded.');
     }
 
     public function render()

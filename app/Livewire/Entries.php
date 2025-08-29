@@ -73,7 +73,7 @@ class Entries extends Component
     public $listEntriesIds = [];
     public $okselections = [];
 
-    // TEST CRITERIA
+    // CRITERIA
     public $criteria = [];
 
     public function boot(
@@ -86,25 +86,18 @@ class Entries extends Component
     {
         $this->resetPage();
 
-        // TEST - Check if the selection exists in the current filtered entries
+        // Check if the selection exists in the current filtered entries
         if($this->selections != [])
         {
-            // convert string to integer values in the array of IDs selected
-            // foreach($this->selections as $key => $selection)
-            // {                   
-            //     $this->selections[$key] = intval($selection);
-            // }
+            // convert string to integer values in the array of IDs selected            
             foreach($this->selections as $key => $selection)
             {                   
                 $this->selections[$key] = intval($selection);
                 
-            }
-            //dd($this->selections);
-            //dd($this->listEntriesIds);
+            }            
         }
 
-        // CRITERIA  
-        
+        // CRITERIA         
         if($this->search != '')
         {
             $this->criteria['search'] = $this->search;     
@@ -115,66 +108,72 @@ class Entries extends Component
                     break;
                 case 'balances.name':
                     $this->criteria['searchType'] = 'Account';
-                    break;
-                
+                    break;                
                 default:
                     $this->criteria['searchType'] = $this->searchType;
                     break;
             }
 
-            //($this->searchType == 'balances.name') ? $this->criteria['searchType'] = 'Account': $this->criteria['searchType'] = $this->searchType;        
         }else{
             unset($this->criteria['search']);
             unset($this->criteria['searchType']);
-        } 
+        }
+
         if($this->userID != 0)
         {
             $this->criteria['user'] = $this->entryService->getUserName($this->userID);
         }else{
             unset($this->criteria['user']);
-        }       
+        }   
+
         if($this->types != 2)
         {
             ($this->types == 1) ? $this->criteria['types'] = 'Income' : $this->criteria['types'] = 'Expense';
         }
         else{
             unset($this->criteria['types']);
-        }          
+        }    
+
         if($this->initialDateTo != $this->dateTo || $this->initialDateFrom != $this->dateFrom )
         {
             $this->criteria['date'] = date('d-m-Y', strtotime($this->dateFrom)) . ' to ' . date('d-m-Y', strtotime($this->dateTo));
         }
         else{
             unset($this->criteria['date']);
-        }  
+        } 
+
         if($this->initialValueTo != $this->valueTo || $this->initialValueFrom != $this->valueFrom)
         {
             $this->criteria['value'] = $this->valueFrom . ' to ' . $this->valueTo;
         }
         else{
             unset($this->criteria['value']);
-        }  
+        } 
+
         if($this->cat != 0)
         {
             $this->criteria['category'] = $this->cat;
         } 
         else{
             unset($this->criteria['category']);
-        }  
+        } 
+
         if($this->bal != 0)
         {
             $this->criteria['balance'] = $this->bal;
         }        
         else{
             unset($this->criteria['balance']);
-        }  
+        }
+
         if($this->freq != 0)
         {
             $this->criteria['frequency'] = $this->freq;
         }
         else{
             unset($this->criteria['frequency']);
-        }  
+        }
+
         if($this->sour != 0)
         {
             $this->criteria['source'] = $this->sour;
@@ -182,6 +181,7 @@ class Entries extends Component
         else{
             unset($this->criteria['source']);
         }  
+
         if($this->compa != 0)
         {
             $this->criteria['company'] = $this->compa;
@@ -189,6 +189,7 @@ class Entries extends Component
         else{
             unset($this->criteria['company']);
         }  
+
         if(!in_array('0', $this->selectedTags) && count($this->selectedTags) != 0)
         {
             $this->tagNames = $this->entryService->getTagNames($this->selectedTags);
@@ -232,12 +233,12 @@ class Entries extends Component
         $this->initialValueTo = Entry::max('value');
     }
 
-    public function activatesmallView(bool $activate)
+    public function activateSmallView(bool $activate)
     {
         $this->smallView = $activate;
     }
 
-    public function activatesmallFont(bool $activate)
+    public function activateSmallFont(bool $activate)
     {
         $this->smallFont = $activate;
     }
@@ -404,16 +405,12 @@ class Entries extends Component
 
     public function bulkDelete()
     {
-        //dd($this->selections);
         foreach ($this->selections as $selection) {
             $element = Entry::find($selection);
-            //dd($element);
             $element->delete();
         }
         
         return to_route('entries.index')->with('message', 'Entries deleted.');
-        //return to_route('entries')->with('message', __('generic.bulkDelete')); 
-        //return $this->portfolioService->bulkDeletePortfolios($this->selections);
     }
 
     public function resetAll()
@@ -437,8 +434,6 @@ class Entries extends Component
         $this->sortLink = '<i class="fa-solid fa-caret-' . $caretOrder . '"></i>';
         $this->orderColumn = $columnName;
     }
-
-    
 
     public function render()
     {
@@ -516,7 +511,7 @@ class Entries extends Component
             $data = $data->where('frequency', '=', $this->freq);
         }
 
-        // source filter
+        // payment filter
         if (!empty($this->sour)) {
             $data = $data->where('balances.source', '=', $this->sour);
         }
@@ -531,7 +526,7 @@ class Entries extends Component
             $data = $data->where('categories.name', '=', $this->cat);            
         }
 
-        // balance filter
+        // account filter
         if ($this->bal != 0) {
             $data = $data->where('balances.name', '=', $this->bal);
         }
@@ -564,10 +559,9 @@ class Entries extends Component
         $dataRaw =  clone $data;      
 
         
-        // TEST STATS - deep copy, clone maintain the references  
+        // STATS - deep copy, clone maintain the references  
         $dataStats = clone $data;
         $dataStats = $dataStats->get()->toArray();
-        //dd($dataStats);
         $stats = $this->entryService->getTotalStats($dataStats);
 
 
@@ -578,15 +572,8 @@ class Entries extends Component
 
         $this->okselections = array_intersect($this->listEntriesIds, $this->selections);
         
-
+        // PAGINATION
         $data = $data->paginate($this->perPage);
-
-
-        // if (!in_array('0', $this->selectedTags)) {
-        //     $this->tagNames = $this->entryService->getTagNames($this->selectedTags);
-        // } else {
-        //     $this->tagNames = [];
-        // }
 
 
         return view('livewire.entries', [
@@ -597,7 +584,6 @@ class Entries extends Component
             'menuTextColor'         => 'text-slate-800',
             'focusColor'            => 'focus:ring-slate-500 focus:border-slate-500',
             // Data
-            //'soft'          => $soft,
             'listEntriesIds'    => $this->listEntriesIds,
             'okselections'      => $this->okselections,
             'entriesRaw'        => $dataRaw,

@@ -11,6 +11,7 @@ use App\Services\EntryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Exception;
 
 class EntriesEdit extends Component
 {
@@ -104,15 +105,18 @@ class EntriesEdit extends Component
     public function save(Request $request)
     {
         $validated = $this->validate();
-        //$validated['distance'] != "" ?: $validated['distance'] = 0;
         $validated['user_id'] = $request->user()->id;
 
+        //$validated['user_id'] = null;
         //dd($validated);
 
-        $this->entry->update($validated);
-        $this->entry->tags()->sync($validated['selectedTags']);        
-
-        return to_route('entries.index', $this->entry)->with('message', 'Entry (' . $this->entry->title . ') updated.');
+        try {
+            $this->entry->update($validated);
+            $this->entry->tags()->sync($validated['selectedTags']); 
+            return to_route('entries.index', $this->entry)->with('message', 'Entry (' . $this->entry->title . ') updated.');
+        } catch (Exception $e) {
+            return to_route('entries.index', $this->entry)->with('error', 'Error (' . $e->getCode() . ') when try to update (' . $this->entry->title . ')');            
+        }
     }
 
     public function render()

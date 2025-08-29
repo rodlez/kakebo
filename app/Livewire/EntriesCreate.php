@@ -28,9 +28,9 @@ class EntriesCreate extends Component
         'title'             => 'required|min:3',
         'date'              => 'required|after:01/01/2015',
         'company'           => 'required|min:3',
-        'value'             => 'required|numeric|min:0',        
-        'frequency'         => 'required',
+        'value'             => 'required|numeric|min:0',                
         'info'              => 'nullable|min:3',
+        'frequency'         => 'required',
         'category_id'       => 'required',
         'balance_id'        => 'required',
         'selectedTags'      => 'required',        
@@ -71,6 +71,7 @@ class EntriesCreate extends Component
         $this->date = date('Y-m-d');
         $this->type = 0;
         $this->value = 0;
+        $this->frequency = 'puntual';
         $this->category_id = Category::orderBy('name', 'asc')->pluck('id')->first();      
         $this->balance_id = Balance::orderBy('name', 'asc')->pluck('id')->first();   
           
@@ -87,10 +88,18 @@ class EntriesCreate extends Component
         // TODO: CHECK WHY GET balance_id come as string and not as int like category_id
         //$validated['balance_id'] = intval($validated['balance_id']);
         //dd($validated);
-        $entry = Entry::create($validated);
-        $entry->tags()->sync($validated['selectedTags']);
+        // $entry = Entry::create($validated);
+        // $entry->tags()->sync($validated['selectedTags']);
 
-        return to_route('entries.index', $entry)->with('message', 'Sport (' . $entry->title . ') created.');
+        // return to_route('entries.index', $entry)->with('message', 'Sport (' . $entry->title . ') created.');
+
+        try {
+            $entry = Entry::create($validated);
+            $entry->tags()->sync($validated['selectedTags']); 
+            return to_route('entries.index', $entry)->with('message', 'Entry (' . $entry->title . ') created.');
+        } catch (Exception $e) {
+            return to_route('entries.index', $entry)->with('error', 'Error (' . $e->getCode() . ') when try to create (' . $entry->title . ')');            
+        }
     }
 
 

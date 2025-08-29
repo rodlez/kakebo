@@ -24,6 +24,6 @@ class FileController extends Controller
     {          
         $this->fileService->deleteOneFile($file);
         
-        return back()->with('message', 'File ' . $file->original_filename . ' from Entry: ' . $entry->title . ' deleted.');
+        return back()->with('message', 'File ' . $file->original_filename . ' deleted.');
     }
 }
