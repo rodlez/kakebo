@@ -9,6 +9,7 @@ use App\Models\Entry;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Livewire\Component;
+use Exception;
 
 class EntriesCreate extends Component
 {
@@ -93,12 +94,15 @@ class EntriesCreate extends Component
 
         // return to_route('entries.index', $entry)->with('message', 'Sport (' . $entry->title . ') created.');
 
+        // test error
+        // $validated['user_id'] = null;
+
         try {
             $entry = Entry::create($validated);
             $entry->tags()->sync($validated['selectedTags']); 
-            return to_route('entries.index', $entry)->with('message', 'Entry (' . $entry->title . ') created.');
+            return to_route('entries.index', $entry)->with('message', 'Entry ID (' . $entry->id . ') created successfully');
         } catch (Exception $e) {
-            return to_route('entries.index', $entry)->with('error', 'Error (' . $e->getCode() . ') when try to create (' . $entry->title . ')');            
+            return to_route('entries.index')->with('error', 'Error (' . $e->getCode() . ') failed when create a new entry');            
         }
     }
 

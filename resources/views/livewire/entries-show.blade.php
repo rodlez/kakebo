@@ -2,27 +2,42 @@
 
     <!-- Messages -->
     @if (session('message'))
-        <div class="bg-green-600 text-white font-bold rounded-sm px-2 py-1 my-1">
-            <span>{{ session('message') }}</span>
+        <div class="flex flex-col bg-green-600 p-1 text-white text-sm rounded-sm">        
+            <div class="flex row justify-between items-center">
+                <span class="font-bold">{{ session('message') }}</span>
+                <a href="/entries/show/{{ $entry->id }}" class="cursor-pointer" title="Close">
+                    <i class="fa-solid fa-xmark hover:text-gray-600 transition-all duration-500"></i>
+                </a>
+            </div>
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="flex flex-col bg-red-600 p-1 text-white text-sm rounded-sm">        
+            <div class="flex row justify-between items-center">
+                <span class="font-bold">{{ session('error') }}</span>
+                <a href="/entries/show/{{ $entry->id }}" class="cursor-pointer" title="Close">
+                    <i class="fa-solid fa-xmark hover:text-gray-600 transition-all duration-500"></i>
+                </a>
+            </div>
         </div>
     @endif
 
     <!-- Sitemap -->
-    <div class="flex flex-row justify-start items-start gap-1 p-2 text-sm text-slate-600">
+    <div class="flex flex-row justify-start items-start gap-1 p-1 text-sm text-slate-600">
         <a href="/entries" class="hover:text-black">Entries</a> /
-        <a href="/entries/show/{{ $entry->id }}" class="font-bold text-black border-b-2 border-b-amber-600">Info</a>
+        <a href="/entries/show/{{ $entry->id }}" class="font-bold text-black border-b-2 border-b-orange-600">Info</a>
     </div>
 
-    <div class="bg-zinc-300 overflow-hidden shadow-sm sm:rounded-sm">
+    <div class="bg-zinc-200 overflow-hidden shadow-sm md:rounded-t-sm">
         
         <!-- Header -->
-        <div class="flex flex-row justify-between items-center p-0 bg-black text-lg text-white rounded-sm">
+        <div class="flex flex-row justify-between items-center bg-amber-600 text-white p-0 rounded-sm">
             
-            <div class="flex flex-row p-2 bg-black">
-                <span class="border-b-2 border-b-amber-600">Entry Info</span> 
+        <div class="flex flex-row p-2 bg-amber-600">
+                <span class="font-bold uppercase">Information</span> 
             </div>
 
-            <div class="flex flex-row gap-4 px-2">
+            <div class="flex flex-row gap-4 p-2 bg-black">
                 <!-- PDF -->
                 <a href="{{ route('entries_pdf.generate', $entry) }}" title="Download as PDF">
                     <i
@@ -42,7 +57,7 @@
                         onclick="return confirm('Are you sure you want to delete the entry: {{ $entry->title }}?')"
                         title="Delete">
                         <i
-                            class="fa-solid fa-trash hover:text-red-600 transition-all duration-500"></i>
+                            class="fa-solid fa-trash hover:text-red-600 transition-all duration-500 cursor-pointer"></i>
                     </button>
                 </form>
             </div>
@@ -50,73 +65,97 @@
 
 
         <!-- INFO -->
-        <div class="mx-auto w-11/12 bg-zinc-300 mt-4 pb-4 rounded-sm flex flex-col gap-2">
+            <div class="mx-auto w-11/12 mt-4 pb-4 rounded-sm flex flex-col gap-2">
 
             <!-- Id -->
-            <div class="flex flex-col md:flex-row border-b-0 bg-zinc-100">
+            <div class="flex flex-col md:flex-row gap-2">
 
-                <div class="flex flex-row justify-start items-center md:w-1/3">
-                    <div class="bg-black text-white p-2.5">
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
                         <i class="fa-solid fa-fingerprint"></i>
                     </div>                    
-                    <div class="bg-amber-600 text-white p-2 w-full">
-                        <span class="text-lg uppercase font-bold">Id</span>
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">id</span>
                     </div>                    
                 </div>
                 
-                <div class="flex flex-row justify-start items-center p-2 w-full">
-                    <span class="text-sm">{{$entry->id}}</span>
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span class="w-full md:w-40 rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">{{$entry->id}}</span>
                 </div>
 
             </div>
 
             <!-- User -->
-            <div class="flex flex-col md:flex-row border-b-0 bg-zinc-100">
+            <div class="flex flex-col md:flex-row gap-2">
 
-                <div class="flex flex-row justify-start items-center md:w-1/3">
-                    <div class="bg-black text-white p-2.5">
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
                         <i class="fa-solid fa-user"></i>
                     </div>                    
-                    <div class="bg-amber-600 text-white p-2 w-full">
-                        <span class="text-lg uppercase font-bold">User</span>
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">user</span>
+                    </div>                    
+                </div>
+
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        {{ $entry->user->name }} - {{ $entry->user->email }}</span>
+                </div>
+
+            </div>
+
+            <!-- Type -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-plus-minus"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">type</span>
                     </div>                    
                 </div>
                 
-                <div class="flex flex-row justify-start items-center p-2 w-full">
-                    <span class="text-sm">{{ $entry->user->name }} - {{ $entry->user->email }}</span>
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <label class="{{($entry->type == 0) ? 'bg-red-600' : 'bg-green-600'}} text-white font-semibold p-2 rounded-sm">
+                        {{ $entry->type == 0 ? 'Expense' : 'Income' }}                        
+                    </label> 
                 </div>
 
             </div>
 
             <!-- Date -->
-            <div class="flex flex-col md:flex-row border-b-0 bg-zinc-100">
+            <div class="flex flex-col md:flex-row gap-2">
 
-                <div class="flex flex-row justify-start items-center md:w-1/3">
-                    <div class="bg-black text-white p-2.5">
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
                         <i class="fa-solid fa-calendar-days"></i>
                     </div>                    
-                    <div class="bg-amber-600 text-white p-2 w-full">
-                        <span class="text-lg uppercase font-bold">Date</span>
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">date</span>
                     </div>                    
                 </div>
                 
-                <div class="flex flex-row justify-start items-center p-2 w-full">
-                    <span class="text-sm">{{ $entry->date }}</span>
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full md:w-fit rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        {{ $entry->date }}</span>
                 </div>
 
             </div>
             
             <!-- Title -->
-            <div class="flex flex-col md:flex-row border-b-0 bg-zinc-100 w-full">
+            <div class="flex flex-col md:flex-row gap-2">
 
-                <div class="flex flex-row justify-start items-center md:w-1/3">
-                    <div class="bg-black text-white p-2.5">
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
                         <i class="fa-solid fa-pen"></i>
                     </div>                    
-                    <div class="flex flex-row bg-amber-600 text-white p-2 w-full">
-                        <span class="text-lg uppercase font-bold">Title</span>
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">title</span>
                     </div>
-                    <div class="flex flex-row justify-start items-center bg-black text-white p-2.5 md:hidden">
+                    <div class="flex flex-row justify-start items-center p-2 md:hidden">
                         <span x-data="{ show: false }" class="relative" data-tooltip="Copy Title">
                             <button class="btn" data-clipboard-target="#title" x-on:click="show = true"
                                 x-on:mouseout="show = false" title="Copy Title">
@@ -131,13 +170,15 @@
                 
                 <div class="flex flex-row justify-between items-center w-full">
 
-                    <div class="flex flex-row p-2">
-                        <span class="text-sm" id="title">{{$entry->title}}</span>
+                    <div class="flex flex-row p-2 bg-zinc-100 w-full">
+                        <span 
+                        id="title">
+                        {{ $entry->title }}</span>
                     </div>
 
-                    <div class="flex flex-row justify-start items-center bg-black text-white p-2.5 max-sm:hidden">
+                    <div class="flex flex-row justify-start items-center p-2 max-sm:hidden">
                         <span x-data="{ show: false }" class="relative" data-tooltip="Copy Title">
-                            <button class="btn" data-clipboard-target="#title" x-on:click="show = true"
+                            <button class="btn cursor-pointer" data-clipboard-target="#title" x-on:click="show = true"
                                 x-on:mouseout="show = false" title="Copy Title">
                                 <i class="fa-solid fa-copy"></i>
                             </button>
@@ -152,175 +193,170 @@
             </div>
 
             <!-- Company -->
-            <div class="flex flex-col md:flex-row border-b-0 bg-zinc-100">
+            <div class="flex flex-col md:flex-row gap-2">
 
-                <div class="flex flex-row justify-start items-center md:w-1/3">
-                    <div class="bg-black text-white p-2.5">
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
                         <i class="fa-solid fa-industry"></i>
                     </div>                    
-                    <div class="bg-amber-600 text-white p-2 w-full">
-                        <span class="text-lg uppercase font-bold">Company</span>
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">company</span>
                     </div>                    
                 </div>
                 
-                <div class="flex flex-row justify-start items-center p-2 w-full">
-                    <span class="text-sm">{{$entry->company}}</span>
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        {{ $entry->company }}</span>
                 </div>
 
             </div>
 
-            <!-- Type -->
-            <div class="flex flex-col md:flex-row border-b-0 bg-zinc-100">
-
-                <div class="flex flex-row justify-start items-center md:w-1/3">
-                    <div class="bg-black text-white p-2.5">
-                        <i class="fa-solid fa-plus-minus"></i>
-                    </div>                    
-                    <div class="bg-amber-600 text-white p-2 w-full">
-                        <span class="text-lg uppercase font-bold">Type</span>
-                    </div>                    
-                </div>
-                
-                <div class="flex flex-row justify-start items-center p-2 w-full">
-                    <span
-                    class="text-sm text-white font-bold p-1 rounded-sm {{ $entry->type == 0 ? 'bg-red-600' : 'bg-green-600' }}">{{ $entry->type == 0 ? 'Expense' : 'Income' }}</span>
-                </div>
-
-            </div>
+            
 
             <!-- Value -->
-            <div class="flex flex-col md:flex-row border-b-0 bg-zinc-100">
+            <div class="flex flex-col md:flex-row gap-2">
 
-                <div class="flex flex-row justify-start items-center md:w-1/3">
-                    <div class="bg-black text-white p-2.5">
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
                         <i class="fa-solid fa-eur"></i>
                     </div>                    
-                    <div class="bg-amber-600 text-white p-2 w-full">
-                        <span class="text-lg uppercase font-bold">Value</span>
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">value</span>
                     </div>                    
                 </div>
                 
-                <div class="flex flex-row justify-start items-center p-2 w-full">
-                    <span class="text-sm">{{$entry->value}} €</span>
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full md:w-24 rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        {{ $entry->value }}</span>
                 </div>
 
             </div>
 
             <!-- Frequency -->
-            <div class="flex flex-col md:flex-row border-b-0 bg-zinc-100">
+            <div class="flex flex-col md:flex-row gap-2">
 
-                <div class="flex flex-row justify-start items-center md:w-1/3">
-                    <div class="bg-black text-white p-2.5">
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
                         <i class="fa-solid fa-clock"></i>
                     </div>                    
-                    <div class="bg-amber-600 text-white p-2 w-full">
-                        <span class="text-lg uppercase font-bold">Frequency</span>
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">frequency</span>
                     </div>                    
                 </div>
                 
-                <div class="flex flex-row justify-start items-center p-2 w-full">
-                    <span class="text-sm capitalize">{{$entry->frequency}}</span>
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full md:w-fit rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        {{ $entry->frequency }}</span>
                 </div>
 
             </div>
 
             <!-- Account -->
-            <div class="flex flex-col md:flex-row border-b-0 bg-zinc-100">
+            <div class="flex flex-col md:flex-row gap-2">
 
-                <div class="flex flex-row justify-start items-center md:w-1/3">
-                    <div class="bg-black text-white p-2.5">
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
                         <i class="fa-solid fa-piggy-bank"></i>
                     </div>                    
-                    <div class="bg-amber-600 text-white p-2 w-full">
-                        <span class="text-lg uppercase font-bold">Account</span>
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">account</span>
                     </div>                    
                 </div>
                 
-                <div class="flex flex-row justify-start items-center p-2 w-full">
-                    <span class="text-sm capitalize">
-                    @if (isset($entry->balance->name))  
-                        <span> {{ $entry->balance->name }}</span>
-                    @else 
-                        <span>-</span>
-                    @endif 
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full md:w-fit rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        @if (isset($entry->balance->name))  
+                            <span> {{ $entry->balance->name }}</span>
+                        @else 
+                            <span>-</span>
+                        @endif 
+                    </span>
                 </div>
 
-            </div>
+            </div>           
 
             <!-- Payment -->
-            <div class="flex flex-col md:flex-row border-b-0 bg-zinc-100">
+            <div class="flex flex-col md:flex-row gap-2">
 
-                <div class="flex flex-row justify-start items-center md:w-1/3">
-                    <div class="bg-black text-white p-2.5">
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
                         <i class="fa-solid fa-money-bill"></i>
                     </div>                    
-                    <div class="bg-amber-600 text-white p-2 w-full">
-                        <span class="text-lg uppercase font-bold">Payment</span>
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">payment</span>
                     </div>                    
                 </div>
                 
-                <div class="flex flex-row justify-start items-center p-2 w-full">
-                    <span class="text-sm capitalize">
-                    @if (isset($entry->balance->source))  
-                        <span> {{ $entry->balance->source }}</span>
-                    @else 
-                        <span>-</span>
-                    @endif 
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full md:w-fit rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        @if (isset($entry->balance->source))  
+                            <span> {{ $entry->balance->source }}</span>
+                        @else 
+                            <span>-</span>
+                        @endif 
+                    </span>
                 </div>
 
             </div>
 
-            <!-- Categories -->
-            <div class="flex flex-col md:flex-row border-b-0 bg-zinc-100">
+            <!-- Category -->
+            <div class="flex flex-col md:flex-row gap-2">
 
-                <div class="flex flex-row justify-start items-center md:w-1/3">
-                    <div class="bg-black text-white p-2.5">
-                        <i class="fa-solid fa-tag"></i>
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-layer-group"></i>
                     </div>                    
-                    <div class="bg-amber-600 text-white p-2 w-full">
-                        <span class="text-lg uppercase font-bold">Categories</span>
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">category</span>
                     </div>                    
                 </div>
                 
-                <div class="flex flex-row justify-start items-center p-2 w-full">
-                    <span class="text-sm capitalize">{{ $entry->category->name }}</span>
-                </div>
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span class="bg-indigo-600 text-white font-semibold p-2 rounded-sm">{{ $entry->category->name }}</span>
+                </div>                
 
             </div>
 
             <!-- Tags -->
-            <div class="flex flex-col md:flex-row border-b-0 bg-zinc-100">
+            <div class="flex flex-col md:flex-row gap-2">
 
-                <div class="flex flex-row justify-start items-center md:w-1/3">
-                    <div class="bg-black text-white p-2.5">
-                        <i class="fa-solid fa-tags"></i>
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-layer-group"></i>
                     </div>                    
-                    <div class="bg-amber-600 text-white p-2 w-full">
-                        <span class="text-lg uppercase font-bold">Tags</span>
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">tags</span>
                     </div>                    
                 </div>
                 
-                <div class="flex flex-row justify-start items-center p-2 w-full">
-                    @foreach ($entry->tags as $tag)
-                        <span
-                            class="text-sm capitalize">{{ $tag->name }}</span>
-                    @endforeach
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <div 
+                        class="flex flex-wrap gap-2">
+                        @foreach ($entry->tags as $tag)
+                            <span class="bg-teal-500 text-white font-semibold p-2 rounded-sm">{{ $tag->name }}</span>
+                        @endforeach    
+                    </div>
                 </div>
 
-            </div>
+            </div>       
 
             <!-- Info -->
-            <div class="flex flex-col md:flex-row border-b-0 bg-zinc-100 w-full">
+                <div class="flex flex-col md:flex-row gap-2">
 
-                <div class="flex flex-row justify-start items-center md:w-1/3">
-                    <div class="bg-black text-white p-2.5 h-full">
+                    <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                        <div class="bg-black text-white p-1 rounded-md">
                         <i class="fa-solid fa-info"></i>
                     </div>                    
-                    <div class="flex flex-row bg-amber-600 text-white p-2 w-full h-full">
-                        <span class="text-lg uppercase font-bold">Info</span>
-                    </div>
+                    <div class="w-full">
+                            <span class="text-lg font-semibold capitalize">extra information</span>
+                        </div>
                     @if (strip_tags($entry->info) != '')
-                    <div class="flex flex-row justify-start items-center bg-black text-white p-2.5 md:hidden">
+                    <div class="flex flex-row justify-start items-center p-2 md:hidden">
                         <span x-data="{ show: false }" class="relative" data-tooltip="Copy Info">
                             <button class="btn" data-clipboard-target="#info" x-on:click="show = true"
                                 x-on:mouseout="show = false" title="Copy Info">
@@ -337,13 +373,13 @@
                 <div class="flex flex-row justify-between items-center w-full">
 
                     @if (strip_tags($entry->info) != '')
-                        <div class="flex flex-row p-2">
-                            <span class="text-sm" id="info">{!! $entry->info !!}</span>
+                        <div class="w-full rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                            <span class="text-md" id="info">{!! $entry->info !!}</span>
                         </div>
 
-                        <div class="flex flex-row justify-start items-start bg-black text-white p-2.5 h-full max-sm:hidden">
+                        <div class="flex flex-row justify-start items-start p-2 max-sm:hidden">
                             <span x-data="{ show: false }" class="relative" data-tooltip="Copy Info">
-                                <button class="btn" data-clipboard-target="#info" x-on:click="show = true"
+                                <button class="btn cursor-pointer" data-clipboard-target="#info" x-on:click="show = true"
                                     x-on:mouseout="show = false" title="Copy Info">
                                     <i class="fa-solid fa-copy"></i>
                                 </button>
@@ -353,7 +389,7 @@
                             </span>
                         </div>
                     @else
-                        <div class="text-sm p-2">-</div>
+                        <div class="p-2">-</div>
                     @endif
 
                 </div>
@@ -361,24 +397,25 @@
             </div>
 
             <!-- Files -->
-            <div class="flex flex-col md:flex-row border-b-0 bg-zinc-100">
+            <div class="flex flex-col md:flex-row gap-2">
 
-                <div class="flex flex-row justify-start items-center md:w-1/3">
-                    <div class="bg-black text-white p-2.5 h-full">
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2 h-full">
+                        <div class="bg-black text-white p-1 rounded-md">
                         <i class="fa-solid fa-file"></i>
                     </div>                    
-                    <div class="bg-amber-600 text-white p-2 w-full h-full">
-                        <span class="text-lg uppercase font-bold">Files ({{ $entry->files->count() }})</span>
+                    <div class="w-full h-full">
+                        <span class="text-lg font-semibold capitalize">Files ({{ $entry->files->count() }})</span>
                     </div>                    
                 </div>
                 
-                <div class="flex flex-row justify-start items-center p-2 w-full">
+                <div class="flex flex-col justify-start items-center w-full">
                     
-                    <!-- file Table -->
-                    <div class="w-full overflow-x-auto">
-                        @if ($entry->files->count() !== 0)
+                    @if ($entry->files->count() > 0)
+                        <!-- FILES TABLE -->
+                        <div class="w-full overflow-x-auto">
+                        
                             <table class="table-auto w-full border text-sm">
-                                <thead class="text-sm text-center text-white bg-violet-600">
+                                <thead class="text-sm text-center text-white bg-black">
                                     <th></th>
                                     <th class="p-2 max-lg:hidden">Filename</th>
                                     <th class="p-2 max-sm:hidden">Created</th>
@@ -429,26 +466,28 @@
                                 @endforeach
 
                             </table>
-                        @endif
-                        <div class="flex flex-row py-2">
+                        </div>
+                    @endif
+
+                        <div class="flex flex-row py-2 w-full">
                             @if ($entry->files->count() >= 5)
                                 <div class="flex flex-row text-red-600 text-sm italic p-2 ">
-                                    <span>Max files (5) reached. Delete some to upload a new File.</span>
+                                    <span>Max files (5) reached. Delete some if you want to upload a new File.</span>
                                 </div>                
                             @else
                                 <!-- Upload file -->
-                                <div class="flex flex-col gap-2">
-                                    <div class="flex flex-row text-sm italic p-2">
+                                <div class="flex flex-col gap-2 w-full">
+                                    <div class="flex flex-row text-sm px-2">
                                     @if($entry->files->count() == 0)                                    
-                                        <span>No files yet for this entry</span>                                    
+                                        <span>No files for this entry</span>                                    
                                     @else
                                         <span>Max files (5). You still can upload {{5 - $entry->files->count()}} more files.</span>        
                                     @endif
                                     </div>
-                                    <div class="flex flex-row">
+                                    <div class="flex flex-row w-full">
                                         <a href="{{ route('files.upload', $entry) }}"
-                                            class="w-full sm:w-40 p-2 rounded-sm text-white text-sm text-center bg-violet-600 hover:bg-violet-500 transition-all duration-500">
-                                            <span class="font-bold"> Upload File</span>
+                                            class="w-full sm:w-1/4 p-2 rounded-sm text-white text-sm text-center bg-black hover:bg-slate-800 transition-all duration-500">
+                                            <span class="font-bold uppercase font-bold"> Upload File</span>
                                             <span class="px-2"><i class="fa-solid fa-file-arrow-up"></i></span>
                                         </a>
                                     </div>
@@ -456,27 +495,21 @@
                             @endif
                         </div>
 
-                    </div>
-
                 </div>
 
             </div>
 
-
         </div>
-
 
         <!-- To the Top Button -->
         <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa-solid fa-angle-up"></i></button>
 
         <!-- Footer -->
-        <div class="flex flex-row justify-center items-center p-2 mt-4 bg-black rounded-sm">
+        <div class="flex flex-row justify-center items-center p-2 mt-4 bg-amber-600 rounded-sm">
             <span class="font-bold text-xs text-white">xavulankis 2025</span>
-        </div>
-        
+        </div>        
 
-    </div>
-    
+    </div>    
 
 </div>
 

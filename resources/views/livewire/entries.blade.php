@@ -1,24 +1,26 @@
 <div class="w-full sm:max-w-10/12 mx-auto">
 
-@if (session('message'))
-
-    <div class="bg-green-400 text-white font-bold rounded-sm px-2 py-1 my-1">
-
-        <span>{{ session('message') }}</span>
-
-    </div>
-
-@endif
-
-@if (session('error'))
-
-    <div class="bg-red-400 text-white font-bold rounded-sm px-2 py-1 my-1">
-
-        <span>{{ session('error') }}</span>
-
-    </div>
-
-@endif
+<!-- Messages -->
+    @if (session('message'))
+        <div class="flex flex-col bg-green-600 p-1 mb-2 text-white text-sm rounded-sm">        
+            <div class="flex row justify-between items-center">
+                <span class="font-bold">{{ session('message') }}</span>
+                <a href="/entries/" class="cursor-pointer" title="Close">
+                    <i class="fa-solid fa-xmark hover:text-gray-600 transition-all duration-500"></i>
+                </a>
+            </div>
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="flex flex-col bg-red-600 p-1 mb-2 text-white text-sm rounded-sm">        
+            <div class="flex row justify-between items-center">
+                <span class="font-bold">{{ session('error') }}</span>
+                <a href="/entries/" class="cursor-pointer" title="Close">
+                    <i class="fa-solid fa-xmark hover:text-gray-600 transition-all duration-500"></i>
+                </a>
+            </div>
+        </div>
+    @endif
 
     <!-- Sitemap -->
     <div class="flex flex-row justify-between items-center gap-2 p-2 font-bold uppercase bg-black text-white rounded-sm">
@@ -29,7 +31,7 @@
 
         <div>
             <a href="{{ route('entries.create') }}"
-                class="capitalize text-sm rounded-sm p-1 bg-yellow-400 text-black hover:text-white transition duration-1000 ease-in-out"
+                class="capitalize text-white text-sm rounded-sm p-1 bg-blue-600 text-black hover:text-white transition duration-1000 ease-in-out"
                 title="Create New Entry">new entry</a>
         </div>
     </div>

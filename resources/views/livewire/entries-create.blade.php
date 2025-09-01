@@ -1,16 +1,16 @@
 <div class="w-full sm:max-w-10/12 mx-auto">
 
     <!-- Sitemap -->    
-    <div class="flex flex-row justify-start items-start gap-1 p-2 text-sm text-slate-600">
-        <a href="/entries" class="hover:text-orange-600">Entries</a> /
-        <a href="/entries/create" class="font-bold text-black border-b-2 border-b-yellow-400">Create</a>
+    <div class="flex flex-row justify-start items-start gap-1 py-1 text-sm text-slate-600">
+        <a href="/entries" class="hover:text-black">Entries</a> /
+        <a href="/entries/create" class="font-bold text-black border-b-2 border-b-blue-600">Create</a>
     </div>
 
-    <div class="bg-zinc-300 overflow-hidden shadow-sm sm:rounded-sm">
+    <div class="bg-zinc-200 overflow-hidden shadow-sm md:rounded-t-sm">
 
         <!-- Header -->
-        <div class="flex flex-row p-2 bg-black">
-            <span class="text-lg text-white border-b-2 border-b-yellow-400">Create a New Entry</span>
+        <div class="flex flex-row text-white font-bold uppercase p-2 bg-blue-600">
+            <span>New Entry</span>
         </div>
 
         <!-- New Entry -->
@@ -18,302 +18,295 @@
             <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
             @csrf
 
-            <div class="mx-auto w-full py-2 md:p-2">
+            <!-- INFO -->
+            <div class="mx-auto w-11/12 mt-4 pb-4 rounded-sm flex flex-col gap-2">
 
-                <!-- 1 row Type -->
-                <div class="flex flex-col md:w-1/3 md:py-2">
-                    
-                    <div class="flex flex-row bg-yellow-400 items-center gap-2">
-                        <span class="bg-black text-white p-2"><i class="fa-solid fa-pen-to-square"></i></span>
-                        <h2 class="text-lg font-bold">Type <span class="text-red-600">*</span></h2>
+                <!-- Type -->
+                <div class="flex flex-col md:flex-row gap-2">
+
+                    <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                        <div class="bg-black text-white p-1 rounded-md">
+                            <i class="fa-solid fa-plus-minus"></i>
+                        </div>                    
+                        <div class="w-full">
+                            <span class="text-lg font-semibold capitalize">type</span>
+                        </div>                    
                     </div>
                     
-                    <div class="flex flex-row justify-start items-center bg-zinc-200 px-2 py-4 gap-4">
+                    <div class="flex flex-row justify-start items-center w-full gap-2">
                         
-                        <label>
+                        <label class="{{($type == 0) ? 'bg-red-600' : 'bg-zinc-400'}} text-white font-semibold p-2 rounded-sm cursor-pointer">
                             Expense
-                            <input type="radio" name="type" id="type" wire:model.live="type" class="accent-red-600" 
+                            <input type="radio" name="type" id="type" wire:model.live="type" class="accent-red-500" 
                                 value="0" {{ $this->type == 0 ? 'checked' : '' }}/>                                                                
                         </label>
-                        <label>
+                        <label class="{{($type == 1) ? 'bg-green-600' : 'bg-zinc-400'}} text-white font-semibold p-2 rounded-sm cursor-pointer">
                             Income
-                            <input type="radio" name="type" id="type" wire:model.live="type" class="accent-green-600" 
+                            <input type="radio" name="type" id="type" wire:model.live="type" class="accent-green-500" 
                                 value="1" {{ $this->type == 1 ? 'checked' : '' }}/>
-                        </label>
+                        </label>      
                         
                     </div>
 
-                </div>                               
+                </div>               
 
-                <!-- 2 row Title and Company -->
-                <div class="flex flex-col md:py-2">
+                <!-- Title -->
+                <div class="flex flex-col md:flex-row gap-2">
 
-                    <div class="flex flex-col md:flex-row justify-between w-full md:gap-2">
-                        
-                        <!-- Title -->
-                        <div class="flex flex-col md:w-1/2">
+                    <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                        <div class="bg-black text-white p-1 rounded-md">
+                            <i class="fa-solid fa-pen"></i>
+                        </div>                    
+                        <div class="w-full">
+                            <span class="text-lg font-semibold capitalize">title</span>
+                        </div>                    
+                    </div>
                     
-                            <div class="flex flex-row bg-yellow-400 items-center gap-2">
-                                <span class="bg-black text-white p-2"><i class="fa-solid fa-pen"></i></span>
-                                <h2 class="text-lg font-bold">Title <span class="text-red-600">*</span></h2>
-                            </div>
-                            
-                            <div class="flex flex-row justify-start items-center bg-zinc-200 px-2 py-4 gap-4">
-                            
-                                <input wire:model="title" name="title" id="title" type="text" value="{{ old('title') }}"
+                    <div class="flex flex-row justify-start items-center p-0 w-full">
+                        <input wire:model="title" name="title" id="title" type="text" value="{{ old('title') }}"
                                     maxlength="200"
-                                    class="w-full p-2 rounded-sm bg-gray-50 border border-gray-200 text-gray-900 focus:border-yellow-400 focus:outline-hidden dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-yellow-400 focus:border-yellow-400">
-                                
-                            </div>
-
-                            @error('title')
-                                <div class="text-sm text-white font-bold bg-red-600 px-2 mb-2">
-                                    {{ $message }}                                
-                                </div>
-                            @enderror
-
-                        </div>
-                    
-                        <!-- Company -->
-                        <div class="flex flex-col md:w-1/2">
-                    
-                            <div class="flex flex-row bg-yellow-400 items-center gap-2">
-                                <span class="bg-black text-white p-2"><i class="fa-solid fa-industry"></i></span>
-                                <h2 class="text-lg font-bold">Company <span class="text-red-600">*</span></h2>
-                            </div>
-                            
-                            <div class="flex flex-row justify-start items-center bg-zinc-200 px-2 py-4 gap-4">
-                            
-                                <input wire:model="company" name="company" id="company" type="text"
-                                    value="{{ old('company') }}" maxlength="200"
-                                    class="w-full p-2 rounded-sm bg-gray-50 border border-gray-200 text-gray-900 focus:border-yellow-400 focus:outline-hidden">
-                                
-                            </div>
-
-                            @error('company')
-                                <div class="text-sm text-white font-bold bg-red-600 px-2 mb-2">
-                                    {{ $message }}                                
-                                </div>
-                            @enderror
-
-                        </div>
-                        
+                                    class="w-full rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
                     </div>
-
-                </div>
-
-                <!-- 3 row Date, Value and Frequency -->
-                <div class="flex flex-col md:py-2">
-
-                    <div class="flex flex-col md:flex-row justify-between w-full">
-                        
-                        <!-- Date -->
-                        <div class="flex flex-col md:w-1/3">
                     
-                            <div class="flex flex-row bg-yellow-400 items-center gap-2">
-                                <span class="bg-black text-white p-2"><i class="fa-solid fa-calendar-days"></i></span>
-                                <h2 class="text-lg font-bold">Date <span class="text-red-600">*</span></h2>
-                            </div>
-                            
-                            <div class="flex flex-row justify-start items-center bg-zinc-200 px-2 py-4 gap-4">
-                            
-                                <input wire:model="date" name="date" id="date" type="date" value="{{ old('date') }}"
+                </div>
+                
+                @error('title')
+                    <div class="text-sm text-red-600 font-semibold">
+                        {{ $message }}                                
+                    </div>
+                @enderror
+
+                <!-- Company -->
+                <div class="flex flex-col md:flex-row gap-2">
+
+                    <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                        <div class="bg-black text-white p-1 rounded-md">
+                            <i class="fa-solid fa-industry"></i>
+                        </div>                    
+                        <div class="w-full">
+                            <span class="text-lg font-semibold capitalize">company</span>
+                        </div>                    
+                    </div>
+                    
+                    <div class="flex flex-row justify-start items-center p-0 w-full">
+                        <input wire:model="company" name="company" id="company" type="text" value="{{ old('company') }}"
                                     maxlength="200"
-                                    class="w-full p-2 md:w-fit rounded-sm bg-gray-50 border border-gray-200 text-gray-900 focus:border-yellow-400 focus:outline-hidden dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-yellow-400 focus:border-yellow-400">
-                                
-                            </div>
-
-                            @error('date')
-                                <div class="text-sm text-white font-bold bg-red-600 px-2 mb-2">
-                                    {{ $message }}                                
-                                </div>
-                            @enderror
-
-                        </div>
-
-                        <!-- Value -->
-                        <div class="flex flex-col md:w-1/3 md:px-2">
-                    
-                            <div class="flex flex-row bg-yellow-400 items-center gap-2">
-                                <span class="bg-black text-white p-2"><i class="fa-solid fa-eur"></i></span>
-                                <h2 class="text-lg font-bold">Value <span class="text-red-600">*</span></h2>
-                            </div>
-                            
-                            <div class="flex flex-row justify-start items-center bg-zinc-200 px-2 py-4 gap-4">
-                            
-                                <input wire:model="value" name="value" id="value" type="any" step=".01"
-                                    value="{{ old('value') }}" maxlength="200"
-                                    class="w-full p-2 md:w-24 rounded-sm bg-gray-50 border border-gray-200 text-gray-900 focus:border-yellow-400 focus:outline-hidden">                                    
-                                
-                            </div>
-
-                            @error('value')
-                                <div class="text-sm text-white font-bold bg-red-600 px-2 mb-2">
-                                    {{ $message }}                                
-                                </div>
-                            @enderror
-
-                        </div>
-                        
-                        <!-- Frequency -->
-                        <div class="flex flex-col md:w-1/3">
-                    
-                            <div class="flex flex-row bg-yellow-400 items-center gap-2">
-                                <span class="bg-black text-white p-2"><i class="fa-solid fa-clock"></i></span>
-                                <h2 class="text-lg font-bold">Frequency <span class="text-red-600">*</span></h2>
-                            </div>
-                            
-                            <div class="flex flex-row justify-start items-center bg-zinc-200 px-2 py-4 gap-4">
-                            
-                                <select wire:model.live="frequency" name="frequency" id="frequency"
-                                    class="w-full md:w-fit p-2.5 rounded-sm bg-gray-50 border border-gray-200 text-gray-900 focus:border-yellow-400 focus:outline-hidden dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-yellow-400 focus:border-yellow-400">
-                                    @foreach ($frequencies as $freq)
-                                        <option value="{{ $freq }}" class="text-orange-600"
-                                            @if (old('frequency') == $freq) selected @endif>{{ $freq }}</option>
-                                    @endforeach
-                                </select>
-                                
-                            </div>
-
-                            @error('frequency')
-                                <div class="text-sm text-white font-bold bg-red-600 px-2 mb-2">
-                                    {{ $message }}                                
-                                </div>
-                            @enderror
-
-                        </div>
-                        
+                                    class="w-full rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
                     </div>
-
-                </div> 
-
-                <!-- 3 row Company, Account and Category -->
-                <div class="flex flex-col md:py-2">
-
-                    <div class="flex flex-col md:flex-row justify-between w-full">
-                        
-                        <!-- Account -->
-                        <div class="flex flex-col md:w-1/3">
                     
-                            <div class="flex flex-row bg-yellow-400 items-center gap-2">
-                                <span class="bg-black text-white p-2"><i class="fa-solid fa-piggy-bank"></i></span>
-                                <h2 class="text-lg font-bold">Account <span class="text-red-600">*</span></h2>
-                            </div>
-                            
-                            <div class="flex flex-row justify-start items-center bg-zinc-200 px-2 py-4 gap-4">
-                            
-                                <select wire:model.live="balance_id" name="balance_id" id="balance_id"
-                                    class="w-full p-2.5 md:w-fit rounded-sm bg-gray-50 border border-gray-200 text-gray-900 focus:border-yellow-400 focus:outline-hidden dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-yellow-400 focus:border-yellow-400">
-                                    @foreach ($balances as $balance)
-                                        <option value="{{ $balance->id }}" class="text-orange-600"
-                                            @if (old('balance_id') == $balance->id) selected @endif>{{ $balance->name }}</option>
-                                    @endforeach
-                                </select>
-                                
-                            </div>
+                </div>
+                
+                @error('company')
+                    <div class="text-sm text-red-600 font-semibold">
+                        {{ $message }}                                
+                    </div>
+                @enderror
 
-                            @error('balance_id')
-                                <div class="text-sm text-white font-bold bg-red-600 px-2 mb-2">
-                                    {{ $message }}                                
-                                </div>
-                            @enderror
+                <!-- Date -->
+                <div class="flex flex-col md:flex-row gap-2">
 
-                        </div>
-                        
-                        <!-- Category -->
-                        <div class="flex flex-col md:w-1/3 md:px-2">
+                    <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                        <div class="bg-black text-white p-1 rounded-md">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>                    
+                        <div class="w-full">
+                            <span class="text-lg font-semibold capitalize">date</span>
+                        </div>                    
+                    </div>
                     
-                            <div class="flex flex-row bg-yellow-400 items-center gap-2">
-                                <span class="bg-black text-white p-2"><i class="fa-solid fa-tag"></i></span>
-                                <h2 class="text-lg font-bold">Category <span class="text-red-600">*</span></h2>
-                            </div>
-                            
-                            <div class="flex flex-row justify-start items-center bg-zinc-200 px-2 py-4 gap-4">
-                            
-                                <select wire:model.live="category_id" name="category_id" id="category_id"
-                                    class="w-full p-2.5 md:w-fit rounded-sm bg-gray-50 border border-gray-200 text-gray-900 focus:border-yellow-400 focus:outline-hidden dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-yellow-400 focus:border-yellow-400">
-                                    @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}" class="text-orange-600"
-                                            @if (old('category_id') == $category->id) selected @endif>{{ $category->name }}</option>
-                                    @endforeach
-                                </select>
-                                
-                            </div>
-
-                            @error('category_id')
-                                <div class="text-sm text-white font-bold bg-red-600 px-2 mb-2">
-                                    {{ $message }}                                
-                                </div>
-                            @enderror
-
-                        </div>
-
-                        <!-- Tags -->
-                        <div class="flex flex-col md:w-1/3">
-                    
-                            <div class="flex flex-row bg-yellow-400 items-center gap-2">
-                                <span class="bg-black text-white p-2"><i class="fa-solid fa-tags"></i></span>
-                                <h2 class="text-lg font-bold">Tags <span class="text-red-600">*</span></h2>
-                            </div>
-                            
-                            <div class="flex flex-row justify-start items-center bg-zinc-200 px-2 py-4 gap-4">
-                            
-                                <div wire:ignore class="w-full">
-                                    <select wire:model="selectedTags" name="selectedTags" id="selectedTags" multiple>
-                                        @foreach ($tags as $tag)
-                                            <option value="{{ $tag->id }}" @if (old('selectedTags') == $tag->id) selected @endif>
-                                                {{ $tag->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                
-                            </div>
-
-                            @error('selectedTags')
-                                <div class="text-sm text-white font-bold bg-red-600 px-2 mb-2">
-                                    {{ $message }}                                
-                                </div>
-                            @enderror
-
-                        </div>
-                        
+                    <div class="flex flex-row justify-start items-center p-0 w-full">
+                        <input wire:model="date" name="date" id="date" type="date" value="{{ old('date') }}"
+                                    maxlength="200"
+                                    class="w-fit rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
                     </div>
 
                 </div>
 
-                <!-- 1 row Info (optional) -->
-                <div class="flex flex-col md:py-2">
-                    
-                    <div class="flex flex-row bg-yellow-400 items-center gap-2">
-                        <span class="bg-black text-white p-2"><i class="fa-solid fa-pen-to-square"></i></span>
-                        <h2 class="text-lg font-bold">Info</h2>
+                @error('date')
+                    <div class="text-sm text-red-600 font-semibold">
+                        {{ $message }}                                
                     </div>
-                    
-                    <div class="w-full p-2 bg-zinc-200">                        
-                        @livewire('texteditor.quill')                        
-                    </div>
+                @enderror               
 
-                    @error('info')
-                        <div class="text-sm text-white font-bold bg-red-600 px-2 mb-2">
-                            {{ $message }}                                
-                        </div>
-                    @enderror
+                <!-- Value -->
+                <div class="flex flex-col md:flex-row gap-2">
+
+                    <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                        <div class="bg-black text-white p-1 rounded-md">
+                            <i class="fa-solid fa-eur"></i>
+                        </div>                    
+                        <div class="w-full">
+                            <span class="text-lg font-semibold capitalize">value</span>
+                        </div>                    
+                    </div>
+                    
+                    <div class="flex flex-row justify-start items-center p-0 w-full">
+                        <input wire:model="value" name="value" id="value" type="any" value="{{ old('value') }}"
+                                    maxlength="8"
+                                    class="w-full md:w-24 rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                    </div>
+                    
+                </div>
+                
+                @error('value')
+                    <div class="text-sm text-red-600 font-semibold">
+                        {{ $message }}                                
+                    </div>
+                @enderror
+
+                <!-- Frequency -->
+                <div class="flex flex-col md:flex-row gap-2">
+
+                    <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                        <div class="bg-black text-white p-1 rounded-md">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>                    
+                        <div class="w-full">
+                            <span class="text-lg font-semibold capitalize">frequency</span>
+                        </div>                    
+                    </div>
+                    
+                    <div class="flex flex-row justify-start items-center w-full">
+                        <select wire:model.live="frequency" name="frequency" id="frequency"
+                            class="w-full md:w-fit rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                            @foreach ($frequencies as $freq)
+                                <option value="{{ $freq }}" class="text-orange-600"
+                                    @if (old('frequency') == $freq) selected @endif>{{ $freq }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
                 </div>
 
-                <!-- 1 row Save -->
-                <div class="flex flex-col md:w-1/3 md:py-2">
-                    
-                    <div class="flex flex-row bg-yellow-400 items-center gap-2">
+                @error('frequency')
+                    <div class="text-sm text-red-600 font-semibold">
+                        {{ $message }}                                
+                    </div>
+                @enderror
 
-                        <button type="submit"
-                            class="w-full bg-black hover:bg-slate-700 text-white uppercase p-2 rounded-md shadow-none transition duration-1000 ease-in-out">
-                            Save
-                            <i class="fa-solid fa-floppy-disk px-2"></i>
-                        </button>
-                        
+                <!-- Account -->
+                <div class="flex flex-col md:flex-row gap-2">
+
+                    <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                        <div class="bg-black text-white p-1 rounded-md">
+                            <i class="fa-solid fa-piggy-bank"></i>
+                        </div>                    
+                        <div class="w-full">
+                            <span class="text-lg font-semibold capitalize">account</span>
+                        </div>                    
+                    </div>
+                    
+                    <div class="flex flex-row justify-start items-center w-full">
+                        <select wire:model.live="balance_id" name="balance_id" id="balance_id"
+                            class="w-full md:w-fit rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                            @foreach ($balances as $balance)
+                                <option value="{{ $balance->id }}" class="text-orange-600"
+                                    @if (old('balance_id') == $balance->id) selected @endif>{{ $balance->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
+                </div>
+
+                @error('balance_id')
+                    <div class="text-sm text-red-600 font-semibold">
+                        {{ $message }}                                
+                    </div>
+                @enderror
+
+                <!-- Category -->
+                <div class="flex flex-col md:flex-row gap-2">
+
+                    <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                        <div class="bg-black text-white p-1 rounded-md">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>                    
+                        <div class="w-full">
+                            <span class="ttext-lg font-semibold capitalize">category</span>
+                        </div>                    
+                    </div>
+                    
+                    <div class="flex flex-row justify-start items-center w-full">
+                        <select wire:model.live="category_id" name="category_id" id="category_id"
+                            class="w-full md:w-fit rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}" class="text-orange-600"
+                                    @if (old('category_id') == $category->id) selected @endif>{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                </div>
+
+                @error('category_id')
+                    <div class="text-sm text-red-600 font-semibold">
+                        {{ $message }}                                
+                    </div>
+                @enderror
+
+
+                <!-- Tags -->
+                <div class="flex flex-col md:flex-row gap-2">
+
+                    <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                        <div class="bg-black text-white p-1 rounded-md">
+                            <i class="fa-solid fa-tags"></i>
+                        </div>                    
+                        <div class="w-full">
+                            <span class="text-lg font-semibold capitalize">tags</span>
+                        </div>                    
+                    </div>
+                    
+                    <div class="flex flex-row justify-start items-center w-full">
+                        <div wire:ignore class="w-full">
+                            <select wire:model="selectedTags" name="selectedTags" id="selectedTags" multiple>
+                                @foreach ($tags as $tag)
+                                    <option value="{{ $tag->id }}" @if (old('selectedTags') == $tag->id) selected @endif>
+                                        {{ $tag->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                @error('selectedTags')
+                    <div class="text-sm text-red-600 font-semibold">
+                        {{ $message }}                                
+                    </div>
+                @enderror
+
+                <!-- Info -->
+                <div class="flex flex-col md:flex-row gap-2">
+
+                    <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                        <div class="bg-black text-white p-1 rounded-md">
+                            <i class="fa-solid fa-info"></i>
+                        </div>                    
+                        <div class="w-full">
+                            <span class="text-lg font-semibold capitalize">extra information</span>
+                        </div>                    
+                    </div>
+                    
+                    <div class="w-full">
+                        @livewire('texteditor.quill')        
+                    </div>
+
+                </div>
+
+                @error('info')
+                    <div class="text-sm text-white font-bold bg-red-600 px-2 mb-2">
+                        {{ $message }}                                
+                    </div>
+                @enderror
+               
+
+                <!-- Save -->
+                <div class="flex flex-col md:items-end">
+                    <button type="submit"
+                        class="w-full md:w-1/4 bg-blue-600 hover:bg-blue-800 text-white font-semibold uppercase p-2 rounded-md shadow-none transition duration-1000 ease-in-out cursor-pointer">
+                        Save
+                    </button>
                 </div>               
 
             </div>
@@ -325,7 +318,7 @@
                 class="fa-solid fa-angle-up"></i></button> 
 
         <!-- Footer -->
-        <div class="flex flex-row justify-center items-center p-2 mt-4 bg-black rounded-sm">
+        <div class="flex flex-row justify-center items-center p-2 mt-4 bg-blue-600 rounded-b-sm">
             <span class="font-bold text-xs text-white">xavulankis 2025</span>
         </div>
 

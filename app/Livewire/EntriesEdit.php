@@ -107,15 +107,16 @@ class EntriesEdit extends Component
         $validated = $this->validate();
         $validated['user_id'] = $request->user()->id;
 
+        // test error
         //$validated['user_id'] = null;
         //dd($validated);
 
         try {
             $this->entry->update($validated);
             $this->entry->tags()->sync($validated['selectedTags']); 
-            return to_route('entries.index', $this->entry)->with('message', 'Entry (' . $this->entry->title . ') updated.');
+            return to_route('entries.show', $this->entry)->with('message', 'Entry updated successfully');
         } catch (Exception $e) {
-            return to_route('entries.index', $this->entry)->with('error', 'Error (' . $e->getCode() . ') when try to update (' . $this->entry->title . ')');            
+            return to_route('entries.show', $this->entry)->with('error', 'Error(' . $e->getCode() . ') Entry updated failed');            
         }
     }
 

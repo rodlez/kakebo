@@ -29,7 +29,7 @@ class FileUpload extends Component
     ];
 
     protected $messages = [
-        'files.min' => 'Select at least 1 file to upload (max 5 files)',
+        'files.min' => 'No files selected',
         'files.max' => 'Limited to 5 files to upload',
         'files.*.required' => 'Select at least one file to upload',
         //'files.*.mimes' => 'At least one file is not one of the allowed formats: PDF, JPG, JPEG or PNG',
@@ -45,6 +45,12 @@ class FileUpload extends Component
         $this->entryService = $entryService;
     }
 
+    public function updated($files)
+    {
+        $this->resetValidation();
+    }
+
+    
     public function mount(Entry $entry)
     {
         $this->entry = $entry;
@@ -57,7 +63,7 @@ class FileUpload extends Component
 
     public function save()
     {       
-        $this->validate();
+        $this->validate();        
 
         foreach ($this->files as $file) {
             // use entryiId as a folder name for the files uploaded for this entry
@@ -67,7 +73,7 @@ class FileUpload extends Component
             File::create($data);            
         }
         
-        return to_route('entries.show', $this->entry)->with('message', 'File(s) successfully uploaded.');
+        return to_route('files.upload', $this->entry)->with('message', 'File(s) successfully uploaded.');
     }
 
     public function render()

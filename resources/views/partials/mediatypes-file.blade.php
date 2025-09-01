@@ -31,7 +31,7 @@ In Workout Main small icons, in Workout Info and Upload big icons.
     @case('image/jpeg')
         <a href="{{ asset('storage/' . $file->path) }}" title="Open Image" target="_blank">
             @if ($imagesBig)
-                <img src="{{ asset('storage/' . $file->path) }}" class="w-12 md:w-24 mx-auto rounded-lg">
+                <img src="{{ asset('storage/' . $file->path) }}" class="w-12 md:w-24 mx-auto">
             @else
                 <i class="{{ $iconSize }} fa-regular fa-image"></i>
             @endif
