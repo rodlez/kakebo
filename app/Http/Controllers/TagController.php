@@ -59,7 +59,7 @@ class TagController extends Controller
             Tag::where('id', $tag->id)->update($formData);
             return to_route('tags.show', $tag)->with('message', 'Tag successfully updated');
         } catch (Exception $e) {
-            return to_route('tags.show', $tag)->with('message', 'Error(' . $e->getCode() . ') tag can not be updated.');
+            return to_route('tags.show', $tag)->with('error', 'Error(' . $e->getCode() . ') tag can not be updated.');
         }
     }
 
@@ -76,7 +76,7 @@ class TagController extends Controller
             $tag->delete();
             return to_route('tags.index')->with('message', 'Tag (' . $tag->name . ') deleted.');
         } catch (Exception $e) {
-            return to_route('tags.index')->with('message', 'Error (' . $e->getCode() . ') Type: ' . $tag->name . ' can not be deleted.');
+            return to_route('tags.index')->with('error', 'Error (' . $e->getCode() . ') Tag: ' . $tag->name . ' can not be deleted.');
         }
     }
 }

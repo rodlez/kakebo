@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-
 class Entries extends Component
 {
     use WithPagination;

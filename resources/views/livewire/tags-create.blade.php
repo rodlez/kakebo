@@ -1,85 +1,85 @@
-<div class="max-w-7xl mx-auto sm:pb-8 sm:px-6 lg:px-8">
+<div class="w-full sm:max-w-10/12 mx-auto">
 
     <!-- Sitemap -->
-    <div class="flex flex-row justify-start items-start gap-1 text-sm py-3 px-4 text-slate-500">
-        <a href="/tags" class="text-black hover:text-orange-600">Tags</a> /
-        <a href="/tags/create" class="font-bold text-black border-b-2 border-b-orange-600">New</a>
+    <div class="flex flex-row justify-start items-start gap-1 py-1 text-sm text-slate-600">
+        <a href="/tags" class="hover:text-black">Tags</a> /
+        <a href="/tags/create" class="font-bold text-black border-b-2 border-b-blue-600">Create</a>
     </div>
 
-    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+    <div class="bg-zinc-200 overflow-hidden shadow-sm md:rounded-t-sm">
 
-        <div>
+        <!-- Header -->
+        <div class="flex flex-row justify-between items-center p-2 bg-blue-600">
+            
+            <span class="text-white font-bold uppercase">New tag </span>
+            
+            <button wire:click.prevent="help">
+                <i class="fa-lg fa-solid fa-circle-question text-white cursor-pointer hover:text-yellow-400 transition duration-1000 ease-in-out" title="help"></i>
+            </button>
 
-            <!-- Header -->
-            <div class="flex flex-row justify-between items-center py-4 bg-orange-400">
-                <div>
-                    <span class="text-lg text-white px-4">New Tag </span>
-                </div>
-                <div class="px-4">
-                    <button wire:click.prevent="help">
-                        <i class="fa-lg fa-solid fa-circle-question text-white hover:text-black transition duration-1000 ease-in-out" title="help"></i>
-                    </button>
-                </div>
-            </div>
-        
-            <!-- Help -->
-            @if ($show % 2 != 0)
-                <div class="flex flex-row justify-start w-fit pt-4 px-4 sm:px-12">
-                    <div class="bg-black text-sm text-white p-2 mx-2 rounded-lg relative">
-                        <span class="text-orange-400 font-bold">HELP - </span> Add multiple tags using the Add button.
-                        <button wire:click.prevent="help"><i class="fa-lg fa-solid fa-circle-xmark text-red-600 hover:text-red-400 transition duration-1000 ease-in-out absolute top-0 -right-2" title="Close"></i></button>
+        </div>
+    
+        <!-- Help -->
+        @if ($show % 2 != 0)
+
+            <div class="flex flex-col w-11/12 mx-auto rounded-sm border-1 border-zinc-400 bg-zinc-300 my-4 p-2">
+                
+                <div class="flex flex-row justify-between items-center">
+                    <div class="flex flex-row text-sm items-center text-zinc-800 font-bold  gap-2">
+                        <span class="uppercase bg-yellow-200 p-1 rounded-sm">Help</span>
+                        <span class="">add multiple tags using the add button</span>
                     </div>
+                    <button wire:click.prevent="help" class="cursor-pointer hover:text-zinc-600 transition duration-1000 ease-in-out" title="Close"><i class="fa-lg fa-solid fa-circle-xmark"></i></button>                    
                 </div>
-            @endif
+                
+            </div>
+            
+        @endif
         
-            <!--Tag -->
-            <div class="mx-auto w-11/12 py-4 px-2">
-                <div>
-                    <span class="font-semibold pl-2">Add</span>
-                    @if ($inputs->count() < 5)
-                        <button wire:click.prevent="add">
-                            <i class="fa-solid fa-circle-plus text-green-600 hover:text-green-400"></i>
-                        </button>
+        <!--tag -->
+        <div class="flex flex-col mx-auto w-11/12 p-2 gap-4 my-4">
+            <span class="text-sm font-bold">You can create 5 new tags at once</span>
+            <div class="flex flex-col">                
+                @if ($inputs->count() < 5)
+                    <button wire:click.prevent="add" class="w-fit bg-green-600 font-bold text-white uppercase p-2 rounded-sm hover:bg-green-500 transition duration-1000 ease-in-out">
+                        add
+                        <i class="fa-solid fa-circle-plus"></i>
+                    </button>
                     @else
-                        <span class="text-red-600 text-sm px-2">You have reached the limit (5)</span>
+                    <span class="text-red-600 text-sm font-semibold">You have reached the limit (5)</span>
+                @endif
+            </div>
+            @php $count = 0 @endphp
+            @foreach ($inputs as $key => $value)
+                <div class="flex flex-row justify-start items-center gap-2">
+    
+                    <input wire:model="inputs.{{ $key }}.name" type="text" id="inputs.{{ $key }}.name" class="w-full sm:w-1/2 rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400" placeholder="Enter a name">
+                    @if ($count > 0)
+                        <button wire:click="remove({{ $key }})" class="cursor-pointer text-red-600 hover:text-black transition duration-1000 ease-in-out">
+                            <i class="fa-solid fa-trash" title="Delete"></i>
+                        </button>
                     @endif
                 </div>
-                @php $count = 0 @endphp
-                @foreach ($inputs as $key => $value)
-                    <div class="flex flex-row justify-start items-center gap-2 py-2">
-        
-                        <input wire:model="inputs.{{ $key }}.name" type="text" id="inputs.{{ $key }}.name" class="w-full sm:w-1/2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 placeholder:text-zinc-400 px-2" placeholder="Enter a name">
-                        @if ($count > 0)
-                            <button wire:click="remove({{ $key }})">
-                                <i class="fa-solid fa-trash text-red-600 hover:text-black transition duration-1000 ease-in-out" title="Delete"></i>
-                            </button>
-                        @else
-                            <span class="px-4"></span>
-                        @endif
+                @error('inputs.' . $key . '.name')
+                    <div>
+                        <span class="text-sm text-red-600 font-semibold p-2">{{ $message }}</span>
                     </div>
-                    @error('inputs.' . $key . '.name')
-                        <div>
-                            <span class="text-sm text-red-400 font-semibold px-2">{{ $message }}</span>
-                        </div>
-                    @enderror
-                    @php $count++ @endphp
-                @endforeach
-                <div class="py-2">
-                    <button wire:click.prevent="save" class="w-full sm:w-fit bg-black hover:bg-slate-700 text-white capitalize p-2 sm:px-4 rounded-lg shadow-none transition duration-500 ease-in-out {{ $inputs->count() > 5 ? 'cursor-not-allowed' : '' }}" {{ $inputs->count() > 5 ? 'disabled' : '' }}>
-                        Save
-                        <i class="fa-solid fa-floppy-disk px-2"></i>
-                    </button>
-                </div>
+                @enderror
+                @php $count++ @endphp
+            @endforeach
+            <!-- Save -->
+            <div class="flex flex-col md:items-start">
+                <button wire:click.prevent="save" 
+                    class="w-full md:w-1/4 bg-blue-600 hover:bg-blue-800 text-white font-semibold uppercase p-2 rounded-md shadow-none transition duration-1000 ease-in-out cursor-pointer {{ $inputs->count() > 5 ? 'cursor-not-allowed' : '' }}" {{ $inputs->count() > 5 ? 'disabled' : '' }}">
+                    Save
+                </button>
             </div>
-        
-            <!-- Footer -->
-            <div class="flex flex-row justify-end items-center py-4 px-4 bg-orange-400 sm:rounded-b-lg">
-                <a href="{{ route('tags.index') }}">
-                    <i class="fa-lg fa-solid fa-backward-step text-white hover:text-black transition duration-1000 ease-in-out" title="Go Back"></i>
-                </a>
-            </div>
-        
         </div>
+        
+        <!-- Footer -->
+        <div class="flex flex-row justify-center items-center p-2 mt-4 bg-blue-600 rounded-b-sm">
+            <span class="font-bold text-xs text-white">xavulankis 2025</span>
+        </div>        
 
     </div>
 

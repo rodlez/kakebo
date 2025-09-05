@@ -19,9 +19,9 @@ class BalanceController extends Controller
         }*/
         try {
             $balance->delete();
-            return to_route('balances.index')->with('message', 'Balance (' . $balance->name . ') deleted.');
+            return to_route('balances.index')->with('message', 'Account (' . $balance->name . ') successfully deleted');
         } catch (Exception $e) {
-            return to_route('balances.index')->with('message', 'Error (' . $e->getCode() . ') Balance: ' . $balance->name . ' can not be deleted.');
+            return to_route('balances.index')->with('message', 'Error (' . $e->getCode() . ') Account: ' . $balance->name . ' can not be deleted');
         }
     }
 }

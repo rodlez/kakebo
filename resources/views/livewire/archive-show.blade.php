@@ -1,236 +1,442 @@
-<div class="max-w-7xl mx-auto sm:pb-8 sm:px-6 lg:px-8">
+<div class="w-full sm:max-w-10/12 mx-auto">
 
     <!-- Sitemap -->
-    <div class="flex flex-row justify-start items-start gap-1 text-sm py-3 px-4 text-slate-500">
-        <a href="/archive" class="hover:text-red-600">Entries</a> /
-        <a href="/archive/show/{{ $archive->id }}" class="font-bold text-black border-b-2 border-b-red-600">Info</a>
+    <div class="flex flex-row justify-start items-start gap-1 p-1 text-sm text-slate-600">
+        <a href="/archive" class="hover:text-black">Archive</a> /
+        <a href="/archive/show/{{ $archive->id }}" class="font-bold text-black border-b-2 border-b-orange-600">Info</a>
     </div>
 
-    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+    <div class="bg-zinc-200 overflow-hidden shadow-sm md:rounded-t-sm">
         <!-- Header -->
-        <div class="flex flex-row justify-between items-center py-4 bg-orange-600">
-            <span class="text-lg text-white px-4">Entry Info (Archived)</span>
+        <div class="flex flex-row text-white font-bold uppercase p-2 bg-red-600">
+            <span>information (archived)</span>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-row w-11/12 mx-auto justify-end items-center p-2 gap-2 border-b-1 border-b-zinc-400">
+                                            
+                <!-- PDF -->
+                <a href="{{ route('entries_pdf.generate', $archive) }}" title="Download as PDF">
+                    <i
+                        class="fa-solid fa-file-pdf hover:text-yellow-400 transition-all duration-500"></i>
+                </a>
+                <!-- Restore -->
+                <form action="{{ route('archive.restore', $archive->id) }}" method="POST">
+                    <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
+                    @csrf
+                    <!-- Dirtective to Override the http method -->
+                    @method('PUT')
+                        <button     
+                            onclick="return confirm('Entry with (ID: {{  $archive->id }}) will be restored')"                                                   
+                            title="Restore">                                                        
+                            <span
+                                class="text-green-600 hover:text-black transition-all duration-500">
+                                <i
+                                    class="fa-lg fa-solid fa-rotate-right text-white hover:text-green-400 transition duration-1000 ease-in-out"></i></span>
+                        </button>
+                </form>
+                <!-- Delete -->
+                <form action="{{ route('archive.destroy', $archive->id) }}" method="POST">
+                    <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
+                    @csrf
+                    <!-- Dirtective to Override the http method -->
+                    @method('DELETE')
+                        <button
+                            onclick="return confirm('Delete PERMANENTLY Entry with (ID: {{  $archive->id }})?')"                                                        
+                            title="Delete PERMANENTLY">                                                        
+                            <span
+                                class="text-green-600 hover:text-black transition-all duration-500">
+                                <i
+                                    class="fa-lg fa-solid fa-trash text-white hover:text-red-600 transition duration-1000 ease-in-out"></i></span>
+                        </button>
+                </form>
+            
         </div>
 
         <!-- INFO -->
-        <div class="mx-auto w-11/12 sm:w-4/5 mt-4 my-10 bg-gray-100 rounded-md shadow-sm">
+        <div class="mx-auto w-11/12 mt-4 pb-4 rounded-sm flex flex-col gap-2">
 
-            <div class="flex flex-row justify-between items-center py-4 sm:pb-8 sm:pt-0 sm:rounded-t-lg bg-black">
-                <span class="text-xl text-white font-bold capitalize sm:mt-8 mx-4">Information</span>
-                <div class="flex flex-row justify-end items-end gap-4 w-fit sm:mt-8 mx-2">                    
-                    <!-- Restore -->
-                    <form action="{{ route('archive.restore', $archive->id) }}" method="POST">
-                        <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
-                        @csrf
-                        <!-- Dirtective to Override the http method -->
-                        @method('PUT')
-                            <button     
-                                onclick="return confirm('Entry with (ID: {{  $archive->id }}) will be restored')"                                                   
-                                title="Restore">                                                        
-                                <span
-                                    class="text-green-600 hover:text-black transition-all duration-500">
-                                    <i
-                                        class="fa-lg fa-solid fa-rotate-right text-white hover:text-green-400 transition duration-1000 ease-in-out"></i></span>
-                            </button>
-                    </form>                                                  
-                    <!-- Delete -->
-                    <form action="{{ route('archive.destroy', $archive->id) }}" method="POST">
-                        <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
-                        @csrf
-                        <!-- Dirtective to Override the http method -->
-                        @method('DELETE')
-                            <button
-                                onclick="return confirm('Delete PERMANENTLY Entry with (ID: {{  $archive->id }})?')"                                                        
-                                title="Delete PERMANENTLY">                                                        
-                                <span
-                                    class="text-green-600 hover:text-black transition-all duration-500">
-                                    <i
-                                        class="fa-lg fa-solid fa-trash text-white hover:text-red-600 transition duration-1000 ease-in-out"></i></span>
-                            </button>
-                    </form>                    
-                </div>
-            </div>
+             <!-- Id -->
+            <div class="flex flex-col md:flex-row gap-2">
 
-            <!-- Id -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 sm:border-t border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <i class="fa-solid fa-fingerprint w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Id</span>
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-fingerprint"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">id</span>
+                    </div>                    
                 </div>
-                <span class="w-full px-8 sm:px-2">{{ $archive->id }}</span>
-            </div>
-            <!-- User -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <i class="fa-solid fa-circle-user w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">User</span>
+                
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span class="w-full md:w-40 rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">{{$archive->id}}</span>
                 </div>
-                <span class="w-full px-8 sm:px-2">{{ $archive->user->name }} - {{ $archive->user->email }}</span>
+
             </div>            
-            <!-- Date -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <i class="fa-solid fa-calendar-days w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Date</span>
+
+            <!-- User -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-user"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">user</span>
+                    </div>                    
                 </div>
-                <span class="w-full px-8 sm:px-2">{{ $archive->date }}</span>
-            </div>
-            <!-- Title -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">
-                <!-- Clipboard Title Button-->
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <span x-data="{ show: false }" class="relative" data-tooltip="Copy Title">
-                        <button class="btn" data-clipboard-target="#title" x-on:click="show = true"
-                            x-on:mouseout="show = false" title="Copy Title">
-                            <i
-                                class="fa-solid fa-pen-to-square w-6 text-center text-black hover:text-blue-600 transition-all duration-500"></i>
-                        </button>
-                        <span x-show="show" class="absolute -top-8 -right-6">
-                            <span class="bg-orange-600 text-white rounded-lg p-2 opacity-100">Copied!</span>
-                        </span>
-                    </span>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Title</span>
+
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        {{ $archive->user->name }} - {{ $archive->user->email }}</span>
                 </div>
-                <div id="title" class="w-full px-8 sm:px-2">{{ $archive->title }}</div>
+
             </div>
+
             <!-- Type -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 sm:border-t border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <i class="fa-solid fa-toggle-on w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Type</span>
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-plus-minus"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">type</span>
+                    </div>                    
                 </div>
-                <span
-                    class="w-full px-8 sm:px-2 {{ $archive->type == 0 ? 'text-red-600' : 'text-orange-600' }}">{{ $archive->type == 0 ? 'Gasto' : 'Ingreso' }}</span>
+                
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <label class="{{($archive->type == 0) ? 'bg-red-600' : 'bg-green-600'}} text-white font-semibold p-2 rounded-sm">
+                        {{ $archive->type == 0 ? 'Expense' : 'Income' }}                        
+                    </label> 
+                </div>
+
+            </div>      
+
+            <!-- Date -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">date</span>
+                    </div>                    
+                </div>
+                
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full md:w-fit rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        {{ $archive->date }}</span>
+                </div>
+
             </div>
-            <!-- Value -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <i class="fa-solid fa-clock w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Value</span>
-                </div>
-                <span
-                    class="w-full px-8 sm:px-2 {{ $archive->type == 0 ? 'text-red-600' : 'text-orange-600' }}">{{ $archive->value }} €</span>                
-            </div>
-            <!-- Frequency -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <i class="fa-solid fa-route w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Frequency</span>
-                </div>
-                <span class="w-full px-8 sm:px-2">{{ $archive->frequency }}</span>
-            </div>
-            <!-- Company -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <i class="fa-solid fa-location-dot w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Company</span>
-                </div>
-                <span class="w-full px-8 sm:px-2">{{ $archive->company }}</span>
-            </div>
-            <!-- Category -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-2 sm:gap-1 border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <i class="fa-solid fa-basketball w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Category</span>
-                </div>
-                <div class="w-full px-8 sm:px-2">
-                    <span
-                        class="bg-blue-600 text-white text-sm font-bold rounded-md p-2">{{ $archive->category->name }}</span>
-                </div>
-            </div>
-            <!-- Tags -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-2 sm:gap-1 border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <i class="fa-solid fa-tags w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Tags</span>
-                </div>
-                <div class="flex flex-row flex-wrap w-full px-8 sm:px-2 gap-2">
-                    @foreach ($archive->tags as $tag)
-                        <span
-                            class="bg-orange-600 text-white text-sm font-bold rounded-md p-2">{{ $tag->name }}</span>
-                    @endforeach
-                </div>
-            </div>                        
-            <!-- Info -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center sm:items-start pb-2 gap-2">
-                    <i class="fa-solid fa-circle-info py-1 w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Info</span>
-                </div>
-                @if (strip_tags($archive->info) != '')
-                    <div class="flex relative w-full">
-                        <!-- Quill Editor -->
-                        <div id="quill_editor"
-                            class="w-full p-2 text-md rounded-lg bg-gray-200 border border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-orange-500 focus:border-orange-500 ">
-                            {!! $archive->info !!}
-                        </div>
-                        <!-- Clipboard Info Button-->
-                        <span x-data="{ show: false }" class="bg-white p-1 rounded-md absolute top-1 right-2"
-                            data-tooltip="Copy Info">
-                            <button class="btn" data-clipboard-target="#quill_editor" x-on:click="show = true"
-                                x-on:mouseout="show = false">
-                                <i class="fa-regular fa-clipboard"></i>
+
+            <!-- Title -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-pen"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">title</span>
+                    </div>
+                    <div class="flex flex-row justify-start items-center p-2 md:hidden">
+                        <span x-data="{ show: false }" class="relative" data-tooltip="Copy Title">
+                            <button class="btn" data-clipboard-target="#title" x-on:click="show = true"
+                                x-on:mouseout="show = false" title="Copy Title">
+                                <i class="fa-solid fa-copy"></i>
                             </button>
-                            <span x-show="show" class="absolute top-1 right-6">
-                                <span class="bg-orange-600 text-white rounded-lg p-1 opacity-100">Copied!</span>
+                            <span x-show="show" class="absolute -top-8 -right-6">
+                                <span class="bg-green-600 text-white text-xs rounded-lg p-1 opacity-90">Copied!</span>
                             </span>
                         </span>
                     </div>
-                @else
-                    <div class="w-full px-8 sm:px-2">-</div>
-                @endif
+                </div>
+                
+                <div class="flex flex-row justify-between items-center w-full">
+
+                    <div class="flex flex-row p-2 bg-zinc-100 w-full">
+                        <span 
+                        id="title">
+                        {{ $archive->title }}</span>
+                    </div>
+
+                    <div class="flex flex-row justify-start items-center p-2 max-sm:hidden">
+                        <span x-data="{ show: false }" class="relative" data-tooltip="Copy Title">
+                            <button class="btn cursor-pointer" data-clipboard-target="#title" x-on:click="show = true"
+                                x-on:mouseout="show = false" title="Copy Title">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                            <span x-show="show" class="absolute -top-8 -right-6">
+                                <span class="bg-green-600 text-white text-xs rounded-lg p-1 opacity-90">Copied!</span>
+                            </span>
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Company -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-industry"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">company</span>
+                    </div>                    
+                </div>
+                
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        {{ $archive->company }}</span>
+                </div>
+
+            </div>
+            
+            <!-- Value -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-eur"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">value</span>
+                    </div>                    
+                </div>
+                
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full md:w-24 rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        {{ $archive->value }}</span>
+                </div>
+
+            </div>
+
+            <!-- Frequency -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">frequency</span>
+                    </div>                    
+                </div>
+                
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full md:w-fit rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        {{ $archive->frequency }}</span>
+                </div>
+
+            </div>
+
+            <!-- Account -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-piggy-bank"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">account</span>
+                    </div>                    
+                </div>
+                
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full md:w-fit rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        @if (isset($archive->balance->name))  
+                            <span> {{ $archive->balance->name }}</span>
+                        @else 
+                            <span>-</span>
+                        @endif 
+                    </span>
+                </div>
+
+            </div> 
+
+            <!-- Payment -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-money-bill"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">payment</span>
+                    </div>                    
+                </div>
+                
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full md:w-fit rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        @if (isset($archive->balance->source))  
+                            <span> {{ $archive->balance->source }}</span>
+                        @else 
+                            <span>-</span>
+                        @endif 
+                    </span>
+                </div>
+
+            </div>
+
+            <!-- Category -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">category</span>
+                    </div>                    
+                </div>
+                
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span class="bg-indigo-600 text-white font-semibold p-2 rounded-sm">{{ $archive->category->name }}</span>
+                </div>                
+
+            </div>
+
+            <!-- Tags -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">tags</span>
+                    </div>                    
+                </div>
+                
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <div 
+                        class="flex flex-wrap gap-2">
+                        @foreach ($archive->tags as $tag)
+                            <span class="bg-teal-500 text-white font-semibold p-2 rounded-sm">{{ $tag->name }}</span>
+                        @endforeach    
+                    </div>
+                </div>
+
+            </div>                
+            
+            <!-- Info -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                    <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                        <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-info"></i>
+                    </div>                    
+                    <div class="w-full">
+                            <span class="text-lg font-semibold capitalize">extra information</span>
+                        </div>
+                    @if (strip_tags($archive->info) != '')
+                    <div class="flex flex-row justify-start items-center p-2 md:hidden">
+                        <span x-data="{ show: false }" class="relative" data-tooltip="Copy Info">
+                            <button class="btn" data-clipboard-target="#info" x-on:click="show = true"
+                                x-on:mouseout="show = false" title="Copy Info">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                            <span x-show="show" class="absolute -top-8 -right-6">
+                                <span class="bg-green-600 text-white text-xs rounded-lg p-1 opacity-90">Copied!</span>
+                            </span>
+                        </span>
+                    </div>
+                    @endif
+                </div>
+                
+                <div class="flex flex-row justify-between items-center w-full">
+
+                    @if (strip_tags($archive->info) != '')
+                        <div class="w-full rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                            <span class="text-md" id="info">{!! $archive->info !!}</span>
+                        </div>
+
+                        <div class="flex flex-row justify-start items-start p-2 max-sm:hidden">
+                            <span x-data="{ show: false }" class="relative" data-tooltip="Copy Info">
+                                <button class="btn cursor-pointer" data-clipboard-target="#info" x-on:click="show = true"
+                                    x-on:mouseout="show = false" title="Copy Info">
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                                <span x-show="show" class="absolute -top-8 -right-6">
+                                    <span class="bg-green-600 text-white text-xs rounded-lg p-1 opacity-90">Copied!</span>
+                                </span>
+                            </span>
+                        </div>
+                    @else
+                        <div class="p-2">-</div>
+                    @endif
+
+                </div>
+
             </div>
 
             <!-- Files -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1">
-                <div class="flex flex-row justify-start items-center sm:items-start pb-2 gap-2">
-                    <i class="fa-solid fa-file py-1 w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Files
-                        ({{ $archive->files->count() }})</span>
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2 h-full">
+                        <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-file"></i>
+                    </div>                    
+                    <div class="w-full h-full">
+                        <span class="text-lg font-semibold capitalize">Files ({{ $archive->files->count() }})</span>
+                    </div>                    
                 </div>
-                <!-- file Table -->
-                <div class="w-full overflow-x-auto">
-                    @if ($archive->files->count() !== 0)
-                        <table class="table-auto w-full border text-sm">
-                            <thead class="text-sm text-center text-white bg-black">
-                                <th></th>
-                                <th class="p-2 max-lg:hidden">Filename</th>
-                                <th class="p-2 max-sm:hidden">Created</th>
-                                <th class="p-2 max-sm:hidden">Size <span class="text-xs">(KB)</span></th>
-                                <th class="p-2">Format</th>
-                                <th></th>
-                            </thead>
+                
+                <div class="flex flex-col justify-start items-center w-full">
+                    
+                    @if ($archive->files->count() > 0)
+                        <!-- FILES TABLE -->
+                        <div class="w-full overflow-x-auto">
+                        
+                            <table class="table-auto w-full border text-sm">
+                                <thead class="text-sm text-center text-white bg-black">
+                                    <th></th>
+                                    <th class="p-2 max-lg:hidden">Filename</th>
+                                    <th class="p-2 max-sm:hidden">Created</th>
+                                    <th class="p-2 max-sm:hidden">Size <span class="text-xs">(KB)</span></th>
+                                    <th class="p-2">Format</th>
+                                </thead>
 
-                            @foreach ($archive->files as $file)
-                                <tr class="bg-white border-b text-center">
-                                    <td class="p-2">
-                                        @include('partials.mediatypes-file', [
-                                            'file' => $file,
-                                            'iconSize' => 'fa-lg',
-                                            'imagesBig' => false,
-                                        ])
-                                    </td>
-                                    <td class="p-2 max-lg:hidden">
-                                        {{ $file->original_filename }}
-                                    </td>
-                                    <td class="p-2 max-sm:hidden">{{ $file->created_at->format('d-m-Y') }}
-                                    </td>
-                                    <td class="p-2 max-sm:hidden">{{ round($file->size / 1000) }} </td>
-                                    <td class="p-2 ">{{ basename($file->media_type) }}</td>                                   
+                                @foreach ($archive->files as $file)
+                                    <tr class="bg-white border-b text-center">
+                                        <td class="p-2">
+                                            @include('partials.mediatypes-file', [
+                                                'file' => $file,
+                                                'iconSize' => 'fa-lg',
+                                                'imagesBig' => false,
+                                            ])
+                                        </td>
+                                        <td class="p-2 max-lg:hidden">
+                                            {{ $file->original_filename }}
+                                        </td>
+                                        <td class="p-2 max-sm:hidden">{{ $file->created_at->format('d-m-Y') }}
+                                        </td>
+                                        <td class="p-2 max-sm:hidden">{{ round($file->size / 1000) }} </td>
+                                        <td class="p-2 ">{{ basename($file->media_type) }}</td>
 
-                                </tr>
-                            @endforeach
+                                    </tr>
+                                @endforeach
 
-                        </table>
-                    @endif                    
+                            </table>
+                        </div>
+                    @endif
 
                 </div>
-            </div>
-
-            <div class="bg-black py-4 sm:rounded-b-md">
 
             </div>
-
 
         </div>
 
@@ -240,14 +446,9 @@
     <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa-solid fa-angle-up"></i></button>
 
     <!-- Footer -->
-    <div class="py-4 flex flex-row justify-end items-center px-4 bg-orange-600 sm:rounded-b-lg">
-        <a href="{{ route('entries.index') }}">
-            <i class="fa-lg fa-solid fa-backward-step text-white hover:text-black transition duration-1000 ease-in-out"
-                title="Go Back"></i>
-        </a>
-    </div>
-
-</div>
+        <div class="flex flex-row justify-center items-center p-2 mt-4 bg-red-600 rounded-sm">
+            <span class="font-bold text-xs text-white">xavulankis 2025</span>
+        </div>
 
 </div>
 

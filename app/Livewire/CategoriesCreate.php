@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Category;
 use Illuminate\Database\QueryException;
 use Livewire\Component;
+use Exception;
 
 class CategoriesCreate extends Component
 {
@@ -52,16 +53,13 @@ class CategoriesCreate extends Component
 
             try {
                 Category::create(['name' => $input['name']]);
-            } catch (QueryException $exception) {
-
-                $errorInfo = $exception->errorInfo;
-                // Return the response to the client..
-                return to_route('categories.index')->with('message', 'Error(' . $errorInfo[0] . ') creating the category (' . $input['name'] . ')');
+            } catch (Exception $e) {
+                return to_route('categories.index')->with('error', 'Error(' . $e->getCode() . ') creating the category (' . $input['name'] . ')');
             }
         }
 
         $message = "";
-        $this->inputs->count() === 1 ? $message = 'Category ' . $input['name'] . ' created' : $message = $this->inputs->count() . ' new categories created';
+        $this->inputs->count() === 1 ? $message = 'Category ' . $input['name'] . ' succesfully created' : $message = $this->inputs->count() . ' new categories successfully created';
 
         return to_route('categories.index')->with('message', $message);
     }

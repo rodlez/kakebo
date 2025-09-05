@@ -1,134 +1,210 @@
-<div class="max-w-7xl mx-auto sm:pb-8 sm:px-6 lg:px-8">
+<div class="w-full sm:max-w-10/12 mx-auto">
+
+    <!-- Messages -->
+    @if (session('message'))
+        <div class="flex flex-col bg-green-600 p-1 text-white text-sm rounded-sm">        
+            <div class="flex row justify-between items-center">
+                <span class="font-bold">{{ session('message') }}</span>
+                <a href="/balances/show/{{ $balance->id }}" class="cursor-pointer" title="Close">
+                    <i class="fa-solid fa-xmark hover:text-gray-600 transition-all duration-500"></i>
+                </a>
+            </div>
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="flex flex-col bg-red-600 p-1 text-white text-sm rounded-sm">        
+            <div class="flex row justify-between items-center">
+                <span class="font-bold">{{ session('error') }}</span>
+                <a href="/balances/show/{{ $balance->id }}" class="cursor-pointer" title="Close">
+                    <i class="fa-solid fa-xmark hover:text-gray-600 transition-all duration-500"></i>
+                </a>
+            </div>
+        </div>
+    @endif
 
     <!-- Sitemap -->
-    <div class="flex flex-row justify-start items-start gap-1 text-sm py-3 px-4 text-slate-500">
-        <a href="/balances" class="hover:text-red-600">Balances</a> /
-        <a href="/balances/show/{{ $balance->id }}" class="font-bold text-black border-b-2 border-b-red-600">Info</a>
+    <div class="flex flex-row justify-start items-start gap-1 p-1 text-sm text-slate-600">
+        <a href="/balances" class="hover:text-black">Accounts</a> /
+        <a href="/balances/show/{{ $balance->id }}" class="font-bold text-black border-b-2 border-b-orange-600">Info</a>
     </div>
 
-    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+    <div class="bg-zinc-200 overflow-hidden shadow-sm md:rounded-t-sm">        
+
         <!-- Header -->
-        <div class="flex flex-row justify-between items-center py-4 bg-orange-600">
-            <span class="text-lg text-white px-4">Balance Info</span>
+        <div class="flex flex-row text-white font-bold uppercase p-2 bg-amber-600">
+            <span>information</span>
         </div>
 
-        <!-- INFO -->
-        <div class="mx-auto w-11/12 sm:w-4/5 mt-4 my-10 bg-gray-100 rounded-md shadow-sm">
-
-            <div class="flex flex-row justify-between items-center py-4 sm:pb-8 sm:pt-0 sm:rounded-t-lg bg-black">
-                <span class="text-xl text-white font-bold capitalize sm:mt-8 mx-4">Information</span>
-                <div class="flex flex-row justify-end items-end gap-4 w-fit sm:mt-8 mx-2">
-                    
-                    <!-- Edit -->
-                    <a href="{{ route('balances.edit', $balance) }}" title="Edit">
-                        <i class="fa-solid fa-pencil text-white hover:text-blue-600 transition-all duration-500"></i>
-                    </a>
-                    <!-- Delete -->
-                    <form action="{{ route('balances.destroy', $balance) }}" method="POST">
-                        <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
-                        @csrf
-                        <!-- Dirtective to Override the http method -->
-                        @method('DELETE')
-                        <button
-                            onclick="return confirm('Are you sure you want to delete the balance: {{ $balance->title }}?')"
-                            title="Delete">
-                            <i
-                                class="fa-solid fa-trash pr-4 text-white hover:text-red-600 transition-all duration-500"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-            <!-- User -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <i class="fa-solid fa-circle-user w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">User</span>
-                </div>
-                <span class="w-full px-8 sm:px-2">{{ $balance->user->name }} - {{ $balance->user->email }}</span>
-            </div>
-            <!-- Id -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 sm:border-t border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <i class="fa-solid fa-fingerprint w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Id</span>
-                </div>
-                <span class="w-full px-8 sm:px-2">{{ $balance->id }}</span>
-            </div>                        
-            <!-- Date -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <i class="fa-solid fa-calendar-days w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Date</span>
-                </div>
-                <span class="w-full px-8 sm:px-2">{{ $balance->date }}</span>
-            </div>
-            <!-- Name -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">
-                <!-- Clipboard Name Button-->
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <span x-data="{ show: false }" class="relative" data-tooltip="Copy Name">
-                        <button class="btn" data-clipboard-target="#name" x-on:click="show = true"
-                            x-on:mouseout="show = false" title="Copy Name">
-                            <i
-                                class="fa-solid fa-pen-to-square w-6 text-center text-black hover:text-blue-600 transition-all duration-500"></i>
-                        </button>
-                        <span x-show="show" class="absolute -top-8 -right-6">
-                            <span class="bg-orange-600 text-white rounded-lg p-2 opacity-100">Copied!</span>
-                        </span>
-                    </span>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Name</span>
-                </div>
-                <div id="name" class="w-full px-8 sm:px-2">{{ $balance->name }}</div>
-            </div>            
-            <!-- Total -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <i class="fa-solid fa-clock w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Total</span>
-                </div>
-                <span
-                    class="w-full px-8 sm:px-2">{{ $balance->total }} €</span>                
-            </div>
-            <!-- Source -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center gap-2">
-                    <i class="fa-solid fa-route w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Source</span>
-                </div>
-                <span class="w-full px-8 sm:px-2">{{ $balance->source }}</span>
-            </div>                                    
-            <!-- Info -->
-            <div class="flex flex-col sm:flex-row py-2 px-3 gap-1 border-b border-b-gray-200">
-                <div class="flex flex-row justify-start items-center sm:items-start pb-2 gap-2">
-                    <i class="fa-solid fa-circle-info py-1 w-6 text-center"></i>
-                    <span class="sm:text-lg font-bold sm:font-normal sm:w-24">Info</span>
-                </div>
-                @if (strip_tags($balance->info) != '')
-                    <div class="flex relative w-full">
-                        <!-- Quill Editor -->
-                        <div id="quill_editor"
-                            class="w-full p-2 text-md rounded-lg bg-gray-200 border border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-orange-500 focus:border-orange-500 ">
-                            {!! $balance->info !!}
-                        </div>
-                        <!-- Clipboard Info Button-->
-                        <span x-data="{ show: false }" class="bg-white p-1 rounded-md absolute top-1 right-2"
-                            data-tooltip="Copy Info">
-                            <button class="btn" data-clipboard-target="#quill_editor" x-on:click="show = true"
-                                x-on:mouseout="show = false">
-                                <i class="fa-regular fa-clipboard"></i>
-                            </button>
-                            <span x-show="show" class="absolute top-1 right-6">
-                                <span class="bg-orange-600 text-white rounded-lg p-1 opacity-100">Copied!</span>
-                            </span>
-                        </span>
-                    </div>
-                @else
-                    <div class="w-full px-8 sm:px-2">-</div>
-                @endif
-            </div>
-
+        <!-- Actions -->
+        <div class="flex flex-row w-11/12 mx-auto justify-end items-center p-2 gap-2 border-b-1 border-b-zinc-400">
+                            
+                <!-- Edit -->
+                <a href="{{ route('balances.edit', $balance) }}" title="Edit">
+                    <i class="fa-solid fa-pencil hover:text-green-600 transition-all duration-500"></i>
+                </a>
+                <!-- Delete -->
+                <form action="{{ route('balances.destroy', $balance) }}" method="POST">
+                    <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
+                    @csrf
+                    <!-- Dirtective to Override the http method -->
+                    @method('DELETE')
+                    <button
+                        onclick="return confirm('Are you sure you want to delete the account: {{ $balance->name }}?')"
+                        title="Delete">
+                        <i
+                            class="fa-solid fa-trash hover:text-red-600 transition-all duration-500 cursor-pointer"></i>
+                    </button>
+                </form>
             
-            <div class="bg-black py-4 sm:rounded-b-md">
+        </div>
+        
+
+        <!-- INFO -->
+        <div class="mx-auto w-11/12 mt-4 pb-4 rounded-sm flex flex-col gap-2">
+
+            <!-- Id -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-fingerprint"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">id</span>
+                    </div>                    
+                </div>
+                
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span class="w-full md:w-40 rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">{{$balance->id}}</span>
+                </div>
+
+            </div>
+        
+            <!-- User -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-user"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">user</span>
+                    </div>                    
+                </div>
+
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        {{ $balance->user->name }} - {{ $balance->user->email }}</span>
+                </div>
+
+            </div>
+
+            <!-- Date -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">date</span>
+                    </div>                    
+                </div>
+                
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full md:w-fit rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        {{ $balance->date }}</span>
+                </div>
+
+            </div>
+
+            <!-- Name -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-pen"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">name</span>
+                    </div>                    
+                </div>
+
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        {{ $balance->name }}</span>
+                </div>
+
+            </div>
+
+            <!-- Total -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-eur"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">total</span>
+                    </div>                    
+                </div>
+                
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full md:w-24 rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        {{ $balance->total }}</span>
+                </div>
+
+            </div>
+
+            <!-- Payment -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-money-bill"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">payment</span>
+                    </div>                    
+                </div>
+                
+                <div class="flex flex-row justify-start items-center p-0 w-full">
+                    <span 
+                        class="w-full md:w-24 rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                        {{ $balance->source }}</span>
+                </div>
+
+            </div>
+        
+        
+            <!-- Info -->
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
+                    <div class="bg-black text-white p-1 rounded-md">
+                        <i class="fa-solid fa-info"></i>
+                    </div>                    
+                    <div class="w-full">
+                        <span class="text-lg font-semibold capitalize">extra information</span>
+                    </div>
+                    
+                </div>
+                
+                <div class="flex flex-row justify-between items-center w-full">
+
+                    @if (strip_tags($balance->info) != '')
+                        <div class="w-full rounded-sm bg-zinc-100 border-1 border-zinc-300 text-gray-900 p-2 focus:border-black focus:outline-hidden focus:ring-blue-400 focus:border-blue-400">
+                            <span class="text-md" id="info">{!! $balance->info !!}</span>
+                        </div>                        
+                    @else
+                        <div class="p-2">-</div>
+                    @endif
+
+                </div>
 
             </div>
 
@@ -141,17 +217,11 @@
     <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa-solid fa-angle-up"></i></button>
 
     <!-- Footer -->
-    <div class="py-4 flex flex-row justify-end items-center px-4 bg-orange-600 sm:rounded-b-lg">
-        <a href="{{ route('balances.index') }}">
-            <i class="fa-lg fa-solid fa-backward-step text-white hover:text-black transition duration-1000 ease-in-out"
-                title="Go Back"></i>
-        </a>
+    <div class="flex flex-row justify-center items-center p-2 mt-4 bg-amber-600 rounded-sm">
+        <span class="font-bold text-xs text-white">xavulankis 2025</span>
     </div>
 
-</div>
 
 </div>
 
-<script>
-    new ClipboardJS('.btn');
-</script>
+

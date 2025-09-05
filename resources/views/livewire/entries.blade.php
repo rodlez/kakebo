@@ -1,6 +1,6 @@
 <div class="w-full sm:max-w-10/12 mx-auto">
 
-<!-- Messages -->
+    <!-- Messages -->
     @if (session('message'))
         <div class="flex flex-col bg-green-600 p-1 mb-2 text-white text-sm rounded-sm">        
             <div class="flex row justify-between items-center">
@@ -22,7 +22,7 @@
         </div>
     @endif
 
-    <!-- Sitemap -->
+    <!-- Header -->
     <div class="flex flex-row justify-between items-center gap-2 p-2 font-bold uppercase bg-black text-white rounded-sm">
         
         <div>
@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <div class="overflow-hidden py-2 bg-zinc-300">
+    <div class="overflow-hidden py-2 bg-zinc-200">
 
             <!-- FILTERS-->
             <div class="flex flex-col bg-green-800 mx-auto">
@@ -1042,7 +1042,7 @@
                             <tbody>
                                 @foreach ($entries as $entry)
                                     <tr
-                                        class="text-black {{$smallFont ? 'text-xs' : 'text-sm'}} leading-6 {{in_array($entry->id, $okselections) ? 'bg-green-200' : 'even:bg-zinc-200 odd:bg-gray-300'}} transition-all duration-1000 hover:bg-yellow-400">
+                                        class="text-black {{$smallFont ? 'text-xs' : 'text-sm'}} leading-6 {{in_array($entry->id, $okselections) ? 'bg-green-200' : 'even:bg-zinc-100 odd:bg-zinc-50'}} transition-all duration-1000 hover:bg-yellow-200">
                                                 
                                         <td class="p-2 text-center"><input wire:model.live="selections" type="checkbox"
                                                 class="text-green-600 outline-none focus:ring-0 checked:bg-green-500"
@@ -1151,14 +1151,10 @@
             <div class="py-2 px-4">
                 {{ $entries->links() }}
             </div>
+
             <!-- To the Top Button -->
             <button onclick="topFunction()" id="myBtn" title="Go to top"><i
-                    class="fa-solid fa-angle-up"></i></button>            
-            
-            
-
-
-        
+                    class="fa-solid fa-angle-up"></i></button>                    
 
     </div>
 

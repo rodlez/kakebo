@@ -88,12 +88,7 @@ class EntriesCreate extends Component
         $validated['user_id'] = $request->user()->id;
         // TODO: CHECK WHY GET balance_id come as string and not as int like category_id
         //$validated['balance_id'] = intval($validated['balance_id']);
-        //dd($validated);
-        // $entry = Entry::create($validated);
-        // $entry->tags()->sync($validated['selectedTags']);
-
-        // return to_route('entries.index', $entry)->with('message', 'Sport (' . $entry->title . ') created.');
-
+        
         // test error
         // $validated['user_id'] = null;
 

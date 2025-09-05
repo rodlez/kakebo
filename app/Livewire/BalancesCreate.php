@@ -6,6 +6,7 @@ use App\Livewire\Texteditor\Quill;
 use App\Models\Balance;
 use Illuminate\Http\Request;
 use Livewire\Component;
+use Exception;
 
 class BalancesCreate extends Component
 {
@@ -24,7 +25,7 @@ class BalancesCreate extends Component
     ];
 
     protected $messages = [
-        'source.required' => 'Select one source.',
+        'source.required' => 'Select one payment.',
 
     ];
 
@@ -53,7 +54,9 @@ class BalancesCreate extends Component
     public function mount()
     {
         $this->date = date('Y-m-d');
+        $this->source = 'card';
         $this->total = 0;
+
     }
 
     public function save(Request $request)
@@ -61,9 +64,16 @@ class BalancesCreate extends Component
         $validated = $this->validate();
         $validated['user_id'] = $request->user()->id;
         
-        $balance = Balance::create($validated);
+        // test error
+        //$validated['name'] = null;
+        //dd($validated);
 
-        return to_route('balances.index', $balance)->with('message', 'Balance (' . $balance->name . ') created.');
+        try {
+            $balance = Balance::create($validated);
+            return to_route('balances.index', $balance)->with('message', 'Balance ID(' . $balance->id . ') successfully created');
+        } catch (Exception $e) {
+            return to_route('balances.index')->with('error', 'Error (' . $e->getCode() . ') Accoutn created failed');            
+        }
     }
 
     public function render()

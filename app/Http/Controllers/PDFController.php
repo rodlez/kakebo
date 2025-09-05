@@ -13,6 +13,7 @@ class PDFController extends Controller
 
     public function generateEntryPDF(Entry $data)
     {
+        dd('oli');
         $dataToPdf = clone $data;
         $dataToPdf = $dataToPdf->toArray();
 

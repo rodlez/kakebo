@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Category;
 use App\Models\Entry;
 use App\Models\Tag;
+use App\Models\User;
 use App\Services\FileService;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -48,8 +49,7 @@ class Archive extends Component
 
     public $tag = 0;
 
-    // test admin
-    public $admin;
+    public $userID = 0;
 
     // multiple batch selections
     public $selections = [];
@@ -67,17 +67,16 @@ class Archive extends Component
     }
 
     public function mount() {       
-        $this->dateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->min('date')));
-        $this->initialDateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->min('date')));
-        $this->dateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->max('date')));
-        $this->initialDateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->max('date')));
+        $this->dateFrom = date('Y-m-d', strtotime(Entry::onlyTrashed()->min('date')));
+        $this->initialDateFrom = date('Y-m-d', strtotime(Entry::onlyTrashed()->min('date')));
+        $this->dateTo = date('Y-m-d', strtotime(Entry::onlyTrashed()->max('date')));
+        $this->initialDateTo = date('Y-m-d', strtotime(Entry::onlyTrashed()->max('date')));
 
-        $this->valueFrom = Entry::onlyTrashed()->where('user_id', Auth::id())->min('value');
-        $this->initialValueFrom = Entry::onlyTrashed()->where('user_id', Auth::id())->min('value');
-        $this->valueTo = Entry::onlyTrashed()->where('user_id', Auth::id())->max('value');
-        $this->initialValueTo = Entry::onlyTrashed()->where('user_id', Auth::id())->max('value');
+        $this->valueFrom = Entry::onlyTrashed()->min('value');
+        $this->initialValueFrom = Entry::onlyTrashed()->min('value');
+        $this->valueTo = Entry::onlyTrashed()->max('value');
+        $this->initialValueTo = Entry::onlyTrashed()->max('value');
 
-        $this->admin = Auth::user()->is_admin;
     }
 
     public function activateFilter()
@@ -90,13 +89,14 @@ class Archive extends Component
     public function clearFilters()
     {
         $this->types = 2;
-        $this->dateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->min('date')));
-        $this->dateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->max('date')));        
-        $this->valueFrom = Entry::onlyTrashed()->where('user_id', Auth::id())->min('value');
-        $this->valueTo = Entry::onlyTrashed()->where('user_id', Auth::id())->max('value');
+        $this->dateFrom = date('Y-m-d', strtotime(Entry::onlyTrashed()->min('date')));
+        $this->dateTo = date('Y-m-d', strtotime(Entry::onlyTrashed()->max('date')));        
+        $this->valueFrom = Entry::onlyTrashed()->min('value');
+        $this->valueTo = Entry::onlyTrashed()->max('value');
         $this->compa = '';
         $this->cat = 0;
         $this->tag = 0;
+        $this->userID = 0;
     }
 
     public function clearSearch()
@@ -111,14 +111,14 @@ class Archive extends Component
 
      public function clearFilterDate()
     {
-        $this->dateFrom = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->min('date')));
-        $this->dateTo = date('Y-m-d', strtotime(Entry::where('user_id', Auth::id())->onlyTrashed()->max('date')));
+        $this->dateFrom = date('Y-m-d', strtotime(Entry::onlyTrashed()->min('date')));
+        $this->dateTo = date('Y-m-d', strtotime(Entry::onlyTrashed()->max('date')));
     }    
 
     public function clearFilterValue()
     {
-        $this->valueFrom = Entry::onlyTrashed()->where('user_id', Auth::id())->min('value');
-        $this->valueTo = Entry::onlyTrashed()->where('user_id', Auth::id())->max('value');
+        $this->valueFrom = Entry::onlyTrashed()->min('value');
+        $this->valueTo = Entry::onlyTrashed()->max('value');
     }
 
     public function clearFilterCompany()
@@ -134,6 +134,11 @@ class Archive extends Component
     public function clearFilterTag()
     {
         $this->tag = 0;
+    }
+
+    public function clearFilterUser()
+    {
+        $this->userID = 0;
     }
     
 
@@ -151,7 +156,7 @@ class Archive extends Component
             $element->restore();
         }
 
-        return to_route('entries.index')->with('message', 'Entries restored.');
+        return to_route('archive.index')->with('message', 'Entries restored.');
     }
 
     public function bulkDelete()
@@ -174,7 +179,7 @@ class Archive extends Component
                     return to_route('archive.index')->with('message', 'Error - Files from Entry (' . $entry->title . ') can not be deleted.');
                 }
             } catch (Exception $e) {            
-                return to_route('archive.index')->with('message', 'Error(' . $e->getCode() . ') - Entry (' . $entry->title . ') can not be deleted.');
+                return to_route('archive.index')->with('error', 'Error(' . $e->getCode() . ') - Entry (' . $entry->title . ') can not be deleted.');
             }
 
         }
@@ -206,11 +211,41 @@ class Archive extends Component
 
         $categories = Category::orderby('name', 'ASC')->get();
         $tags = Tag::orderby('name', 'ASC')->get();
+        $users = User::orderby('name', 'ASC')->get();
         $companies = Entry::onlyTrashed()->orderby('company', 'ASC')->select('company')->get();
+       
+        //$data = Entry::orderby($this->orderColumn, $this->sortOrder)->onlyTrashed()->select('*');      
 
-        //$data = Entry::onlyTrashed()->orderby($this->orderColumn, $this->sortOrder)->get();
-        $data = Entry::orderby($this->orderColumn, $this->sortOrder)->onlyTrashed()->select('*');      
-
+        $data = Entry::select(
+            'entries.id as id',
+            'categories.name as category_name',
+            'balances.name as balance_name',
+            'balances.source as balance_source',
+            'entries.title as title',
+            'entries.user_id as user_id',
+            'entries.type as type',
+            'entries.company as company',
+            'entries.value as value',
+            'entries.frequency as frequency',
+            'entries.date as date',
+            'entries.info as info',
+            'entries.created_at as created_at',
+            'entries.updated_at as updated_at',
+        )
+            ->join('categories', 'entries.category_id', '=', 'categories.id')
+            ->join('balances', 'entries.balance_id', '=', 'balances.id')
+            ->join('entry_tag', 'entries.id', '=', 'entry_tag.entry_id')
+            ->onlyTrashed()
+            ->distinct('entries.id')
+            ->orderby($this->orderColumn, $this->sortOrder);
+        
+        //dd($data->count());
+            
+        // user filter
+        if ($this->userID != 0) {
+            $data = $data->where('user_id', '=', $this->userID);
+        }
+        
         // types filter
         if ($this->types != 2) {
             $data = $data->where('type', '=', $this->types);
@@ -219,19 +254,21 @@ class Archive extends Component
         // // interval date filter
         if (isset($this->dateFrom)) {
             if ($this->dateFrom <= $this->dateTo) {                                
-                $data = $data->where('date', '>=', $this->dateFrom)
-                ->where('date', '<=', $this->dateTo);
+                $data = $data->where('entries.date', '>=', $this->dateFrom)
+                ->where('entries.date', '<=', $this->dateTo);
+                //$data = $data->whereBetween('entries.date', [$this->dateFrom, $this->dateTo]);
             }
             else {
-                //dd('errorcito');
+                dd('errorcito');
             }
         }
-
+//var_dump($this->valueFrom);
+//var_dump($this->valueTo);
         // interval value filter   
         if ($this->valueFrom <= $this->valueTo) {
             $data = $data->whereBetween('value', [$this->valueFrom, $this->valueTo]);
         }
-
+//dd($data->count());
         // company filter
         if (!empty($this->compa)) {
             $data = $data->where('company', '=', $this->compa);
@@ -258,7 +295,7 @@ class Archive extends Component
 
         $total = $data->count();       
         $data = $data->paginate($this->perPage);
-        //$data = $data->paginate($this->perPage);
+        //dd($data->count());
 
         return view('livewire.archive', [
             // Styles
@@ -271,6 +308,7 @@ class Archive extends Component
             'entries'       => $data,
             'categories'    => $categories,
             'tags'          => $tags,
+            'users'         => $users,
             'companies'     => $companies,
             'found'         => $found,
             'column'        => $this->orderColumn,

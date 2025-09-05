@@ -59,7 +59,7 @@ class CategoryController extends Controller
             Category::where('id', $category->id)->update($formData);
             return to_route('categories.show', $category)->with('message', 'Category successfully updated');
         } catch (Exception $e) {
-            return to_route('categories.show', $category)->with('message', 'Error(' . $e->getCode() . ') Category can not be updated.');
+            return to_route('categories.show', $category)->with('error', 'Error(' . $e->getCode() . ') Category can not be updated');
         }
     }
 
@@ -72,11 +72,14 @@ class CategoryController extends Controller
         if ($category->user_id !== request()->user()->id) {
             abort(403);
         }*/
+        // test error
+        //$category->id = null;  
+        //dd($category);  
         try {
             $category->delete();
-            return to_route('categories.index')->with('message', 'Category (' . $category->name . ') deleted.');
+            return to_route('categories.index')->with('message', 'Category (' . $category->name . ') deleted');
         } catch (Exception $e) {
-            return to_route('categories.index')->with('message', 'Error (' . $e->getCode() . ') Type: ' . $category->name . ' can not be deleted.');
+            return to_route('categories.index')->with('error', 'Error (' . $e->getCode() . ') Category: ' . $category->name . ' can not be deleted');
         }
     }
 }

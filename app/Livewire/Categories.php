@@ -18,11 +18,25 @@ class Categories extends Component
     public $search = "";
     public $perPage = 25;
 
-    public $selections = [];
+    // multiple batch selections
+    public $selections = [];       
+    public $listEntriesIds = [];
+    public $okselections = [];
 
     public function updated()
     {
         $this->resetPage();
+
+        // Check if the selection exists in the current filtered entries
+        if($this->selections != [])
+        {
+            // convert string to integer values in the array of IDs selected            
+            foreach($this->selections as $key => $selection)
+            {                   
+                $this->selections[$key] = intval($selection);
+                
+            }            
+        }
     }
 
     public function clearSearch()
@@ -42,7 +56,7 @@ class Categories extends Component
             $category->delete();
         }
 
-        return to_route('categories.index')/* ->with('message', 'categories successfully deleted.') */;
+        return to_route('categories.index')->with('message', 'categories successfully deleted.');
     }
 
      public function sorting($columnName = "")
@@ -72,9 +86,18 @@ class Categories extends Component
 
         $total = $categories->count();
 
+        // TEST SELECTIONS IN FILTERS
+        $dataEntriesIds = clone $categories;
+
+        $this->listEntriesIds = $dataEntriesIds->pluck('id')->toArray();
+
+        $this->okselections = array_intersect($this->listEntriesIds, $this->selections);
+
         $categories = $categories->paginate($this->perPage);
 
         return view('livewire.categories', [
+            'listEntriesIds'    => $this->listEntriesIds,
+            'okselections'      => $this->okselections,
             'categories'    => $categories,
             'found'         => $found,
             'column'        => $this->orderColumn,

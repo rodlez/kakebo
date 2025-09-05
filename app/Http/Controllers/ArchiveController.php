@@ -17,18 +17,20 @@ class ArchiveController extends Controller
      * Restore the entry from Archive to Entries, Soft Delete DB Column deleted_at = NULL.
      */
     public function restore(int $entry)
-    {              
+    {      
+                
         $data = Entry::onlyTrashed()->get();
         $restoreEntry = $data->where('id', '=', $entry)->first();
-
-        if ($restoreEntry->user_id !== Auth::id()) {           
-            abort(403);
-        }   
+        
+        // if can restore is ALREADY an admin
+        // if ($restoreEntry->user_id !== Auth::id()) {           
+        //     abort(403);
+        // }   
          try {            
             $restoreEntry->restore();
-            return to_route('archive.index')->with('message', 'Entry (' . $restoreEntry->name . ') restored.');
+            return to_route('archive.index')->with('message', 'Entry ID(' . $restoreEntry->id . ') restored');
         } catch (Exception $e) {
-            return to_route('archive.index')->with('message', 'Error (' . $e->getCode() . ') Entry: ' . $restoreEntry->name . ' can not be restored.');
+            return to_route('archive.index')->with('error', 'Error (' . $e->getCode() . ') Entry: ' . $restoreEntry->id . ' can not be restored.');
         }         
                       
     }
@@ -51,12 +53,12 @@ class ArchiveController extends Controller
                     $this->fileService->deleteFiles($files);
                 }
                 
-                return to_route('archive.index')->with('message', 'Entry (' . $entry->title . ') successfully deleted PERMANENTLY.');               
+                return to_route('archive.index')->with('message', 'Entry ID(' . $entry->id . ') successfully deleted PERMANENTLY');               
             } else {
-                return to_route('archive.index')->with('message', 'Error - Files from Entry (' . $entry->title . ') can not be deleted.');
+                return to_route('archive.index')->with('error', 'Error - Files from Entry ID(' . $entry->id . ') can not be deleted');
             }
         } catch (Exception $e) {            
-            return to_route('archive.index')->with('message', 'Error(' . $e->getCode() . ') - Entry (' . $entry->title . ') can not be deleted.');
+            return to_route('archive.index')->with('error', 'Error(' . $e->getCode() . ') - Entry ID(' . $entry->id . ') can not be deleted');
         }
            
                       

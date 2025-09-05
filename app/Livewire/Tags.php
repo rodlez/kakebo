@@ -8,6 +8,7 @@ use Livewire\WithPagination;
 
 class Tags extends Component
 {
+    
     use WithPagination;
 
     //protected $paginationTheme = "bootstrap";
@@ -17,11 +18,25 @@ class Tags extends Component
     public $search = "";
     public $perPage = 25;
 
-    public $selections = [];
+    // multiple batch selections
+    public $selections = [];       
+    public $listEntriesIds = [];
+    public $okselections = [];
 
     public function updated()
     {
         $this->resetPage();
+
+        // Check if the selection exists in the current filtered entries
+        if($this->selections != [])
+        {
+            // convert string to integer values in the array of IDs selected            
+            foreach($this->selections as $key => $selection)
+            {                   
+                $this->selections[$key] = intval($selection);
+                
+            }            
+        }
     }
 
     public function clearSearch()
@@ -41,7 +56,7 @@ class Tags extends Component
             $category->delete();
         }
 
-        return to_route('tags.index')/* ->with('message', 'tags successfully deleted.') */;
+        return to_route('tags.index')->with('message', 'tags successfully deleted.');
     }
 
      public function sorting($columnName = "")
@@ -70,9 +85,18 @@ class Tags extends Component
 
         $total = $tags->count();
 
+        // TEST SELECTIONS IN FILTERS
+        $dataEntriesIds = clone $tags;
+
+        $this->listEntriesIds = $dataEntriesIds->pluck('id')->toArray();
+
+        $this->okselections = array_intersect($this->listEntriesIds, $this->selections);
+
         $tags = $tags->paginate($this->perPage);
 
         return view('livewire.tags', [
+            'listEntriesIds'    => $this->listEntriesIds,
+            'okselections'      => $this->okselections,
             'tags'    => $tags,
             'found'   => $found,
             'column'  => $this->orderColumn,

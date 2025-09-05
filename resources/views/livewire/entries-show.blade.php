@@ -29,19 +29,18 @@
     </div>
 
     <div class="bg-zinc-200 overflow-hidden shadow-sm md:rounded-t-sm">
-        
+                
         <!-- Header -->
-        <div class="flex flex-row justify-between items-center bg-amber-600 text-white p-0 rounded-sm">
-            
-        <div class="flex flex-row p-2 bg-amber-600">
-                <span class="font-bold uppercase">Information</span> 
-            </div>
-
-            <div class="flex flex-row gap-4 p-2 bg-black">
+        <div class="flex flex-row text-white font-bold uppercase p-2 bg-amber-600">
+            <span>information</span>
+        </div>
+        <!-- Actions -->
+        <div class="flex flex-row w-11/12 mx-auto justify-end items-center p-2 gap-2 border-b-1 border-b-zinc-400">
+                                            
                 <!-- PDF -->
                 <a href="{{ route('entries_pdf.generate', $entry) }}" title="Download as PDF">
                     <i
-                        class="fa-solid fa-file-pdf hover:text-amber-600 transition-all duration-500"></i>
+                        class="fa-solid fa-file-pdf hover:text-yellow-400 transition-all duration-500"></i>
                 </a>
                 <!-- Edit -->
                 <a href="{{ route('entries.edit', $entry) }}" title="Edit">
@@ -54,18 +53,18 @@
                     <!-- Dirtective to Override the http method -->
                     @method('DELETE')
                     <button
-                        onclick="return confirm('Are you sure you want to delete the entry: {{ $entry->title }}?')"
+                        onclick="return confirm('Are you sure you want to delete this entry')"
                         title="Delete">
                         <i
                             class="fa-solid fa-trash hover:text-red-600 transition-all duration-500 cursor-pointer"></i>
                     </button>
                 </form>
-            </div>
+            
         </div>
 
 
         <!-- INFO -->
-            <div class="mx-auto w-11/12 mt-4 pb-4 rounded-sm flex flex-col gap-2">
+        <div class="mx-auto w-11/12 mt-4 pb-4 rounded-sm flex flex-col gap-2">
 
             <!-- Id -->
             <div class="flex flex-col md:flex-row gap-2">
@@ -210,9 +209,7 @@
                         {{ $entry->company }}</span>
                 </div>
 
-            </div>
-
-            
+            </div>           
 
             <!-- Value -->
             <div class="flex flex-col md:flex-row gap-2">
@@ -346,7 +343,7 @@
             </div>       
 
             <!-- Info -->
-                <div class="flex flex-col md:flex-row gap-2">
+            <div class="flex flex-col md:flex-row gap-2">
 
                     <div class="flex flex-row justify-start items-center md:w-1/3 gap-2">
                         <div class="bg-black text-white p-1 rounded-md">

@@ -6,6 +6,7 @@ use App\Livewire\Texteditor\Quill;
 use App\Models\Balance;
 use Illuminate\Http\Request;
 use Livewire\Component;
+use Exception;
 
 class BalancesEdit extends Component
 {
@@ -67,10 +68,17 @@ class BalancesEdit extends Component
     {
         $validated = $this->validate();
         $validated['user_id'] = $request->user()->id;
-        
-        $this->balance->update($validated);
 
-        return to_route('balances.index', $this->balance)->with('message', 'Balance (' . $this->balance->name . ') updated.');
+        // test error
+        //$validated['name'] = null;
+        //dd($validated);
+
+        try {
+            $this->balance->update($validated);
+            return to_route('balances.show', $this->balance)->with('message', 'Account succesfully updated');
+        } catch (Exception $e) {
+            return to_route('balances.show', $this->balance)->with('error', 'Error(' . $e->getCode() . ') Account updated failed');            
+        }
     }
 
     public function render()
