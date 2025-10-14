@@ -2,9 +2,7 @@
 
 namespace App\Services;
 
-// Models
-
-// Files
+// Storage
 use Illuminate\Support\Facades\Storage;
 
 // Collection
@@ -58,7 +56,7 @@ class FileService
     // }
 
     /**
-     * Inset new Note and insert the tags in the intermediate table note_tag
+     * Given a collection of files, delete them all calling deleteOneFile every time
      */
     public function deleteFiles(Collection $files)
     {
@@ -68,7 +66,7 @@ class FileService
     }
 
     /**
-     * Inset new Note and insert the tags in the intermediate table note_tag
+     * Delete the file from the path, and then delete the file from the DB
      */
     public function deleteOneFile(mixed $file)
     {
@@ -78,6 +76,23 @@ class FileService
             Storage::disk('public')->delete($file->path);
             $file->delete();
         }
+    }
+
+    /**
+     * Remove a directory and all of its files
+     */
+    public function deleteFolder(string $folderPath)
+    {
+        //Storage::makeDirectory(storage_path('app/public/entryfiles/gretucci'));
+        //$directory = Storage::disk('public')->path($folderPath);
+        //$directory = storage_path('app/public/entryfiles/19');
+        //$directory = public_path('/entryfiles/19/');
+        //dd($directory);
+        //print_r($storage_path());
+        //dd(public_path($folderPath));
+        //Storage::deleteDirectory($directory);
+        Storage::disk('public')->deleteDirectory($folderPath);
+        
     }
 
 }

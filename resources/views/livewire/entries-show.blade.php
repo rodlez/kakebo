@@ -40,7 +40,7 @@
                 <!-- PDF -->
                 <a href="{{ route('entries_pdf.generate', $entry) }}" title="Download as PDF">
                     <i
-                        class="fa-solid fa-file-pdf hover:text-yellow-400 transition-all duration-500"></i>
+                        class="fa-solid fa-file-pdf hover:text-amber-600 transition-all duration-500"></i>
                 </a>
                 <!-- Edit -->
                 <a href="{{ route('entries.edit', $entry) }}" title="Edit">

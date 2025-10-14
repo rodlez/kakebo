@@ -18,7 +18,7 @@
                 <!-- PDF -->
                 <a href="{{ route('entries_pdf.generate', $archive) }}" title="Download as PDF">
                     <i
-                        class="fa-solid fa-file-pdf hover:text-yellow-400 transition-all duration-500"></i>
+                        class="fa-solid fa-file-pdf hover:text-amber-600 transition-all duration-500"></i>
                 </a>
                 <!-- Restore -->
                 <form action="{{ route('archive.restore', $archive->id) }}" method="POST">
@@ -29,10 +29,8 @@
                         <button     
                             onclick="return confirm('Entry with (ID: {{  $archive->id }}) will be restored')"                                                   
                             title="Restore">                                                        
-                            <span
-                                class="text-green-600 hover:text-black transition-all duration-500">
-                                <i
-                                    class="fa-lg fa-solid fa-rotate-right text-white hover:text-green-400 transition duration-1000 ease-in-out"></i></span>
+                            <i
+                            class="fa-solid fa-rotate-right hover:text-green-600 transition-all duration-500 cursor-pointer"></i>
                         </button>
                 </form>
                 <!-- Delete -->
@@ -44,10 +42,8 @@
                         <button
                             onclick="return confirm('Delete PERMANENTLY Entry with (ID: {{  $archive->id }})?')"                                                        
                             title="Delete PERMANENTLY">                                                        
-                            <span
-                                class="text-green-600 hover:text-black transition-all duration-500">
-                                <i
-                                    class="fa-lg fa-solid fa-trash text-white hover:text-red-600 transition duration-1000 ease-in-out"></i></span>
+                            <i
+                            class="fa-solid fa-trash hover:text-red-600 transition-all duration-500 cursor-pointer"></i>
                         </button>
                 </form>
             

@@ -8,6 +8,7 @@ use App\Models\Entry;
 use App\Models\Tag;
 use App\Models\User;
 use App\Services\EntryService;
+use App\Services\FileService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -18,6 +19,7 @@ class Archive extends Component
 
     // Dependency Injection to use the Service
     protected EntryService $entryService;     
+    protected FileService $fileService; 
     
     // order and pagination
     public $orderColumn = 'entries.id';
@@ -78,8 +80,10 @@ class Archive extends Component
 
     public function boot(
         EntryService $entryService,
+        FileService $fileService
     ) {
         $this->entryService = $entryService;
+        $this->fileService = $fileService;
     }
 
     public function updated()
@@ -361,7 +365,10 @@ class Archive extends Component
                 // If the Entry has been deleted, check if there is associated files and delete them.
                 if ($result) {
                     if ($files->isNotEmpty()) {
-                        $this->fileService->deleteFiles($files);
+                        //$this->fileService->deleteFiles($files);
+                        // BETTER: Delete the directory with all the files inside
+                        $folderPath = 'entryfiles/' . $entry->id;
+                        $this->fileService->deleteFolder($folderPath);
                     }              
                 } else {
                     return to_route('archive.index')->with('message', 'Error - Files from Entry (' . $entry->title . ') can not be deleted.');

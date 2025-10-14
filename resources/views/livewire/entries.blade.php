@@ -1119,9 +1119,8 @@
                                                         onclick="return confirm('Are you sure you want to delete the entry: {{ $entry->title }}?')"
                                                         title="Delete this entry"
                                                         class="cursor-pointer">                                                        
-                                                        <span
-                                                            class="text-red-600 hover:text-red-700 transition-all duration-500"><i
-                                                                class="fa-solid fa-trash"></i></span>
+                                                        <i
+                                                            class="fa-solid fa-trash text-red-600 hover:text-red-700 transition-all duration-500 cursor-pointer"></i>
                                                     </button>
                                                 </form>                                                
                                             </div>

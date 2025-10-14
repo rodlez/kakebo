@@ -40,7 +40,26 @@ class ArchiveController extends Controller
      */
      public function destroy(int $entryID)
     {   
-        $entry = Entry::onlyTrashed()->find($entryID);        
+        $entry = Entry::onlyTrashed()->find($entryID);     
+        
+        // TEST DELETE DIRECTLY THE FOLDER WITH ALL THE FILES FOR THE ENTRY INSTEAD ONE BY ONE.
+        //$files = $entry->files;
+        //dd($files);
+        // test delete folder
+        //$testDeleteFolder = public_path('/entryfiles/19');
+        //$testDeleteFolder = '/entryfiles/gretucci';
+        //dd($testDeleteFolder);
+        //$this->fileService->deleteFolder($testDeleteFolder);
+        //dd('folder deleted');
+
+
+        //$storagePathFolder = 'entryfiles/' . $entry->id;
+        //if ($files->isNotEmpty()) {
+        //        print_r($storagePathFolder);
+        //        dd($files);            
+                    // BETTER: Delete the directory with all the files inside
+        //        }
+        //dd('No files in the entry', $entry->id);
         
         try {
             $files = $entry->files;
@@ -50,7 +69,10 @@ class ArchiveController extends Controller
             // If the Entry has been deleted, check if there is associated files and delete them.
             if ($result) {
                 if ($files->isNotEmpty()) {
-                    $this->fileService->deleteFiles($files);
+                    //$this->fileService->deleteFiles($files);
+                    // BETTER: Delete the directory with all the files inside
+                    $folderPath = 'entryfiles/' . $entry->id;
+                    $this->fileService->deleteFolder($folderPath);
                 }
                 
                 return to_route('archive.index')->with('message', 'Entry ID(' . $entry->id . ') successfully deleted PERMANENTLY');               

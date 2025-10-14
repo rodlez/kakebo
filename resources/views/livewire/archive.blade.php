@@ -942,7 +942,7 @@
                             <div class="flex flex-row gap-2">   
                                 <!-- Unselect -->                         
                                 <a wire:click.prevent="bulkClear" class="cursor-pointer" title="Unselect Entries">
-                                    <i class="fa-solid fa-rotate-right text-blue-600"></i>
+                                    <i class="fa-solid fa-xmark text-blue-600"></i>
                                 </a>
                                 <!-- Restore -->
                                 <a wire:click.prevent="bulkRestore" wire:confirm="Restore this entries?"
@@ -1088,7 +1088,7 @@
                                                 <!-- Show -->
                                                 <a href="{{ route('archive.show', $entry->id) }}" title="Show">
                                                     <i
-                                                        class="fa-solid fa-circle-info text-amber-600 hover:text-black transition duration-1000 ease-in-out"></i>
+                                                        class="fa-solid fa-circle-info text-orange-600 hover:text-orange-700 transition duration-1000 ease-in-out"></i>
                                                 </a>      
                                                 <!-- Restore -->                                                 
                                                 <form action="{{ route('archive.restore', $entry->id) }}" method="POST">
@@ -1099,9 +1099,8 @@
                                                     <button   
                                                         onclick="return confirm('Entry with (ID: {{  $entry->id }}) will be restored')"                                                     
                                                         title="Restore">                                                        
-                                                        <span
-                                                            class="text-green-600 hover:text-black transition-all duration-500"><i
-                                                                class="fa-solid fa-rotate-right"></i></span>
+                                                        <i
+                                                        class="fa-solid fa-rotate-right text-green-600 hover:text-green-700 transition duration-1000 ease-in-out"></i>
                                                     </button>
                                                 </form>                                         
                                                 <!-- Delete -->
