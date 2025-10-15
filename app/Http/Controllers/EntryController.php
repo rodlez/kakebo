@@ -59,14 +59,80 @@ class EntryController extends Controller
         // File name
         if($criteria != '[]')
         {
-            $excelFileName = 'Kakebo_'. date('Y-m-d',time()) . '_CRITERIA_' . $criteriaName . 'Total('. count($listIds) .').xlsx';
+            if ($request->entryType == 'archive')
+            {
+                $excelFileName = 'ARCHIVE_Kakebo_'. date('Y-m-d',time()) . '_CRITERIA_' . $criteriaName . 'Total('. count($listIds) .').xlsx';
+            }
+            else {
+                $excelFileName = 'Kakebo_'. date('Y-m-d',time()) . '_CRITERIA_' . $criteriaName . 'Total('. count($listIds) .').xlsx';
+            }            
         }
-        else{
-            $excelFileName = 'Kakebo_'. date('Y-m-d',time()) . '_User_' . Auth::user()->name . '_TotalEntries('. count($listIds) .').xlsx';
+        else {
+
+            if ($request->entryType == 'archive')
+            {
+                $excelFileName = 'ARCHIVE_Kakebo_'. date('Y-m-d',time()) . '_User_' . Auth::user()->name . '_TotalEntries('. count($listIds) .').xlsx';
+            }
+            else {
+                $excelFileName = 'Kakebo_'. date('Y-m-d',time()) . '_User_' . Auth::user()->name . '_TotalEntries('. count($listIds) .').xlsx';
+            }
         }
         
-        return Excel::download(new EntryExport(false, $listIds, $this->entryService),  $excelFileName);
+        return Excel::download(new EntryExport($request->entryType, false, $listIds, $this->entryService),  $excelFileName);
     }
+
+    /**
+     * Export the collection as excel file
+     */
+    public function exportBulk(Request $request) 
+    {                
+        
+        //dd($request);
+
+        $criteriaSelection = json_decode($request->criteriaSelection, true);        
+        $criteriaName = $this->entryService->getCriteriaFilename($criteriaSelection);
+        $criteria = $request->criteriaSelection;
+        //dd($criteria);
+
+        // convert string to array of Ids
+        $listIds = explode(',',$request->listEntriesBulk);   
+        //$excelFileName = Auth::user()->name . '_BulkEntries('. count($listIds) .').xlsx';
+
+
+        // File name
+        if($criteria != '[]')
+        {
+            if ($request->entryType == 'archive')
+            {
+                $excelFileName = 'ARCHIVE_Kakebo_Bulk_'. date('Y-m-d',time()) . '_CRITERIA_' . $criteriaName . 'Total('. count($listIds) .').xlsx';
+            }
+            else {
+                $excelFileName = 'Kakebo_Bulk_'. date('Y-m-d',time()) . '_CRITERIA_' . $criteriaName . 'Total('. count($listIds) .').xlsx';
+            }            
+        }
+        else {
+
+            if ($request->entryType == 'archive')
+            {
+                $excelFileName = 'ARCHIVE_Kakebo_Bulk_'. date('Y-m-d',time()) . '_User_' . Auth::user()->name . '_TotalEntries('. count($listIds) .').xlsx';
+            }
+            else {
+                $excelFileName = 'Kakebo_Bulk_'. date('Y-m-d',time()) . '_User_' . Auth::user()->name . '_TotalEntries('. count($listIds) .').xlsx';
+            }
+        }
+
+        //print_r($listIds);
+        //print_r($excelFileName);
+        //dd('export Bulk');
+
+        return Excel::download(new EntryExport($request->entryType, false, $listIds, $this->entryService), $excelFileName);
+    }
+
+
+
+
+
+
 
     /**
      * Export the collection as excel file
@@ -74,7 +140,7 @@ class EntryController extends Controller
     public function exportAll() 
     {        
         //$totalEntries = $this->codeService->totalEntries();
-
+        dd('export all');
         $totalEntries = Entry::get()->where('user_id', Auth::id())->count();
         $excelFileName = Auth::user()->name . '_AllEntries('. $totalEntries .').xlsx';
 
@@ -96,18 +162,7 @@ class EntryController extends Controller
         return Excel::download(new EntryExport(false, $listIds, $this->entryService),  $excelFileName);
     }
 
-    /**
-     * Export the collection as excel file
-     */
-    public function exportBulk(Request $request) 
-    {                
-        //dd($request->listEntriesBulk);
-        // convert string to array of Ids
-        $listIds = explode(',',$request->listEntriesBulk);   
-        $excelFileName = Auth::user()->name . '_BulkSports('. count($listIds) .').xlsx';
-
-        return Excel::download(new EntryExport(false, $listIds, $this->entryService), $excelFileName);
-    }
+    
 
     
 }

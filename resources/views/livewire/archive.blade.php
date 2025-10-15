@@ -918,7 +918,9 @@
                                 <input type="hidden" id="entries" name="entries"
                                     value="{{ $entriesRaw->pluck('id') }}">
                                 <input type="hidden" id="criteriaSelection" name="criteriaSelection"
-                                    value="{{ json_encode($this->criteria) }}">                        
+                                    value="{{ json_encode($this->criteria) }}">
+                                <input type="hidden" id="entryType" name="entryType"
+                                    value="archive">                   
                                 <button
                                     class="hover:text-amber-600 transition duration-1000 ease-in-out cursor-pointer"
                                     title="Export All as Excel file">
@@ -962,6 +964,10 @@
                                         @csrf
                                         <input type="hidden" id="listEntriesBulk" name="listEntriesBulk"
                                             value="{{ implode(',', $okselections) }}">
+                                        <input type="hidden" id="criteriaSelection" name="criteriaSelection"
+                                            value="{{ json_encode($this->criteria) }}">    
+                                        <input type="hidden" id="entryType" name="entryType"
+                                            value="archive">
                                         <button class="cursor-pointer" title="Export Selected as Excel file">
                                             <i class="fa-solid fa-file-export text-green-600"></i>
                                         </button>

@@ -18,8 +18,15 @@ class Users extends Component
     public $perPage = 25;
 
     // search
+    public $showSearch = 1;
     public $search = "";
     public $searchType = 'name';
+
+    // small or full view of the entry table
+    public $smallView = false;
+
+    // font size table
+    public $smallFont = true;
 
     // filters    
     public $showFilters = 0;
@@ -60,16 +67,31 @@ class Users extends Component
         $this->initialDateTo = date('Y-m-d', strtotime(User::max('created_at')));
     }
 
+    public function activateSmallView(bool $activate)
+    {
+        $this->smallView = $activate;
+    }
+
+    public function activateSmallFont(bool $activate)
+    {
+        $this->smallFont = $activate;
+    }
+
     public function activateFilter()
     {
         $this->showFilters++;
     }
 
+    public function activateSearch()
+    {
+        $this->showSearch++;
+    }
+
     public function clearFilters()
     {
-        $this->dateFrom = date('Y-m-d', strtotime(User::min('created_at')));
-        $this->dateTo = date('Y-m-d', strtotime(User::max('created_at')));        
         $this->isAdmin = 2;
+        $this->dateFrom = date('Y-m-d', strtotime(User::min('created_at')));
+        $this->dateTo = date('Y-m-d', strtotime(User::max('created_at')));                
     }
 
     public function clearFilterDate()
@@ -169,6 +191,7 @@ class Users extends Component
         }
 
         $total = $data->count();
+        $dataRaw =  clone $data;
 
         // TEST SELECTIONS IN FILTERS
         $dataEntriesIds = clone $data;
@@ -182,6 +205,7 @@ class Users extends Component
         return view('livewire.users', [
             'listEntriesIds'    => $this->listEntriesIds,
             'okselections'      => $this->okselections,
+            'usersRaw'          => $dataRaw,
             'users'             => $data,
             'found'             => $found,
             'column'            => $this->orderColumn,

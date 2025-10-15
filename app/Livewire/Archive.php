@@ -30,7 +30,7 @@ class Archive extends Component
     // search
     public $showSearch = 1;
     public $search = '';
-    public $searchType = 'company';
+    public $searchType = 'title';
 
     // stats
     public $showStats = 1;
@@ -414,8 +414,8 @@ class Archive extends Component
         $sources = Balance::orderby('source', 'ASC')->select('source')->distinct()->get();
         $tags = Tag::orderby('name', 'ASC')->get();
         $users = User::orderby('name', 'ASC')->get();
-        $frequencies = Entry::orderby('frequency', 'ASC')->select('frequency')->distinct()->get();
-        $companies = Entry::orderby('company', 'ASC')->select('company')->get();
+        $frequencies = Entry::onlyTrashed()->orderby('frequency', 'ASC')->select('frequency')->distinct()->get();
+        $companies = Entry::onlyTrashed()->orderby('company', 'ASC')->select('company')->get();
         
         // Main Selection, Join tables sports, sport_categories and sports_tag
         $data = Entry::select(

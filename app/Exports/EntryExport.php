@@ -3,7 +3,6 @@
 namespace App\Exports;
 
 use App\Models\Entry;
-use App\Models\Sport\Sport;
 use App\Services\EntryService;
 
 // Auth
@@ -31,14 +30,16 @@ use function PHPUnit\Framework\isEmpty;
 
 class EntryExport implements FromCollection, WithMapping, WithHeadings, WithStyles, WithEvents
 {
+    private $entryType;
     private $exportAll;
     private $listIds;
 
-    // Dependency Injection SportService
+    // Dependency Injection EntryService
     private EntryService $entryService;
 
-    public function __construct(bool $exportAll, array $listIds, EntryService $entryService)
+    public function __construct(string $entryType, bool $exportAll, array $listIds, EntryService $entryService)
     {
+        $this->entryType = $entryType;
         $this->exportAll = $exportAll;
         $this->listIds = $listIds;
         $this->entryService = $entryService;
@@ -51,14 +52,36 @@ class EntryExport implements FromCollection, WithMapping, WithHeadings, WithStyl
     {      
         // To select the columns in the DB that we want to export
         if ($this->exportAll) {
-            return Entry::select('id', 'user_id', 'date', 'title', 'type', 'value', 'company', 'category_id', 'frequency', 'info', 'created_at', 'updated_at')
+            // ExportAll
+            // Export all the entries in the archive (softdeletes)
+            if ($this->entryType == 'archive')
+            {
+                return Entry::onlyTrashed()
+                    ->select('id', 'user_id', 'date', 'title', 'type', 'value', 'company', 'category_id', 'frequency', 'info', 'created_at', 'updated_at')
                     ->get()
                     ->where('user_id', Auth::id());
+            }
+            else {
+                return Entry::select('id', 'user_id', 'date', 'title', 'type', 'value', 'company', 'category_id', 'frequency', 'info', 'created_at', 'updated_at')
+                    ->get()
+                    ->where('user_id', Auth::id());
+            }
         } else {
-            //dd($this->listIds);
-            return Entry::select('id', 'user_id', 'date', 'title', 'type', 'value', 'company', 'category_id', 'frequency', 'info', 'created_at', 'updated_at')
-                ->get()
-                ->whereIn('id', $this->listIds);            
+            // BulkExport
+            // Export entries in the archive (softdeletes)
+            if ($this->entryType == 'archive')
+            {
+                return Entry::onlyTrashed()
+                    ->select('id', 'user_id', 'date', 'title', 'type', 'value', 'company', 'category_id', 'frequency', 'info', 'created_at', 'updated_at')
+                    ->get()                    
+                    ->whereIn('id', $this->listIds);            
+            }
+            // Export normal Entry
+            else {
+                return Entry::select('id', 'user_id', 'date', 'title', 'type', 'value', 'company', 'category_id', 'frequency', 'info', 'created_at', 'updated_at')
+                    ->get()
+                    ->whereIn('id', $this->listIds);            
+            }
         }
     }
 

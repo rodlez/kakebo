@@ -56,12 +56,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/entries/edit/{entry}', EntriesEdit::class)->name('entries.edit');    
 
     // EXCEL 
-    Route::get('/entries/export', [EntryController::class, 'exportAll'])->name('entries.exportall');
-
     Route::post('/entries/export', [EntryController::class, 'export'])->name('entries.export');
-
-    Route::post('/entries/exportselected', [EntryController::class, 'exportSelected'])->name('entries.exportselected');
     Route::post('/entries/exportbulk', [EntryController::class, 'exportBulk'])->name('entries.exportbulk');
+    //Route::get('/entries/export', [EntryController::class, 'exportAll'])->name('entries.exportall');
+    //Route::post('/entries/exportselected', [EntryController::class, 'exportSelected'])->name('entries.exportselected');
 
     /* FILES */
     Route::get('/entries/{entry}/file', FileUpload::class)->name('files.upload');
