@@ -371,24 +371,24 @@
                             <thead>
                                 <tr class="text-left text-sm font-normal capitalize">
                                     <th></th>
-                                    <th wire:click="sorting('users.id')" scope="col"
+                                    <th wire:click="sorting('id')" scope="col"
                                         class="p-2 hover:cursor-pointer {{ $column == 'id' ? 'text-yellow-400' : '' }}">
                                         id {!! $sortLink !!}</th>
-                                    <th wire:click="sorting('users.name')" scope="col"
+                                    <th wire:click="sorting('name')" scope="col"
                                         class="p-2 hover:cursor-pointer {{ $column == 'name' ? 'text-yellow-400' : '' }}">
                                         Name {!! $sortLink !!}</th>
-                                    <th wire:click="sorting('users.email')" scope="col"
+                                    <th wire:click="sorting('email')" scope="col"
                                         class="p-2 hover:cursor-pointer {{ $column == 'email' ? 'text-yellow-400' : '' }}">
                                         Email {!! $sortLink !!}</th>
-                                    <th wire:click="sorting('users.is_admin')" scope="col"
+                                    <th wire:click="sorting('is_admin')" scope="col"
                                         class="p-2 hover:cursor-pointer {{ $column == 'is_admin' ? 'text-yellow-400' : '' }}">
                                         Admin {!! $sortLink !!}</th>
                                     <th scope="col" class="p-2 text-center">Entries</th>
                                     @if(!$smallView)
-                                    <th wire:click="sorting('users.created_at')" scope="col"
+                                    <th wire:click="sorting('created_at')" scope="col"
                                         class="p-2 hover:cursor-pointer {{ $column == 'created_at' ? 'text-yellow-400' : '' }}">
                                         Created {!! $sortLink !!}</th>
-                                    <th wire:click="sorting('users.updated_at')" scope="col"
+                                    <th wire:click="sorting('updated_at')" scope="col"
                                         class="p-2 hover:cursor-pointer {{ $column == 'updated_at' ? 'text-yellow-400' : '' }}">
                                         Updated {!! $sortLink !!}</th>
                                     @endif                                    

@@ -63,10 +63,12 @@ Route::middleware(['auth'])->group(function () {
 
     /* FILES */
     Route::get('/entries/{entry}/file', FileUpload::class)->name('files.upload');
-    Route::delete('/sports/{entry}/file/{file}', [FileController::class, 'destroy'])->name('files.destroy');    
+    Route::delete('/entries/{entry}/file/{file}', [FileController::class, 'destroy'])->name('files.destroy');    
 
     /* PDF */
     Route::get('/generate_pdf/{data}', [PDFController::class, 'generateEntryPDF'])->name('entries_pdf.generate');
+    
+    Route::get('/generate_archive_pdf/{data}', [PDFController::class, 'generateArchiveEntryPDF'])->name('entries_archive_pdf.generate');
 
     /* STATS */
     Route::get('/stats', Stats::class)->name('stats.index');
