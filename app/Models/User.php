@@ -60,13 +60,13 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the entries associated with the user.
+     * Get the entries associated with the user, included the entries in the archive (deleted with softdelete).
      */
     public function entries()
     {
         return $this->hasMany(
             Entry::class,
             foreignKey: 'user_id'
-        );
+        )->withTrashed();
     }
 }

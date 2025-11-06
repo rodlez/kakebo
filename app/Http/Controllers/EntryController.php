@@ -41,7 +41,7 @@ class EntryController extends Controller
     public function export(Request $request) 
     {   
         
-        //dd($request);
+        dd($request);
         $criteriaSelection = json_decode($request->criteriaSelection, true);
         
         $criteriaName = $this->entryService->getCriteriaFilename($criteriaSelection);
