@@ -9,6 +9,7 @@ use App\Models\Tag;
 use App\Models\User;
 use App\Services\EntryService;
 use App\Services\FileService;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;

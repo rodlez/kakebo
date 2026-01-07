@@ -137,30 +137,30 @@ class EntryController extends Controller
     /**
      * Export the collection as excel file
      */
-    public function exportAll() 
-    {        
-        //$totalEntries = $this->codeService->totalEntries();
-        dd('export all');
-        $totalEntries = Entry::get()->where('user_id', Auth::id())->count();
-        $excelFileName = Auth::user()->name . '_AllEntries('. $totalEntries .').xlsx';
+    // public function exportAll() 
+    // {        
+    //     //$totalEntries = $this->codeService->totalEntries();
+    //     dd('export all');
+    //     $totalEntries = Entry::get()->where('user_id', Auth::id())->count();
+    //     $excelFileName = Auth::user()->name . '_AllEntries('. $totalEntries .').xlsx';
 
-        return Excel::download(new EntryExport(true, [], $this->entryService), $excelFileName);
-    }
+    //     return Excel::download(new EntryExport(true, [], $this->entryService), $excelFileName);
+    // }
 
     /**
      * Export the collection as excel file
      */
-    public function exportSelected(Request $request) 
-    {   
-        // listEntries is a string, remove [ ] from start and end of the string
-        $stringListEntries = substr($request->listEntries, 1, -1);
+    // public function exportSelected(Request $request) 
+    // {   
+    //     // listEntries is a string, remove [ ] from start and end of the string
+    //     $stringListEntries = substr($request->listEntries, 1, -1);
 
-        // convert string to array of Ids
-        $listIds = explode(',',$stringListEntries);
-        $excelFileName = Auth::user()->name . '_SelectionEntriess('. count($listIds) .').xlsx';                
+    //     // convert string to array of Ids
+    //     $listIds = explode(',',$stringListEntries);
+    //     $excelFileName = Auth::user()->name . '_SelectionEntriess('. count($listIds) .').xlsx';                
         
-        return Excel::download(new EntryExport(false, $listIds, $this->entryService),  $excelFileName);
-    }
+    //     return Excel::download(new EntryExport(false, $listIds, $this->entryService),  $excelFileName);
+    // }
 
     
 
