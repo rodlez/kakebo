@@ -7,9 +7,9 @@
         <flux:header container class="border-b border-zinc-200 {{(auth()->user()->is_admin) ? 'bg-amber-300' : 'bg-zinc-100'}} dark:border-zinc-700 dark:bg-zinc-900 p-1">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
-            <a href="{{ route('dashboard') }}" class="ms-2 me-5 flex items-center space-x-2 rtl:space-x-reverse lg:ms-0" title="Home" wire:navigate>
+            <!-- <a href="{{ route('dashboard') }}" class="ms-2 me-5 flex items-center space-x-2 rtl:space-x-reverse lg:ms-0" title="Home" wire:navigate>
                 <x-app-logo />
-            </a>
+            </a> -->
 
             <flux:navbar class="-mb-px max-lg:hidden">
 
@@ -114,9 +114,9 @@
         <flux:sidebar stashable sticky class="lg:hidden border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-            <a href="{{ route('dashboard') }}" class="ms-1 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
+            <!-- <a href="{{ route('dashboard') }}" class="ms-1 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
                 <x-app-logo />
-            </a>
+            </a> -->
 
             <flux:navlist variant="outline">
                 <!-- <flux:navlist.group :heading="__('Platform')">                     -->

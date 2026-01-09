@@ -65,6 +65,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/entries/{entry}/file', FileUpload::class)->name('files.upload');
     Route::delete('/entries/{entry}/file/{file}', [FileController::class, 'destroy'])->name('files.destroy');    
 
+    Route::post('/entries/{entry}/file/{file}', [FileController::class, 'downloadFile'])->name('files.download');
+
+    Route::get('/entries/{entry}/zip', [FileController::class, 'downloadZip'])->name('files.zip');
+
+
     /* PDF */
     Route::get('/generate_pdf/{data}', [PDFController::class, 'generateEntryPDF'])->name('entries_pdf.generate');
     

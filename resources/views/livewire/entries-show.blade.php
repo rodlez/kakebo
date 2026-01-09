@@ -401,13 +401,23 @@
                         <i class="fa-solid fa-file"></i>
                     </div>                    
                     <div class="w-full h-full">
-                        <span class="text-lg font-semibold capitalize">Files ({{ $entry->files->count() }})</span>
+                        <span class="text-lg font-semibold capitalize">Files ({{ $entry->files->count() }})</span>                        
                     </div>                    
                 </div>
                 
                 <div class="flex flex-col justify-start items-center w-full">
                     
                     @if ($entry->files->count() > 0)
+                        
+                        <!-- DOWNLOAD ZIP -->
+                        <div class="w-full overflow-x-auto text-end">
+                            <a href="{{ route('files.zip', $entry) }}"
+                                class="w-full sm:w-1/4 p-2 text-sm text-center">
+                                <span class="font-bold lowercase font-bold"> Download All Files</span>
+                                <span class="px-2"><i class="fa-regular fa-file-zipper"></i></span>
+                            </a>                            
+                        </div>
+
                         <!-- FILES TABLE -->
                         <div class="w-full overflow-x-auto">
                         
@@ -429,7 +439,7 @@
                                                 'iconSize' => 'fa-lg',
                                                 'imagesBig' => false,
                                             ])
-                                        </td>
+                                        </td>                                        
                                         <td class="p-2 max-lg:hidden">
                                             {{ $file->original_filename }}
                                         </td>
@@ -440,6 +450,17 @@
                                         <td class="p-2">
                                             <div class="flex justify-center items-center gap-2">
                                                 <!-- Download file -->
+                                                 <form action="{{ route('files.download', [$entry, $file]) }}"
+                                                    method="POST">
+                                                    <!-- Add Token to prevent Cross-Site Request Forgery (CSRF) -->
+                                                    @csrf                                                    
+                                                    <button
+                                                        title="Download file">
+                                                        <span
+                                                            class="text-green-600 hover:text-green-500 transition-all duration-500 cursor-pointer"><i
+                                                                class="fa-lg fa-solid fa-file-arrow-down"></i></span>
+                                                    </button>
+                                                </form>
                                                 
                                                 <!-- Delete file -->
                                                 <form action="{{ route('files.destroy', [$entry, $file]) }}"
